@@ -44,50 +44,48 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                    child:   RichText(
-                      textAlign: TextAlign.justify,
-                      softWrap: true,
-                      text: TextSpan(
-                        style: TextStyle(fontSize: 16),
-                        children: [
-                          TextSpan(text: "Weather data by "),
-                          TextSpan(
-                            text: "Open-Meteo.com",
-                            style: const TextStyle(
-                              color: Colors.blue,
-
-                              /// Set the color of the link
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                /// Define the URL to open when the link is tapped
-                                final uri = Uri.parse("https://open-meteo.com/");
-
-                                /// Use the url_launcher package to open the URL
-                                launchUrl(uri);
-                              },
-                          ),
-                          TextSpan(text: " (Licence can be found "),
-                          TextSpan(
-                            text: "here",
-                            style: const TextStyle(
-                              color: Colors.blue,
-
-                              /// Set the color of the link
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                /// Define the URL to open when the link is tapped
-                                final uri = Uri.parse("https://github.com/open-meteo/open-meteo/blob/main/LICENSE");
-
-                                /// Use the url_launcher package to open the URL
-                                launchUrl(uri);
-                              },
-                          ),
-                          const TextSpan(text: ")."),
-                        ],
+                    child: Text.rich(TextSpan(
+                      style: TextStyle(
+                        fontSize: 16,
                       ),
-                    ),
+                      children: [
+                        TextSpan(text: "Weather data by "),
+                        TextSpan(
+                          text: "Open-Meteo.com",
+                          style: const TextStyle(
+                            color: Colors.blue,
+
+                            /// Set the color of the link
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              /// Define the URL to open when the link is tapped
+                              final uri = Uri.parse("https://open-meteo.com/");
+
+                              /// Use the url_launcher package to open the URL
+                              launchUrl(uri);
+                            },
+                        ),
+                        TextSpan(text: " (Licence can be found "),
+                        TextSpan(
+                          text: "here",
+                          style: const TextStyle(
+                            color: Colors.blue,
+
+                            /// Set the color of the link
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              /// Define the URL to open when the link is tapped
+                              final uri = Uri.parse("https://github.com/open-meteo/open-meteo/blob/main/LICENSE");
+
+                              /// Use the url_launcher package to open the URL
+                              launchUrl(uri);
+                            },
+                        ),
+                        const TextSpan(text: ")."),
+                      ],
+                    )),
                   ),
                 ),
               ],
