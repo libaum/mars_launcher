@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mars_launcher/pages/home.dart';
+import 'package:mars_launcher/pages/home/home.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:sizer/sizer.dart';

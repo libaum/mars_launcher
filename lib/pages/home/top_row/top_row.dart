@@ -7,10 +7,10 @@ import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/logic/temperature_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
-import 'package:mars_launcher/pages/fragments/top_row/battery.dart';
-import 'package:mars_launcher/pages/fragments/top_row/event.dart';
-import 'package:mars_launcher/pages/fragments/top_row/clock.dart';
-import 'package:mars_launcher/pages/fragments/top_row/temperature.dart';
+import 'package:mars_launcher/pages/home/top_row/battery.dart';
+import 'package:mars_launcher/pages/home/top_row/event.dart';
+import 'package:mars_launcher/pages/home/top_row/clock.dart';
+import 'package:mars_launcher/pages/home/top_row/temperature.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 

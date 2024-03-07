@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/logic/temperature_manager.dart';
-import 'package:mars_launcher/pages/fragments/app_shortcuts_fragment.dart';
-import 'package:mars_launcher/pages/fragments/app_search_fragment.dart';
-import 'package:mars_launcher/pages/fragments/top_row/top_row.dart';
+import 'package:mars_launcher/pages/home/app_shortcuts_fragment.dart';
+import 'package:mars_launcher/pages/home/app_search_fragment.dart';
+import 'package:mars_launcher/pages/home/top_row/top_row.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
-import 'package:mars_launcher/pages/settings.dart';
+import 'package:mars_launcher/pages/settings/settings.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
 const double HEIGHT_SIZED_BOX = 50;
