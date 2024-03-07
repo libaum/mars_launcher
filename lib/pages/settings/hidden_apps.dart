@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/apps_manager.dart';
+import 'package:mars_launcher/pages/settings/utils.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/pages/fragments/cards/hidden_app_card.dart';
 import 'package:mars_launcher/services/service_locator.dart';
-
-const TEXT_STYLE_TITLE = TextStyle(fontSize: 30, fontWeight: FontWeight.normal);
-const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
-const ROW_PADDING_RIGHT = 60.0;
 
 class HiddenApps extends StatefulWidget {
   const HiddenApps({Key? key}) : super(key: key);
@@ -46,7 +43,7 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
               Align(
                 alignment: Alignment.topLeft,
                 child: const Padding(
-                  padding: EdgeInsets.fromLTRB(40, 20, 0, 20),
+                  padding: EdgeInsets.fromLTRB(50, 20, 0, 0),
                   child: Text(
                     title,
                     textAlign: TextAlign.left,
@@ -57,7 +54,7 @@ class _HiddenAppsState extends State<HiddenApps> with WidgetsBindingObserver {
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
+                      padding: const EdgeInsets.fromLTRB(40, 20, 40, 40),
                       child: ValueListenableBuilder<List<AppInfo>>(
                           valueListenable: appsManager.appsNotifier,
                           builder: (context, apps, child) {

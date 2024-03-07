@@ -31,11 +31,11 @@ ButtonStyle getDialogButtonStyle(isDarkMode) {
       )));
 }
 
-
 ThemeData basicLightTheme = ThemeData(
   colorScheme: ColorScheme.light(
     background: COLOR_LIGHT_BACKGROUND,
-    primary: Colors.black,
+    primary: COLOR_LIGHT_PRIMARY,
+    secondary: COLOR_ACCENT,
     brightness: Brightness.light,
   ),
   primaryTextTheme: TextTheme(
@@ -75,8 +75,9 @@ ThemeData basicLightTheme = ThemeData(
 ThemeData basicDarkTheme = ThemeData(
 
   colorScheme: ColorScheme.dark(
-    background: Colors.black,
-    primary: Colors.white,
+    background: COLOR_DARK_BACKGROUND,
+    primary: COLOR_DARK_PRIMARY,
+    secondary: COLOR_ACCENT,
     brightness: Brightness.dark,
   ),
   primaryTextTheme: TextTheme(

@@ -7,11 +7,13 @@ import 'package:mars_launcher/theme/theme_constants.dart';
 const BUTTON_BACKGROUND_COLOR_DIALOG = Colors.black;
 const BUTTON_TEXT_COLOR_DIALOG = Colors.white;
 
+
+
 class ColorPickerDialog extends StatelessWidget {
-  final bool changeDarkModeColor;
+  final ColorType colorType;
   final themeManager = getIt<ThemeManager>();
 
-  ColorPickerDialog({Key? key, required this.changeDarkModeColor}): super(key: key);
+  ColorPickerDialog({Key? key, required this.colorType}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,14 @@ class ColorPickerDialog extends StatelessWidget {
 
     final buttonStyle = getDialogButtonStyle(themeManager.isDarkMode);
 
-    var selectedColor = changeDarkModeColor ? themeManager.darkBackground : themeManager.lightBackground;
+    late var selectedColor;
+    if (colorType == ColorType.lightBackground){
+      selectedColor = themeManager.lightBackground;
+    } else if (colorType == ColorType.darkBackground) {
+      selectedColor = themeManager.darkBackground;
+    } else {
+      selectedColor = themeManager.searchTextColor;
+    }
 
     return AlertDialog(
       title: const Text(
@@ -50,7 +59,7 @@ class ColorPickerDialog extends StatelessWidget {
                 onPressed: () {
                   print(selectedColor);
 
-                  themeManager.setBackgroundColor(changeDarkModeColor, selectedColor);
+                  themeManager.setColor(colorType, selectedColor);
                   Navigator.of(context).pop();
                 },
                 style: buttonStyle

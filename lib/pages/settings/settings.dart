@@ -3,19 +3,18 @@ import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
+import 'package:mars_launcher/pages/settings/colors.dart';
 import 'package:mars_launcher/pages/settings/credits.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
-import 'package:mars_launcher/pages/dialogs/dialog_color_picker.dart';
 import 'package:mars_launcher/pages/home/app_search_fragment.dart';
+import 'package:mars_launcher/pages/settings/utils.dart';
 import 'package:mars_launcher/pages/settings/hidden_apps.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/strings.dart';
 
-const TEXT_STYLE_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
-const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
 const ROW_PADDING_RIGHT = 50.0; // TODO look for overflow
 
 class Settings extends StatefulWidget {
@@ -51,6 +50,13 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
     );
   }
 
+  void pushOtherPage(Widget page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -73,248 +79,70 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                     child: SingleChildScrollView(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         /// SET DEFAULT LAUNCHER
-                        TextButton(
-                          onPressed: () {
-                            settingsManager.openDefaultLauncherSettings();
-                          },
-                          child: const Text(
-                            Strings.settingsChangeDefaultLauncher,
-                            style: TEXT_STYLE_ITEMS,
-                          ),
-                        ),
-
-                        /// LIGHT COLOR / DARK COLOR
-                        Row(
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return ColorPickerDialog(changeDarkModeColor: false);
-                                  },
-                                );
-                              },
-                              child: const Text(
-                                Strings.settingsLightColor,
-                                style: TEXT_STYLE_ITEMS,
-                              ),
-                            ),
-                            // Expanded(child: Container()),
-                            TextButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return ColorPickerDialog(changeDarkModeColor: true);
-                                    });
-                              },
-                              child: const Text(
-                                Strings.settingsDarkColor,
-                                style: TEXT_STYLE_ITEMS,
-                              ),
-                            ),
-                          ],
-                        ),
+                        GenericSettingsButton(
+                            onPressed: () {
+                              settingsManager.openDefaultLauncherSettings();
+                            },
+                            name: Strings.settingsChangeDefaultLauncher),
 
                         /// APPS NUMBER
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                settingsManager.setNotifierValueAndSave(settingsManager.numberOfShortcutItemsNotifier);
-                              },
-                              child: const Text(
-                                Strings.settingsAppNumber,
-                                style: TEXT_STYLE_ITEMS,
-                              ),
-                            ),
-                            Expanded(child: Container()),
-                            ValueListenableBuilder<int>(
-                                valueListenable: settingsManager.numberOfShortcutItemsNotifier,
-                                builder: (context, numOfShortcutItems, child) {
-                                  return SizedBox(
-                                      width: 86,
-                                      child: TextButton(
-                                        onPressed: () {
-                                          settingsManager.setNotifierValueAndSave(settingsManager.numberOfShortcutItemsNotifier);
-                                        },
-                                        child: Center(child: Text(numOfShortcutItems.toString(), style: TEXT_STYLE_ITEMS)),
-                                      ));
-                                }),
-                          ],
-                        ),
+                        buildAppsNumberRow(),
 
                         /// CLOCK APP
-                        Row(
-                          children: [
-                            TextButton(
-                                onLongPress: () {},
-                                onPressed: () {
-                                  pushAppSearch(appShortcutsManager.clockAppNotifier);
-                                },
-                                child: const Text(
-                                  Strings.settingsClockApp,
-                                  style: TEXT_STYLE_ITEMS,
-                                )),
-                            Expanded(
-                              child: Container(),
-                            ),
-                            ShowHideButton(
-                              notifier: settingsManager.clockWidgetEnabledNotifier,
-                              onPressed: () {
-                                settingsManager.setNotifierValueAndSave(settingsManager.clockWidgetEnabledNotifier);
-                              },
-                            ),
-                          ],
-                        ),
+                        buildTopRowAppRow(
+                            specialShortcutAppNotifier: appShortcutsManager.clockAppNotifier,
+                            widgetEnabledNotifier: settingsManager.clockWidgetEnabledNotifier,
+                            name: Strings.settingsClockApp),
 
                         /// WEATHER APP
-                        Row(
-                          children: [
-                            TextButton(
-                                onLongPress: () {},
-                                onPressed: () {
-                                  pushAppSearch(appShortcutsManager.weatherAppNotifier);
-                                },
-                                child: const Text(
-                                  Strings.settingsWeatherApp,
-                                  style: TEXT_STYLE_ITEMS,
-                                )),
-                            Expanded(child: Container()),
-                            ShowHideButton(
-                              notifier: settingsManager.weatherWidgetEnabledNotifier,
-                              onPressed: () {
-                                if (sharedPrefsManager.readData(Keys.weatherActivatedAtLeaseOnce) == null) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text("Requesting location permission"),
-                                          titleTextStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
-                                          content: Text(
-                                            "mars launcher collects location data to be able to show accurate temperature information.",
-                                            style: TextStyle(color: Colors.black),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              style: ButtonStyle(foregroundColor: MaterialStatePropertyAll<Color>(Colors.blue)),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('OK'),
-                                            ),
-                                          ],
-                                        );
-                                      }).then((value) {
-                                    settingsManager.setNotifierValueAndSave(settingsManager.weatherWidgetEnabledNotifier);
-                                  });
-
-                                  sharedPrefsManager.saveData(Keys.weatherActivatedAtLeaseOnce, true);
-                                } else {
-                                  settingsManager.setNotifierValueAndSave(settingsManager.weatherWidgetEnabledNotifier);
-                                }
-                              },
-                            ),
-                          ],
-                        ),
+                        buildWeatherAppRow(context),
 
                         /// CALENDAR APP
-                        Row(
-                          children: [
-                            TextButton(
-                              onLongPress: () {},
-                              onPressed: () {
-                                pushAppSearch(appShortcutsManager.calendarAppNotifier);
-                              },
-                              child: const Text(
-                                Strings.settingsCalendarApp,
-                                style: TEXT_STYLE_ITEMS,
-                              ),
-                            ),
-                            Expanded(child: Container()),
-                            ShowHideButton(
-                              notifier: settingsManager.calendarWidgetEnabledNotifier,
-                              onPressed: () {
-                                settingsManager.setNotifierValueAndSave(settingsManager.calendarWidgetEnabledNotifier);
-                              },
-                            ),
-                          ],
-                        ),
+                        buildTopRowAppRow(
+                            specialShortcutAppNotifier: appShortcutsManager.calendarAppNotifier,
+                            widgetEnabledNotifier: settingsManager.calendarWidgetEnabledNotifier,
+                            name: Strings.settingsCalendarApp),
 
                         /// BATTERY
-                        Row(
-                          children: [
-                            TextButton(
-                                onLongPress: () {},
-                                onPressed: () {
-                                  pushAppSearch(appShortcutsManager.batteryAppNotifier);
-                                },
-                                child: const Text(
-                                  Strings.settingsBattery,
-                                  style: TEXT_STYLE_ITEMS,
-                                )),
-                            Expanded(
-                              child: Container(),
-                            ),
-                            ShowHideButton(
-                              notifier: settingsManager.batteryWidgetEnabledNotifier,
-                              onPressed: () {
-                                settingsManager.setNotifierValueAndSave(settingsManager.batteryWidgetEnabledNotifier);
-                              },
-                            ),
-                          ],
-                        ),
+                        buildTopRowAppRow(
+                            specialShortcutAppNotifier: appShortcutsManager.batteryAppNotifier,
+                            widgetEnabledNotifier: settingsManager.batteryWidgetEnabledNotifier,
+                            name: Strings.settingsBattery),
 
                         /// SWIPE LEFT
-                        TextButton(
-                            onLongPress: () {},
+                        GenericSettingsButton(
                             onPressed: () {
                               pushAppSearch(appShortcutsManager.swipeLeftAppNotifier);
                             },
-                            child: const Text(
-                              Strings.settingsSwipeLeft,
-                              style: TEXT_STYLE_ITEMS,
-                            )),
+                            name: Strings.settingsSwipeLeft),
 
                         /// SWIPE RIGHT
-                        TextButton(
-                            onLongPress: () {},
+                        GenericSettingsButton(
                             onPressed: () {
                               pushAppSearch(appShortcutsManager.swipeRightAppNotifier);
                             },
-                            child: const Text(
-                              Strings.settingsSwipeRight,
-                              style: TEXT_STYLE_ITEMS,
-                            )),
+                            name: Strings.settingsSwipeRight),
+
+                        /// COLORS
+                        GenericSettingsButton(
+                            onPressed: () {
+                              pushOtherPage(SettingsColors());
+                            },
+                            name: Strings.settingsColors),
 
                         /// HIDDEN APPS
-                        TextButton(
+                        GenericSettingsButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const HiddenApps()),
-                              );
+                              pushOtherPage(HiddenApps());
                             },
-                            child: const Text(
-                              Strings.settingsHiddenApps,
-                              style: TEXT_STYLE_ITEMS,
-                            )),
+                            name: Strings.settingsHiddenApps),
 
-                        /// SET API KEY
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const Credits()),
-                            );
-                          },
-                          child: const Text(
-                            Strings.settingsCredits,
-                            style: TEXT_STYLE_ITEMS,
-                          ),
-                        ),
+                        /// CREDITS
+                        GenericSettingsButton(
+                            onPressed: () {
+                              pushOtherPage(Credits());
+                            },
+                            name: Strings.settingsCredits),
                       ]),
                     ),
                   ),
@@ -324,6 +152,101 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
           ),
         ),
       ),
+    );
+  }
+
+  Row buildTopRowAppRow(
+      {required ValueNotifierWithKey<AppInfo> specialShortcutAppNotifier, required ValueNotifierWithKey<bool> widgetEnabledNotifier, required String name}) {
+    return Row(
+      children: [
+        GenericSettingsButton(
+            onPressed: () {
+              pushAppSearch(specialShortcutAppNotifier);
+            },
+            name: name),
+        Expanded(
+          child: Container(),
+        ),
+        ShowHideButton(
+          notifier: widgetEnabledNotifier,
+          onPressed: () {
+            settingsManager.setNotifierValueAndSave(widgetEnabledNotifier);
+          },
+        ),
+      ],
+    );
+  }
+
+  Row buildWeatherAppRow(BuildContext context) {
+    return Row(
+      children: [
+        GenericSettingsButton(
+            onPressed: () {
+              pushAppSearch(appShortcutsManager.weatherAppNotifier);
+            },
+            name: Strings.settingsWeatherApp),
+        Expanded(child: Container()),
+        ShowHideButton(
+          notifier: settingsManager.weatherWidgetEnabledNotifier,
+          onPressed: () {
+            if (sharedPrefsManager.readData(Keys.weatherActivatedAtLeaseOnce) == null) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Requesting location permission"),
+                      titleTextStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                      content: Text(
+                        "mars launcher collects location data to be able to show accurate temperature information.",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      actions: [
+                        TextButton(
+                          style: ButtonStyle(foregroundColor: MaterialStatePropertyAll<Color>(Colors.blue)),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    );
+                  }).then((value) {
+                settingsManager.setNotifierValueAndSave(settingsManager.weatherWidgetEnabledNotifier);
+              });
+
+              sharedPrefsManager.saveData(Keys.weatherActivatedAtLeaseOnce, true);
+            } else {
+              settingsManager.setNotifierValueAndSave(settingsManager.weatherWidgetEnabledNotifier);
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Row buildAppsNumberRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        GenericSettingsButton(
+            onPressed: () {
+              settingsManager.setNotifierValueAndSave(settingsManager.numberOfShortcutItemsNotifier);
+            },
+            name: Strings.settingsAppNumber),
+        Expanded(child: Container()),
+        ValueListenableBuilder<int>(
+            valueListenable: settingsManager.numberOfShortcutItemsNotifier,
+            builder: (context, numOfShortcutItems, child) {
+              return SizedBox(
+                  width: 86,
+                  child: TextButton(
+                    onPressed: () {
+                      settingsManager.setNotifierValueAndSave(settingsManager.numberOfShortcutItemsNotifier);
+                    },
+                    child: Center(child: Text(numOfShortcutItems.toString(), style: TEXT_STYLE_ITEMS)),
+                  ));
+            }),
+      ],
     );
   }
 }

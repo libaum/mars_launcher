@@ -9,13 +9,16 @@ class Strings {
   static const settingsSwipeRight = "swipe right";
   static const settingsHiddenApps = "hidden apps";
   static const settingsCredits = "credits";
+  static const settingsColors = "colors";
   static const settingsMore = "more";
   static const settingsChangeDefaultLauncher = "set default launcher";
-  static const settingsLightColor = "light color";
-  static const settingsDarkColor = "dark color";
   static const settingsAppNumber = "app number";
 
   static const creditsTitle = "Credits";
+  static const settingsColorsTitle = "Colors";
+  static const settingsColorsSearchColor = "search color";
+  static const settingsColorsLightBackground = "light background";
+  static const settingsColorsDarkBackground = "dark background";
 
   /// Standard names
   static const defaultTemperatureString = "-°C";
@@ -50,9 +53,8 @@ class Keys {
   static const typeAppSwipeRight = "swipeRightApp";
   static const themeMode = "themeMode";
   static const lightBackground = "light_background";
-  static const lightSearchColor = "light_search_color";
+  static const searchColor = "search_color";
   static const darkBackground = "dark_background";
-  static const darkSearchColor = "dark_search_color";
   static const weatherActivatedAtLeaseOnce = "weatherActivatedAtLeaseOnce";
 }
 

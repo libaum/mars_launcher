@@ -6,8 +6,7 @@ import 'package:mars_launcher/pages/fragments/cards/todo_list_card.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 
-const TEXT_STYLE_TITLE = TextStyle(fontSize: 30, fontWeight: FontWeight.normal);
-const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
+const TEXT_STYLE_TODO_TITLE = TextStyle(fontSize: 30, fontWeight: FontWeight.normal);
 const ROW_PADDING_RIGHT = 60.0;
 
 class TodoList extends StatefulWidget {
@@ -68,7 +67,7 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
                     const Text(
                       title,
                       textAlign: TextAlign.left,
-                      style: TEXT_STYLE_TITLE,
+                      style: TEXT_STYLE_TODO_TITLE,
                     ),
                   TextButton(
                       onPressed: () {

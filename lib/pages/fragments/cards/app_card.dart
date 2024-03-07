@@ -19,7 +19,8 @@ class AppCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var fontFamily = isShortcutItem ? FONT_REGULAR : FONT_LIGHT;
     var letterSpacing = isShortcutItem ? 1.0 : 0.0;
-    var textColor = isShortcutItem ? Theme.of(context).primaryColor : COLOR_ACCENT;
+    var textColor = isShortcutItem ? Theme.of(context).primaryColor : Theme.of(context).colorScheme.secondary;
+
 
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),

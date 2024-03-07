@@ -1,13 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:mars_launcher/pages/settings/utils.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/strings.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-const TEXT_STYLE_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
-const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
-const ROW_PADDING_RIGHT = 50.0;
 
 class Credits extends StatefulWidget {
   const Credits({Key? key}) : super(key: key);
@@ -35,7 +32,7 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(50, 20, ROW_PADDING_RIGHT, 0),
+            padding: const EdgeInsets.fromLTRB(50, 20, 0, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
