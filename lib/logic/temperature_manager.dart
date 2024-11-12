@@ -12,7 +12,6 @@ import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:open_meteo/open_meteo.dart';
-import 'package:sunrise_sunset_calc/sunrise_sunset_calc.dart';
 
 class TemperatureManager {
   final sharedPrefsManager = getIt<SharedPrefsManager>();
@@ -67,28 +66,43 @@ class TemperatureManager {
       return couldNotRetrieveNewTemperature("[$runtimeType] latitude or longitude == null");
     }
 
-    /// Update sunrise/sunset data if last update later than 10h (10h * 60min * 60s)
-    bool isMoreThanTenHours = DateTime.now().difference(lastSunriseSunsetUpdate).inHours > 10;
-    if (isMoreThanTenHours) {
-      updateSunriseSunset();
-    }
-
     /// Request the current weather for location data
-    print("[$runtimeType] Check new weather");
-    var weather = Weather(latitude: locationService.locationData.latitude!, longitude: locationService.locationData.longitude!, temperature_unit: TemperatureUnit.celsius);
+    print("[$runtimeType] Fetching new weather data");
 
-    var result = await weather.raw_request(current: [Current.temperature_2m]);
-    final temperatureObj = result["current"];
-    if (temperatureObj != null) {
-      final temp = temperatureObj["temperature_2m"];
-      if (temp != null) {
-        setNewTemperature(temp);
-      } else {
-        couldNotRetrieveNewTemperature("[$runtimeType] temp is null");
+    final weatherApi = WeatherApi(temperatureUnit: TemperatureUnit.celsius);
+
+    DateTime now = DateTime.now();
+    try {
+      final response = await weatherApi.request(
+        latitude: locationService.locationData.latitude!,
+        longitude: locationService.locationData.longitude!,
+        current: {WeatherCurrent.temperature_2m},
+        startDate: now,
+        endDate: now,
+        daily: {WeatherDaily.sunrise, WeatherDaily.sunset},
+      );
+
+      final temp = response.currentData[WeatherCurrent.temperature_2m]?.value.round() ?? "-";
+      print(response.dailyData[WeatherDaily.sunset]?.values.values.first);
+      setNewTemperature(temp);
+
+      /// Update sunrise/sunset data if last update later than 10h (10h * 60min * 60s)
+      bool isMoreThanTenHours = DateTime.now().difference(lastSunriseSunsetUpdate).inHours > 10;
+      if (isMoreThanTenHours) {
+        final sunriseUnix = response.dailyData[WeatherDaily.sunrise]?.values.values.first;
+        final sunsetUnix = response.dailyData[WeatherDaily.sunset]?.values.values.first;
+
+        if (sunriseUnix != null && sunsetUnix != null) {
+          DateTime sunriseDateTime = DateTime.fromMillisecondsSinceEpoch(sunriseUnix.toInt() * 1000);
+          DateTime sunsetDateTime = DateTime.fromMillisecondsSinceEpoch(sunsetUnix.toInt() * 1000);
+          updateSunriseSunset(sunsetDateTime, sunriseDateTime);
+        }
       }
-    } else {
-      couldNotRetrieveNewTemperature("[$runtimeType] temperatureObj is null");
+
+        } catch (e) {
+      couldNotRetrieveNewTemperature("[$runtimeType] Error fetching weather data: $e");
     }
+
   }
 
   void setNewTemperature(temp) {
@@ -98,12 +112,9 @@ class TemperatureManager {
     print("[$runtimeType] New Temperature value: ${temperatureNotifier.value}");
   }
 
-  void updateSunriseSunset() {
-    final now = DateTime.now();
-    final utcOffset = Duration(minutes: now.timeZoneOffset.inMinutes);
-    final sunriseSunset = getSunriseSunset(locationService.locationData.latitude!, locationService.locationData.longitude!, utcOffset, now);
-    sunriseSunsetString = "Sunrise: ${DateFormat.Hm().format(sunriseSunset.sunrise)}\nSunset:  ${DateFormat.Hm().format(sunriseSunset.sunset)}";
-    lastSunriseSunsetUpdate = now;
+  void updateSunriseSunset(DateTime sunset, DateTime sunrise) {
+    sunriseSunsetString = "Sunrise: ${DateFormat.Hm().format(sunrise)}\nSunset:  ${DateFormat.Hm().format(sunset)}";
+    lastSunriseSunsetUpdate = DateTime.now();
   }
 
   void couldNotRetrieveNewTemperature(String cause) {
