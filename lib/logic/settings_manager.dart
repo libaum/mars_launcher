@@ -1,14 +1,16 @@
 
 import 'package:flutter/services.dart';
-import 'package:mars_launcher/global.dart';
+import 'package:mars_launcher/constants/global.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
+import 'package:mars_launcher/constants/method_channels.dart';
 
 
 
 class SettingsManager {
+  static const MethodChannel _openDefaultLauncherSettingsChannel = MethodChannel(MethodChannels.openDefaultLauncherSettings);
 
   final sharedPrefsManager = getIt<SharedPrefsManager>();
 
@@ -58,9 +60,8 @@ class SettingsManager {
 
 
   Future<void> openDefaultLauncherSettings() async {
-    const platform = MethodChannel('com.cloudcatcher.launcher/settings');
     try {
-      await platform.invokeMethod('openLauncherSettings');
+      await _openDefaultLauncherSettingsChannel.invokeMethod('openLauncherSettings');
     } on PlatformException catch (e) {
       throw 'Could not launch launcher settings: ${e.message}';
     }

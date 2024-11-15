@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mars_launcher/data/app_info.dart';
-import 'package:mars_launcher/global.dart';
+import 'package:mars_launcher/constants/global.dart';
 import 'package:mars_launcher/logic/apps_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/services/service_locator.dart';

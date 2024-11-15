@@ -4,6 +4,7 @@ import 'package:mars_launcher/pages/home/home.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:sizer/sizer.dart';
+import 'package:mars_launcher/constants/method_channels.dart';
 
 
 void main() async {
@@ -12,6 +13,12 @@ void main() async {
   await setupGetIt();
 
   runApp(MarsLauncher());
+  registerAppChangeReceiver();
+}
+
+void registerAppChangeReceiver() {
+  const platform = MethodChannel(MethodChannels.notifyAppChanges);
+  platform.invokeMethod('registerAppChangeReceiver');
 }
 
 class MarsLauncher extends StatelessWidget {

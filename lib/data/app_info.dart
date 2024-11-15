@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:android_intent_plus/android_intent.dart';
-import 'package:device_apps/device_apps.dart';
+import 'package:mars_launcher/logic/apps_manager.dart';
+import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/strings.dart';
 
 
 class AppInfo {
+
   final String packageName;
   final String appName;
   final bool systemApp;
@@ -40,7 +42,8 @@ class AppInfo {
 
   void open() {
     if (this.packageName.isNotEmpty && this.appName != Strings.appNameUninitialized) {
-      DeviceApps.openApp(this.packageName);
+      final appsManager = getIt<AppsManager>();
+      appsManager.launchApp(packageName);
     } else {
       print("[$runtimeType] Could not open app: packageName is empty");
     }
@@ -54,8 +57,14 @@ class AppInfo {
       await intent.launch();
   }
 
+
   void openSettings() {
-    DeviceApps.openAppSettings(this.packageName);
+    if (this.packageName.isNotEmpty && this.appName != Strings.appNameUninitialized) {
+      final appsManager = getIt<AppsManager>();
+      appsManager.openAppSettings(packageName);
+    } else {
+      print("[$runtimeType] Could not open app settings: packageName is empty");
+    }
   }
 
   AppInfo.fromJson(Map<String, dynamic> json)

@@ -1,16 +1,20 @@
 import 'dart:convert';
 
-import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mars_launcher/data/app_info.dart';
-import 'package:mars_launcher/global.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
-
+import 'package:mars_launcher/constants/method_channels.dart';
 
 
 class AppsManager {
+  static const MethodChannel _installedAppsChannel    = MethodChannel(MethodChannels.installedApps);
+  static const MethodChannel _launchAppChannel        = MethodChannel(MethodChannels.launchApp);
+  static const MethodChannel _openAppSettingsChannel  = MethodChannel(MethodChannels.openAppSettings);
+  static const MethodChannel _notifyAppChangesChannel = MethodChannel(MethodChannels.notifyAppChanges);
+
   /// LIST of INSTALLED APPs
   final appsNotifier = ValueNotifier<List<AppInfo>>([]);
 
@@ -32,7 +36,41 @@ class AppsManager {
 
 
     /// Listen to change of apps (install/uninstall)
-    DeviceApps.listenToAppsChanges().where((event) => event.event != ApplicationEventType.updated).listen((event) {handleAppEvent(event);});
+    _notifyAppChangesChannel.setMethodCallHandler(_handleAppChange);
+  }
+
+  Future<void> _handleAppChange(MethodCall call) async {
+    if (call.method == 'onAppChanged') {
+      String packageName = call.arguments;
+      print("[$runtimeType] received app event for packageName: ${packageName}");
+      if (!currentlySyncing) {
+        currentlySyncing = true;
+        await syncInstalledApps();
+        currentlySyncing = false;
+      }
+    }
+  }
+
+  /// Startet eine App anhand ihres Paketnamens
+  Future<bool> launchApp(String packageName) async {
+    try {
+      final bool success = await _launchAppChannel.invokeMethod('launchApp', {'packageName': packageName});
+      return success;
+    } on PlatformException catch (e) {
+      print("Fehler beim Starten der App: ${e.message}");
+      return false;
+    }
+  }
+
+  /// Öffnet die Einstellungsseite einer App anhand ihres Paketnamens
+  Future<bool> openAppSettings(String packageName) async {
+    try {
+      final bool success = await _openAppSettingsChannel.invokeMethod('openAppSettings', {'packageName': packageName});
+      return success;
+    } on PlatformException catch (e) {
+      print("Fehler beim Öffnen der App-Einstellungen: ${e.message}");
+      return false;
+    }
   }
 
   Future<void> loadAndSyncApps() async {
@@ -92,38 +130,25 @@ class AppsManager {
     }
   }
 
-  handleAppEvent(ApplicationEvent event) async {
-    print("[$runtimeType] received app event: ${event.event}, packageName: ${event.packageName}");
-    if (!currentlySyncing) {
-      currentlySyncing = true;
-      await syncInstalledApps();
-      currentlySyncing = false;
-    }
-  }
-
   syncInstalledApps() async {
     print("START SYNCING APPS");
     final stopwatch = Stopwatch()..start();
-    List<Application> applications = await DeviceApps.getInstalledApplications(
-      includeSystemApps: true,
-      onlyAppsWithLaunchIntent: true,
-    );
 
     List<AppInfo> apps = [];
+    final List<dynamic> applications = await _installedAppsChannel.invokeMethod('getInstalledApps');
+
     for (var app in applications) {
-      if (app.packageName == PACKAGE_NAME) {
-        continue;
-      }
+      final Map<String, dynamic> appMap = Map<String, dynamic>.from(app);
 
-      AppInfo appInfo = AppInfo(
-        packageName: app.packageName,
-        appName: app.appName,
-        systemApp: app.systemApp,
-        isHidden: hiddenAppsNotifier.value.contains(app.packageName), /// If in hiddenApps set hide status true else false
-        displayName: renamedApps[app.packageName] /// Get display name if in renamedApps else null
-      );
+        AppInfo appInfo = AppInfo(
+            packageName: appMap['packageName'],
+            appName: appMap['appName'],
+            systemApp: bool.parse(appMap['isSystemApp']),
+            isHidden: hiddenAppsNotifier.value.contains(appMap['packageName']), /// If in hiddenApps set hide status true else false
+            displayName: renamedApps[appMap['packageName']] /// Get display name if in renamedApps else null
+        );
 
-      apps.add(appInfo);
+        apps.add(appInfo);
     }
 
     /// Sort from A-Z

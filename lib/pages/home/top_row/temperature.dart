@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mars_launcher/global.dart';
+import 'package:mars_launcher/constants/global.dart';
 import 'package:mars_launcher/logic/temperature_manager.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';

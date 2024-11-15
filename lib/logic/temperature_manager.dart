@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mars_launcher/global.dart';
+import 'package:mars_launcher/constants/global.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/services/location_service.dart';

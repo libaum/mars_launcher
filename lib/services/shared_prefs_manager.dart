@@ -1,4 +1,4 @@
-import 'package:mars_launcher/global.dart';
+import 'package:mars_launcher/constants/global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 printSharedPrefAccess(text) {
