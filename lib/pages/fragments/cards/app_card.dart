@@ -43,7 +43,7 @@ class AppCard extends StatelessWidget {
           maxLines: isShortcutItem ? 1 : 2,
         ),
         style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all(textColor),
+          foregroundColor: WidgetStateProperty.all(textColor),
         ),
       ),
     );

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_color_picker.dart';
 import 'package:mars_launcher/pages/settings/utils.dart';

@@ -202,7 +202,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                       ),
                       actions: [
                         TextButton(
-                          style: ButtonStyle(foregroundColor: MaterialStatePropertyAll<Color>(Colors.blue)),
+                          style: ButtonStyle(foregroundColor: WidgetStatePropertyAll<Color>(Colors.blue)),
                           onPressed: () {
                             Navigator.pop(context);
                           },

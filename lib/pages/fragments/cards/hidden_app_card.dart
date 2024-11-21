@@ -35,7 +35,7 @@ class HiddenAppCard extends StatelessWidget {
               ),
             ),
             style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(textColor),
+              foregroundColor: WidgetStateProperty.all(textColor),
             ),
           ),
         ),

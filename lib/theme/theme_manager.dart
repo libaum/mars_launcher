@@ -39,7 +39,7 @@ class ThemeManager {
     return basicLightTheme.copyWith(
       scaffoldBackgroundColor: lightBackground,
       colorScheme: ColorScheme.light(
-        background: lightBackground,
+        surface: lightBackground,
         primary: COLOR_LIGHT_PRIMARY,
         secondary: searchTextColor,
         brightness: Brightness.light,
@@ -51,7 +51,7 @@ class ThemeManager {
     return basicDarkTheme.copyWith(
       scaffoldBackgroundColor: darkBackground,
       colorScheme: ColorScheme.light(
-        background: darkBackground,
+        surface: darkBackground,
         primary: COLOR_DARK_PRIMARY,
         secondary: searchTextColor,
         brightness: Brightness.dark,

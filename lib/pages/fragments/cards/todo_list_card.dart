@@ -36,7 +36,7 @@ class TodoListCard extends StatelessWidget {
               ),
             ),
             style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(textColor),
+              foregroundColor: WidgetStateProperty.all(textColor),
             ),
           ),
         ),

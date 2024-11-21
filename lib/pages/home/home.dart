@@ -47,7 +47,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     print("BUILDING HOME SCREEN");
     return PopScope( /// Detect back button to close app search
       canPop: false,
-      onPopInvoked: (didPop) {_onWillPop(didPop);},
+      onPopInvokedWithResult: (didPop, result) {_onWillPop(didPop);},
       child: GestureDetector(
         /// SWIPE DETECTION
         onHorizontalDragUpdate: _horizontalDragHandler,

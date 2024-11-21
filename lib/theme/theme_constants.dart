@@ -19,21 +19,21 @@ const FONT_REGULAR = "NotoSansRegular";
 ButtonStyle getDialogButtonStyle(isDarkMode) {
   return ButtonStyle(
       // backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
-      backgroundColor: MaterialStateProperty.all<Color>(COLOR_ACCENT.withOpacity(isDarkMode ? 0.1 : 0.25)),
-      overlayColor: MaterialStateProperty.all<Color>(COLOR_ACCENT.withOpacity(0.05)),
-      foregroundColor: MaterialStateProperty.all<Color>(COLOR_ACCENT),
-      textStyle: MaterialStateProperty.all(TextStyle(
+      backgroundColor: WidgetStateProperty.all<Color>(COLOR_ACCENT.withOpacity(isDarkMode ? 0.1 : 0.25)),
+      overlayColor: WidgetStateProperty.all<Color>(COLOR_ACCENT.withOpacity(0.05)),
+      foregroundColor: WidgetStateProperty.all<Color>(COLOR_ACCENT),
+      textStyle: WidgetStateProperty.all(TextStyle(
         fontFamily: FONT_LIGHT,
         fontWeight: FontWeight.bold,
       )),
-      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+      shape: WidgetStateProperty.all(RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(3.0)),
       )));
 }
 
 ThemeData basicLightTheme = ThemeData(
   colorScheme: ColorScheme.light(
-    background: COLOR_LIGHT_BACKGROUND,
+    surface: COLOR_LIGHT_BACKGROUND,
     primary: COLOR_LIGHT_PRIMARY,
     secondary: COLOR_ACCENT,
     brightness: Brightness.light,
@@ -68,14 +68,14 @@ ThemeData basicLightTheme = ThemeData(
   ),
   textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(COLOR_LIGHT_PRIMARY),
-          overlayColor: MaterialStateProperty.all<Color>(Colors.transparent))),
+          foregroundColor: WidgetStateProperty.all<Color>(COLOR_LIGHT_PRIMARY),
+          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent))),
 );
 
 ThemeData basicDarkTheme = ThemeData(
 
   colorScheme: ColorScheme.dark(
-    background: COLOR_DARK_BACKGROUND,
+    surface: COLOR_DARK_BACKGROUND,
     primary: COLOR_DARK_PRIMARY,
     secondary: COLOR_ACCENT,
     brightness: Brightness.dark,
@@ -108,8 +108,8 @@ ThemeData basicDarkTheme = ThemeData(
 
   textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(COLOR_DARK_PRIMARY),
-          overlayColor: MaterialStateProperty.all<Color>(Colors.transparent))),
+          foregroundColor: WidgetStateProperty.all<Color>(COLOR_DARK_PRIMARY),
+          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent))),
 );
 
 SystemUiOverlayStyle lightSystemUiOverlayStyle = SystemUiOverlayStyle(
