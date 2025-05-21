@@ -1,6 +1,6 @@
-# mars launcher
+# Mars Launcher
 
-minimalistic and really simple android launcher app
+Minimalistic and really simple Android Launcher App
 
 available in [Google Play](https://play.google.com/store/apps/details?id=com.cloudcatcher.mars_launcher)
 
