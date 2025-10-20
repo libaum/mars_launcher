@@ -5,6 +5,7 @@ import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/logic/settings_manager.dart';
 
 class AppSearchFragment extends StatefulWidget {
   final AppSearchMode appSearchMode;
@@ -79,6 +80,7 @@ class TextFieldSearchApp extends StatefulWidget {
 
 class _TextFieldSearchAppState extends State<TextFieldSearchApp> {
   late FocusNode _focusNode;
+  final settingsManager = getIt<SettingsManager>();
 
   @override
   void initState() {
@@ -94,10 +96,12 @@ class _TextFieldSearchAppState extends State<TextFieldSearchApp> {
 
   @override
   Widget build(BuildContext context) {
+    // Verwende die Einstellung, um zu entscheiden, ob die Tastatur automatisch angezeigt werden soll
+    final shouldAutofocus = settingsManager.keyboardAutofocusEnabledNotifier.value;
 
     return TextField(
-      focusNode: _focusNode, /// to automatically focus TextField when search is opened
-      autofocus: true,
+      focusNode: _focusNode,
+      autofocus: shouldAutofocus,
       cursorColor: Colors.white,
       cursorWidth: 0,
       decoration: InputDecoration(
@@ -114,3 +118,4 @@ class _TextFieldSearchAppState extends State<TextFieldSearchApp> {
     );
   }
 }
+

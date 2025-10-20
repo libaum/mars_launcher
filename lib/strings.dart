@@ -13,6 +13,7 @@ class Strings {
   static const settingsMore = "more";
   static const settingsChangeDefaultLauncher = "set default launcher";
   static const settingsAppNumber = "app number";
+  static const String settingsKeyboardAutofocus = "Keyboard";
 
   static const creditsTitle = "Credits";
   static const settingsColorsTitle = "Colors";
@@ -56,6 +57,7 @@ class Keys {
   static const searchColor = "search_color";
   static const darkBackground = "dark_background";
   static const weatherActivatedAtLeaseOnce = "weatherActivatedAtLeaseOnce";
+  static const keyboardAutofocusEnabled = "keyboard_autofocus_enabled";
 }
 
 class JsonKeys {
@@ -65,3 +67,4 @@ class JsonKeys {
   static const displayName = "appDisplayName";
   static const appIsHidden = "appIsHidden";
 }
+

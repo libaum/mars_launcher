@@ -137,6 +137,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             },
                             name: Strings.settingsHiddenApps),
 
+                        /// KEYBOARD AUTOFOCUS
+                        ///buildKeyboardAutofocusRow(),
+
                         /// CREDITS
                         GenericSettingsButton(
                             onPressed: () {
@@ -249,6 +252,25 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
       ],
     );
   }
+
+  Row buildKeyboardAutofocusRow() {
+    return Row(
+      children: [
+        GenericSettingsButton(
+            onPressed: () {
+              settingsManager.setNotifierValueAndSave(settingsManager.keyboardAutofocusEnabledNotifier);
+            },
+            name: Strings.settingsKeyboardAutofocus),
+        Expanded(child: Container()),
+        ShowHideButton(
+          notifier: settingsManager.keyboardAutofocusEnabledNotifier,
+          onPressed: () {
+            settingsManager.setNotifierValueAndSave(settingsManager.keyboardAutofocusEnabledNotifier);
+          },
+        ),
+      ],
+    );
+  }
 }
 
 class ShowHideButton extends StatelessWidget {
@@ -279,3 +301,4 @@ class ShowHideButton extends StatelessWidget {
     );
   }
 }
+
