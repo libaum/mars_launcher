@@ -5,23 +5,10 @@
   </a>
 </h1>
 
-<!-- > **M**inimalist **a**nd **r**eally **s**imple Android Launcher. -->
-
-<!-- [![Flutter](https://img.shields.io/badge/Made%20with-Flutter-02569B?style=flat&logo=flutter&logoColor=white)](https://flutter.dev/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE) -->
-
-<!-- <br><br> -->
-
-<!-- <div align="center">
-  <img src="https://github.com/droggl/mars_launcher/assets/65762534/c646b4d1-178b-4527-be4c-ec416c330316" width="100%" alt="Mars Launcher Showcase">
-</div> -->
-
-<!-- --- -->
-
 
 **Mars Launcher** (**M**inimalist **a**nd **r**eally **s**imple) is a distraction-free home screen replacement for Android built with **Flutter**. It is designed to help users reduce screen time and reclaim their focus. By removing colorful icons and clutter, it leaves only what is essential, following the philosophy of digital minimalism.
 
-![Mars Launcher Showcase](https://github.com/droggl/mars_launcher/assets/65762534/c646b4d1-178b-4527-be4c-ec416c330316)
+![Mars Launcher Showcase](assets/mars-launcher-showcase.png)
 
 ## 🎯 Motivation
 
