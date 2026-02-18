@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/logic/app_search_manager.dart';
+import 'package:mars_launcher/logic/apps_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/logic/temperature_manager.dart';
 import 'package:mars_launcher/pages/home/app_shortcuts_fragment.dart';
@@ -32,6 +33,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   final themeManager = getIt<ThemeManager>();
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final temperatureManager = getIt<TemperatureManager>();
+  final appsManager = getIt<AppsManager>();
   final sensitivity = 8;
 
   final ValueNotifier<bool> searchAppsNotifier = ValueNotifier(false);
@@ -41,6 +43,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      appsManager.loadAndSyncApps();
+    });
   }
 
   @override

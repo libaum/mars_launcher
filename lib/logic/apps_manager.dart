@@ -18,6 +18,9 @@ class AppsManager {
   /// LIST of INSTALLED APPs
   final appsNotifier = ValueNotifier<List<AppInfo>>([]);
 
+  /// Expose sync state for loading UI.
+  final ValueNotifier<bool> syncingNotifier = ValueNotifier(false);
+
   final sharedPrefsManager = getIt<SharedPrefsManager>();
 
   /// LIST of HIDDEN APPs (as packageName)
@@ -28,12 +31,12 @@ class AppsManager {
   final ValueNotifier<bool> renamedAppsUpdatedNotifier = ValueNotifier(false);
 
   var currentlySyncing = false;
+  bool _hasLoadedApps = false;
 
   AppsManager() {
     print("[$runtimeType] INITIALISING");
     hiddenAppsNotifier = ValueNotifier((sharedPrefsManager.readStringList(Keys.hiddenApps) ?? []).toSet());
-    loadAndSyncApps();
-
+    loadRenamedAppsFromSharedPrefs();
 
     /// Listen to change of apps (install/uninstall)
     _notifyAppChangesChannel.setMethodCallHandler(_handleAppChange);
@@ -73,10 +76,12 @@ class AppsManager {
     }
   }
 
-  Future<void> loadAndSyncApps() async {
-    loadRenamedAppsFromSharedPrefs();
+  Future<void> loadAndSyncApps({bool force = false}) async {
+    if (_hasLoadedApps && !force) {
+      return;
+    }
 
-    syncInstalledApps();
+    await syncInstalledApps();
   }
 
   void addOrUpdateRenamedApp(AppInfo appInfo, String newName) {
@@ -133,12 +138,14 @@ class AppsManager {
   syncInstalledApps() async {
     print("START SYNCING APPS");
     final stopwatch = Stopwatch()..start();
+    syncingNotifier.value = true;
 
-    List<AppInfo> apps = [];
-    final List<dynamic> applications = await _installedAppsChannel.invokeMethod('getInstalledApps');
+    try {
+      List<AppInfo> apps = [];
+      final List<dynamic> applications = await _installedAppsChannel.invokeMethod('getInstalledApps');
 
-    for (var app in applications) {
-      final Map<String, dynamic> appMap = Map<String, dynamic>.from(app);
+      for (var app in applications) {
+        final Map<String, dynamic> appMap = Map<String, dynamic>.from(app);
 
         AppInfo appInfo = AppInfo(
             packageName: appMap['packageName'],
@@ -149,12 +156,16 @@ class AppsManager {
         );
 
         apps.add(appInfo);
-    }
+      }
 
-    /// Sort from A-Z
-    apps.sort((a, b) => a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase()));
-    appsNotifier.value = apps;
-    print("[$runtimeType] syncInstalledApps() executed in ${stopwatch.elapsed.inMilliseconds}ms");
+      /// Sort from A-Z
+      apps.sort((a, b) => a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase()));
+      appsNotifier.value = apps;
+      _hasLoadedApps = true;
+      print("[$runtimeType] syncInstalledApps() executed in ${stopwatch.elapsed.inMilliseconds}ms");
+    } finally {
+      syncingNotifier.value = false;
+    }
   }
 
   loadRenamedAppsFromSharedPrefs() {

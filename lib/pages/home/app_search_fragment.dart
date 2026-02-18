@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/logic/app_search_manager.dart';
+import 'package:mars_launcher/logic/apps_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/services/service_locator.dart';
@@ -20,6 +21,7 @@ class AppSearchFragment extends StatefulWidget {
 
 class _AppSearchFragmentState extends State<AppSearchFragment> with WidgetsBindingObserver {
   final appSearchManager = getIt<AppSearchManager>();
+  final appsManager = getIt<AppsManager>();
 
   @override
   void initState() {
@@ -50,15 +52,34 @@ class _AppSearchFragmentState extends State<AppSearchFragment> with WidgetsBindi
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(12.0),
-            child: ValueListenableBuilder<List<AppInfo>>(
-                valueListenable: appSearchManager.filteredAppsNotifier,
-                builder: (context, filteredApps, child) {
-                  return ListView.builder(
+            child: ValueListenableBuilder<bool>(
+              valueListenable: appsManager.syncingNotifier,
+              builder: (context, isSyncing, child) {
+                final isInitialLoad = isSyncing && appsManager.appsNotifier.value.isEmpty;
+                if (isInitialLoad) {
+                  final spinnerColor = Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: spinnerColor,
+                    ),
+                  );
+                }
+
+                return ValueListenableBuilder<List<AppInfo>>(
+                  valueListenable: appSearchManager.filteredAppsNotifier,
+                  builder: (context, filteredApps, child) {
+                    return ListView.builder(
                       itemCount: filteredApps.length,
                       itemBuilder: (context, index) {
                         return appSearchManager.getMemorizedAppCard(filteredApps[index]);
-                      });
-                }),
+                      },
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       ],
@@ -118,4 +139,3 @@ class _TextFieldSearchAppState extends State<TextFieldSearchApp> {
     );
   }
 }
-
