@@ -77,76 +77,86 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                     child: SingleChildScrollView(
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        /// SET DEFAULT LAUNCHER
-                        GenericSettingsButton(
-                            onPressed: () {
-                              settingsManager.openDefaultLauncherSettings();
-                            },
-                            name: Strings.settingsChangeDefaultLauncher),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /// SET DEFAULT LAUNCHER
+                            GenericSettingsButton(
+                                onPressed: () {
+                                  settingsManager.openDefaultLauncherSettings();
+                                },
+                                name: Strings.settingsChangeDefaultLauncher),
 
-                        /// APPS NUMBER
-                        buildAppsNumberRow(),
+                            /// APPS NUMBER
+                            buildAppsNumberRow(),
 
-                        /// CLOCK APP
-                        buildTopRowAppRow(
-                            specialShortcutAppNotifier: appShortcutsManager.clockAppNotifier,
-                            widgetEnabledNotifier: settingsManager.clockWidgetEnabledNotifier,
-                            name: Strings.settingsClockApp),
+                            /// CLOCK APP
+                            buildTopRowAppRow(
+                                specialShortcutAppNotifier:
+                                    appShortcutsManager.clockAppNotifier,
+                                widgetEnabledNotifier:
+                                    settingsManager.clockWidgetEnabledNotifier,
+                                name: Strings.settingsClockApp),
 
-                        /// WEATHER APP
-                        buildWeatherAppRow(context),
+                            /// WEATHER APP
+                            buildWeatherAppRow(context),
 
-                        /// CALENDAR APP
-                        buildTopRowAppRow(
-                            specialShortcutAppNotifier: appShortcutsManager.calendarAppNotifier,
-                            widgetEnabledNotifier: settingsManager.calendarWidgetEnabledNotifier,
-                            name: Strings.settingsCalendarApp),
+                            /// CALENDAR APP
+                            buildTopRowAppRow(
+                                specialShortcutAppNotifier:
+                                    appShortcutsManager.calendarAppNotifier,
+                                widgetEnabledNotifier: settingsManager
+                                    .calendarWidgetEnabledNotifier,
+                                name: Strings.settingsCalendarApp),
 
-                        /// BATTERY
-                        buildTopRowAppRow(
-                            specialShortcutAppNotifier: appShortcutsManager.batteryAppNotifier,
-                            widgetEnabledNotifier: settingsManager.batteryWidgetEnabledNotifier,
-                            name: Strings.settingsBattery),
+                            /// BATTERY
+                            buildTopRowAppRow(
+                                specialShortcutAppNotifier:
+                                    appShortcutsManager.batteryAppNotifier,
+                                widgetEnabledNotifier: settingsManager
+                                    .batteryWidgetEnabledNotifier,
+                                name: Strings.settingsBattery),
 
-                        /// SWIPE LEFT
-                        GenericSettingsButton(
-                            onPressed: () {
-                              pushAppSearch(appShortcutsManager.swipeLeftAppNotifier);
-                            },
-                            name: Strings.settingsSwipeLeft),
+                            /// SWIPE LEFT
+                            GenericSettingsButton(
+                                onPressed: () {
+                                  pushAppSearch(
+                                      appShortcutsManager.swipeLeftAppNotifier);
+                                },
+                                name: Strings.settingsSwipeLeft),
 
-                        /// SWIPE RIGHT
-                        GenericSettingsButton(
-                            onPressed: () {
-                              pushAppSearch(appShortcutsManager.swipeRightAppNotifier);
-                            },
-                            name: Strings.settingsSwipeRight),
+                            /// SWIPE RIGHT
+                            GenericSettingsButton(
+                                onPressed: () {
+                                  pushAppSearch(appShortcutsManager
+                                      .swipeRightAppNotifier);
+                                },
+                                name: Strings.settingsSwipeRight),
 
-                        /// COLORS
-                        GenericSettingsButton(
-                            onPressed: () {
-                              pushOtherPage(SettingsColors());
-                            },
-                            name: Strings.settingsColors),
+                            /// COLORS
+                            GenericSettingsButton(
+                                onPressed: () {
+                                  pushOtherPage(SettingsColors());
+                                },
+                                name: Strings.settingsColors),
 
-                        /// HIDDEN APPS
-                        GenericSettingsButton(
-                            onPressed: () {
-                              pushOtherPage(HiddenApps());
-                            },
-                            name: Strings.settingsHiddenApps),
+                            /// HIDDEN APPS
+                            GenericSettingsButton(
+                                onPressed: () {
+                                  pushOtherPage(HiddenApps());
+                                },
+                                name: Strings.settingsHiddenApps),
 
-                        /// KEYBOARD AUTOFOCUS
-                        ///buildKeyboardAutofocusRow(),
+                            /// KEYBOARD AUTOFOCUS
+                            ///buildKeyboardAutofocusRow(),
 
-                        /// CREDITS
-                        GenericSettingsButton(
-                            onPressed: () {
-                              pushOtherPage(Credits());
-                            },
-                            name: Strings.settingsCredits),
-                      ]),
+                            /// CREDITS
+                            GenericSettingsButton(
+                                onPressed: () {
+                                  pushOtherPage(Credits());
+                                },
+                                name: Strings.settingsCredits),
+                          ]),
                     ),
                   ),
                 )
@@ -159,7 +169,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   }
 
   Row buildTopRowAppRow(
-      {required ValueNotifierWithKey<AppInfo> specialShortcutAppNotifier, required ValueNotifierWithKey<bool> widgetEnabledNotifier, required String name}) {
+      {required ValueNotifierWithKey<AppInfo> specialShortcutAppNotifier,
+      required ValueNotifierWithKey<bool> widgetEnabledNotifier,
+      required String name}) {
     return Row(
       children: [
         GenericSettingsButton(
@@ -192,20 +204,26 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
         ShowHideButton(
           notifier: settingsManager.weatherWidgetEnabledNotifier,
           onPressed: () {
-            if (sharedPrefsManager.readData(Keys.weatherActivatedAtLeaseOnce) == null) {
+            if (sharedPrefsManager.readData(Keys.weatherActivatedAtLeaseOnce) ==
+                null) {
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text("Requesting location permission"),
-                      titleTextStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                      titleTextStyle: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
                       content: Text(
-                        "mars launcher collects location data to be able to show accurate temperature information.",
+                        "Mars Launcher collects location data to be able to show accurate temperature information.",
                         style: TextStyle(color: Colors.black),
                       ),
                       actions: [
                         TextButton(
-                          style: ButtonStyle(foregroundColor: WidgetStatePropertyAll<Color>(Colors.blue)),
+                          style: ButtonStyle(
+                              foregroundColor:
+                                  WidgetStatePropertyAll<Color>(Colors.blue)),
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -214,12 +232,15 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                       ],
                     );
                   }).then((value) {
-                settingsManager.setNotifierValueAndSave(settingsManager.weatherWidgetEnabledNotifier);
+                settingsManager.setNotifierValueAndSave(
+                    settingsManager.weatherWidgetEnabledNotifier);
               });
 
-              sharedPrefsManager.saveData(Keys.weatherActivatedAtLeaseOnce, true);
+              sharedPrefsManager.saveData(
+                  Keys.weatherActivatedAtLeaseOnce, true);
             } else {
-              settingsManager.setNotifierValueAndSave(settingsManager.weatherWidgetEnabledNotifier);
+              settingsManager.setNotifierValueAndSave(
+                  settingsManager.weatherWidgetEnabledNotifier);
             }
           },
         ),
@@ -233,7 +254,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
       children: [
         GenericSettingsButton(
             onPressed: () {
-              settingsManager.setNotifierValueAndSave(settingsManager.numberOfShortcutItemsNotifier);
+              settingsManager.setNotifierValueAndSave(
+                  settingsManager.numberOfShortcutItemsNotifier);
             },
             name: Strings.settingsAppNumber),
         Expanded(child: Container()),
@@ -244,9 +266,12 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                   width: 86,
                   child: TextButton(
                     onPressed: () {
-                      settingsManager.setNotifierValueAndSave(settingsManager.numberOfShortcutItemsNotifier);
+                      settingsManager.setNotifierValueAndSave(
+                          settingsManager.numberOfShortcutItemsNotifier);
                     },
-                    child: Center(child: Text(numOfShortcutItems.toString(), style: TEXT_STYLE_ITEMS)),
+                    child: Center(
+                        child: Text(numOfShortcutItems.toString(),
+                            style: TEXT_STYLE_ITEMS)),
                   ));
             }),
       ],
@@ -258,14 +283,16 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
       children: [
         GenericSettingsButton(
             onPressed: () {
-              settingsManager.setNotifierValueAndSave(settingsManager.keyboardAutofocusEnabledNotifier);
+              settingsManager.setNotifierValueAndSave(
+                  settingsManager.keyboardAutofocusEnabledNotifier);
             },
             name: Strings.settingsKeyboardAutofocus),
         Expanded(child: Container()),
         ShowHideButton(
           notifier: settingsManager.keyboardAutofocusEnabledNotifier,
           onPressed: () {
-            settingsManager.setNotifierValueAndSave(settingsManager.keyboardAutofocusEnabledNotifier);
+            settingsManager.setNotifierValueAndSave(
+                settingsManager.keyboardAutofocusEnabledNotifier);
           },
         ),
       ],
@@ -274,7 +301,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
 }
 
 class ShowHideButton extends StatelessWidget {
-  const ShowHideButton({Key? key, required this.notifier, required this.onPressed}) : super(key: key);
+  const ShowHideButton(
+      {Key? key, required this.notifier, required this.onPressed})
+      : super(key: key);
 
   final ValueNotifierWithKey<bool> notifier;
   final Function onPressed;
@@ -301,4 +330,3 @@ class ShowHideButton extends StatelessWidget {
     );
   }
 }
-
