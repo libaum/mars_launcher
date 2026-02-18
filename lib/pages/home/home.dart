@@ -13,10 +13,19 @@ const double HEIGHT_SIZED_BOX = 50;
 const double BOTTOM_GESTURE_DEAD_ZONE = 16;
 
 class Home extends StatefulWidget {
+  final Widget? topRowOverride;
+  final Widget Function()? appShortcutsBuilder;
+  final Widget Function()? appSearchBuilder;
+
   @override
   _HomeState createState() => _HomeState();
 
-  const Home();
+  const Home({
+    super.key,
+    this.topRowOverride,
+    this.appShortcutsBuilder,
+    this.appSearchBuilder,
+  });
 }
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
@@ -80,7 +89,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TopRow(),
+                widget.topRowOverride ?? TopRow(),
                 SizedBox(
                   height: HEIGHT_SIZED_BOX,
                   child: ValueListenableBuilder<String>(
@@ -93,11 +102,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                       valueListenable: searchAppsNotifier,
                       builder: (context, searchApps, child) {
                       return !searchApps
-                          ? Align(
+                          ? (widget.appShortcutsBuilder?.call() ?? Align(
                           alignment:
                           Alignment.centerLeft, // Center only vertically
-                          child: AppShortcutsFragment())
-                          : AppSearchFragment(appSearchMode: AppSearchMode.openApp);
+                          child: AppShortcutsFragment()))
+                          : (widget.appSearchBuilder?.call() ?? AppSearchFragment(appSearchMode: AppSearchMode.openApp));
                     },
                   ),
                 )
