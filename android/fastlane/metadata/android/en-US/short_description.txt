@@ -1,0 +1,1 @@
+A minimalistic and really simple launcher to make you indistractable.
