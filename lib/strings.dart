@@ -56,7 +56,7 @@ class Keys {
   static const lightBackground = "light_background";
   static const searchColor = "search_color";
   static const darkBackground = "dark_background";
-  static const weatherActivatedAtLeaseOnce = "weatherActivatedAtLeaseOnce";
+  static const weatherActivatedAtLeastOnce = "weatherActivatedAtLeastOnce";
   static const keyboardAutofocusEnabled = "keyboard_autofocus_enabled";
 }
 

@@ -5,6 +5,7 @@ import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/pages/settings/colors.dart';
 import 'package:mars_launcher/pages/settings/credits.dart';
+import 'package:mars_launcher/services/location_service.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
@@ -203,42 +204,69 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
         Expanded(child: Container()),
         ShowHideButton(
           notifier: settingsManager.weatherWidgetEnabledNotifier,
-          onPressed: () {
-            if (sharedPrefsManager.readData(Keys.weatherActivatedAtLeaseOnce) ==
+          onPressed: () async {
+            // Check if this is the first time enabling weather
+            if (sharedPrefsManager.readData(Keys.weatherActivatedAtLeastOnce) ==
                 null) {
-              showDialog(
+              final bool? accepted = await showDialog<bool>(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text("Requesting location permission"),
-                      titleTextStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
+                      title: Text("Enable Weather?",
+                          style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
                       content: Text(
-                        "Mars Launcher collects location data to be able to show accurate temperature information.",
-                        style: TextStyle(color: Colors.black),
+                        "To show the current temperature, your location is sent anonymously to Open-Meteo.\n\nThis data is used only for weather updates and is never tracked or sold.",
+                        style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
+                            fontSize: 16),
                       ),
                       actions: [
                         TextButton(
-                          style: ButtonStyle(
-                              foregroundColor:
-                                  WidgetStatePropertyAll<Color>(Colors.blue)),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.pop(context, false);
                           },
-                          child: const Text('OK'),
+                          child: const Text('Cancel',
+                              style: TextStyle(color: Colors.grey)),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: const Text('Enable',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ],
                     );
-                  }).then((value) {
-                settingsManager.setNotifierValueAndSave(
-                    settingsManager.weatherWidgetEnabledNotifier);
-              });
+                  });
 
-              sharedPrefsManager.saveData(
-                  Keys.weatherActivatedAtLeaseOnce, true);
+              if (accepted == true) {
+                // Request location permission
+                final locationService = LocationService();
+                final bool permissionGranted = await locationService.checkPermission();
+
+                if (permissionGranted) {
+                  // Permission granted, enable weather widget
+                  sharedPrefsManager.saveData(
+                      Keys.weatherActivatedAtLeastOnce, true);
+                  settingsManager.setNotifierValueAndSave(
+                      settingsManager.weatherWidgetEnabledNotifier);
+                } else {
+                  // Permission denied, show info
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Location permission is required for weather updates'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
+              }
             } else {
+              // Toggle normal (on/off) - permission already handled
               settingsManager.setNotifierValueAndSave(
                   settingsManager.weatherWidgetEnabledNotifier);
             }
