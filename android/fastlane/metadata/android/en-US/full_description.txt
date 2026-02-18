@@ -1,1 +1,25 @@
-Mars Launcher is a minimalistic and really simple launcher that helps you focus on the most important apps, while providing a super fast search, many shortcuts and useful tools like the integrated to-do list and quick alarm maker.
+<b>Earth is loud. Your phone shouldn’t be.</b><br>
+<br>
+Mars Launcher is a minimalistic, text-based escape for digital minimalists and focus-seekers. It reduces your smartphone to its core purpose: a tool, not a trap. By removing colorful icons and dopamine-driven clutter, Mars gives you your time back.<br>
+<br>
+<b>🚀 CORE NAVIGATION</b><br>
+• <b>Instant Launch:</b> Swipe up and start typing. As soon as the search result is unique, the app opens automatically. No extra clicks. No friction. Experience the fastest way to access your apps.<br>
+• <b>Up to 7 Text Shortcuts:</b> Tap to launch, long-press to assign your daily drivers.<br>
+• <b>Swipe Left/Right:</b> Instant access to custom shortcuts assigned in settings.<br>
+• <b>Settings:</b> Long-press the void (empty space) to customize your mission control.<br>
+<br>
+<b>🛠️ STEALTH TOOLS (HIDDEN MODULES)</b><br>
+Mars hides powerful productivity tools directly behind the widgets you already use. No extra icons needed:<br>
+• <b>Clock:</b> Long-press for a quick alarm maker.<br>
+• <b>Date:</b> Long-press for a minimalist, built-in To-Do list.<br>
+• <b>Weather:</b> Long-press to reveal local Sunset and Sunrise times.<br>
+<br>
+<b>🌓 DESIGNED FOR YOUR VIBE</b><br>
+• <b>Toggle Theme:</b> Double-tap the empty space to switch between Dark and Light mode instantly.<br>
+• <b>AMOLED Friendly:</b> Pure black background to save battery and reduce eye strain.<br>
+• <b>Customization:</b> Change colors and UI settings to match your personal aesthetic.<br>
+<br>
+<b>WHY MARS?</b><br>
+We believe in <b>Humane Tech</b>. Mars has no ads, no data tracking, and no subscriptions. It’s a clean and quiet environment for those who want to "Escape Earth" and reclaim their focus.<br>
+<br>
+<b>Welcome to Mars Launcher. Welcome home.</b>

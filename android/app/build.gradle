@@ -54,7 +54,7 @@ android {
         }
         debug {
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Mars DEBUG"
+            resValue "string", "app_name", "Mars Launcher DEBUG"
         }
     }
 }

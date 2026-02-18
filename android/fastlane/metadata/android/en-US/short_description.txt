@@ -1,1 +1,1 @@
-A minimalistic and really simple launcher to make you indistractable.
+Escape noise. A lightning-fast, text-based launcher with hidden focus tools.
