@@ -10,6 +10,7 @@ import 'package:mars_launcher/pages/settings/settings.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
 const double HEIGHT_SIZED_BOX = 50;
+const double BOTTOM_GESTURE_DEAD_ZONE = 16;
 
 class Home extends StatefulWidget {
   @override
@@ -25,6 +26,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   final sensitivity = 8;
 
   final ValueNotifier<bool> searchAppsNotifier = ValueNotifier(false);
+  bool _allowVerticalDrag = true;
 
   @override
   void initState() {
@@ -51,7 +53,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       child: GestureDetector(
         /// SWIPE DETECTION
         onHorizontalDragUpdate: _horizontalDragHandler,
+        onVerticalDragStart: (details) => _verticalDragStartHandler(context, details),
         onVerticalDragUpdate: _verticalDragHandler,
+        onVerticalDragEnd: (_) => _resetVerticalDragGate(),
+        onVerticalDragCancel: _resetVerticalDragGate,
         onLongPress: () {
           Navigator.push(
             context,
@@ -124,10 +129,30 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   _verticalDragHandler(details) {
+    if (!_allowVerticalDrag) {
+      return;
+    }
+
     if (details.delta.dy > sensitivity) { /// Down Swipe
       searchAppsNotifier.value = false; /// Close app search
     } else if (details.delta.dy < -sensitivity) { /// Up Swipe
       searchAppsNotifier.value = true; /// Open app search
     }
+  }
+
+  void _verticalDragStartHandler(BuildContext context, DragStartDetails details) {
+    _allowVerticalDrag = _isDragStartAboveSystemGestureArea(context, details.globalPosition.dy);
+  }
+
+  void _resetVerticalDragGate() {
+    _allowVerticalDrag = true;
+  }
+
+  bool _isDragStartAboveSystemGestureArea(BuildContext context, double globalDy) {
+    final mediaQuery = MediaQuery.of(context);
+    final bottomInset = mediaQuery.viewPadding.bottom;
+    final screenHeight = mediaQuery.size.height;
+    final bottomEdgeLimit = screenHeight - (bottomInset + BOTTOM_GESTURE_DEAD_ZONE);
+    return globalDy < bottomEdgeLimit;
   }
 }
