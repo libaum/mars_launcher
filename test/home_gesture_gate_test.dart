@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:mars_launcher/logic/apps_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/logic/temperature_manager.dart';
 import 'package:mars_launcher/pages/home/home.dart';
@@ -10,6 +11,7 @@ import 'package:mars_launcher/theme/theme_manager.dart';
 class MockThemeManager extends Mock implements ThemeManager {}
 class MockAppShortcutsManager extends Mock implements AppShortcutsManager {}
 class MockTemperatureManager extends Mock implements TemperatureManager {}
+class MockAppsManager extends Mock implements AppsManager {}
 
 void main() {
   final getIt = GetIt.instance;
@@ -20,13 +22,22 @@ void main() {
     final mockThemeManager = MockThemeManager();
     final mockAppShortcutsManager = MockAppShortcutsManager();
     final mockTemperatureManager = MockTemperatureManager();
+    final mockAppsManager = MockAppsManager();
 
     when(() => mockTemperatureManager.sunriseSunsetNotifier)
         .thenReturn(ValueNotifier<String>(""));
 
+    when(() => mockAppsManager.appsNotifier)
+        .thenReturn(ValueNotifier([]));
+    when(() => mockAppsManager.syncingNotifier)
+        .thenReturn(ValueNotifier(false));
+    when(() => mockAppsManager.loadAndSyncApps())
+        .thenAnswer((_) async {});
+
     getIt.registerSingleton<ThemeManager>(mockThemeManager);
     getIt.registerSingleton<AppShortcutsManager>(mockAppShortcutsManager);
     getIt.registerSingleton<TemperatureManager>(mockTemperatureManager);
+    getIt.registerSingleton<AppsManager>(mockAppsManager);
   });
 
   testWidgets("Swipe from bottom edge does not open search", (tester) async {
