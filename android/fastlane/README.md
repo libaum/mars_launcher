@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane android deploy
 ```
 
-Builds the app and pushes it IMMEDIATELY to the Production Track 🚀
+Build & Deploy to Production
 
 ### android metadata
 
@@ -29,7 +29,7 @@ Builds the app and pushes it IMMEDIATELY to the Production Track 🚀
 [bundle exec] fastlane android metadata
 ```
 
-Update only texts & images in the Store (without new code)
+Update only texts & images
 
 ----
 

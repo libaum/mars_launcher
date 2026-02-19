@@ -2,35 +2,38 @@ default_platform(:android)
 
 platform :android do
 
-  desc "Builds the app and pushes it IMMEDIATELY to the Production Track 🚀"
-  lane :deploy do
-    # 1. Clean & build everything
-    gradle(task: "clean")
-    gradle(
-      task: "bundle",
-      build_type: "Release"
-    )
+  desc "Build & Deploy to Production"
+    lane :deploy do
+      # 1. Sicherstellen, dass wir im richtigen Verzeichnis starten
+      # Wir sind in android/fastlane, also müssen wir 2 Ebenen hoch zum Flutter-Root
 
-    # 2. Upload directly to production
-    supply(
-      track: "production", # <--- The target is now directly 'production'
-      aab: "app/build/outputs/bundle/release/app-release.aab",
+      # Cleanen (optional, aber sicher)
+      sh "cd ../.. && flutter clean"
 
-      # By default, we only upload the code (it's faster).
-      # If you have also changed texts, set this to 'false'.
-      skip_upload_metadata: true,
-      skip_upload_images: true,
-      skip_upload_screenshots: true,
+      # Bauen (Das erstellt das AppBundle korrekt mit Version aus pubspec.yaml)
+      sh "cd ../.. && flutter build appbundle --release"
 
-      # IMPORTANT:
-      # 'completed' = Live immediately for everyone (once Google has reviewed).
-      # 'draft' = Upload only, you must press the button in the Console.
-      # 'inProgress' + rollout = Percentage rollout (see below).
-      release_status: "completed"
-    )
-  end
+      # 2. Upload
+      supply(
+        track: "production",
+        # Der Pfad zum Output ist immer gleich bei Flutter:
+        # Vom android-Ordner (wo Fastlane läuft) aus gesehen:
+        aab: "../build/app/outputs/bundle/release/app-release.aab",
 
-  desc "Update only texts & images in the Store (without new code)"
+        # Metadaten überspringen, wenn du nur Code updaten willst
+        skip_upload_metadata: true,
+        skip_upload_images: true,
+        skip_upload_screenshots: true,
+
+        # IMPORTANT:
+        # 'completed' = Live immediately for everyone (once Google has reviewed).
+        # 'draft' = Upload only, you must press the button in the Console.
+        # 'inProgress' + rollout = Percentage rollout (see below).
+        release_status: "completed"
+      )
+    end
+
+  desc "Update only texts & images"
   lane :metadata do
     supply(
       track: "production",

@@ -1,0 +1,1 @@
+Bugfix: Resolved a conflict between the app's swipe-up gesture and Android system navigation.
