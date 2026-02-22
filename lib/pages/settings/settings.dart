@@ -32,6 +32,9 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   final settingsManager = getIt<SettingsManager>();
   final sharedPrefsManager = getIt<SharedPrefsManager>();
 
+  //bool isDarkMode = true; //isThemeDark(context);
+  //final buttonStyle = getDialogButtonStyle(isDarkMode);
+
   @override
   void initState() {
     super.initState();
@@ -211,32 +214,37 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
               final bool? accepted = await showDialog<bool>(
                   context: context,
                   builder: (BuildContext context) {
+                    final Color onSurface = Theme.of(context).colorScheme.onSurface;
+                    final Color primary = Theme.of(context).colorScheme.primary;
                     return AlertDialog(
+                      actionsAlignment: MainAxisAlignment.spaceBetween,
                       title: Text("Enable Weather?",
                           style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                              color: onSurface,
                               fontWeight: FontWeight.bold,
                               fontSize: 18)),
                       content: Text(
                         "To show the current temperature, your location is sent anonymously to Open-Meteo.\n\nThis data is used only for weather updates and is never tracked or sold.",
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyMedium?.color,
-                            fontSize: 16),
+                        style: TextStyle(color: onSurface, fontSize: 16),
                       ),
                       actions: [
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context, false);
                           },
-                          child: const Text('Cancel',
-                              style: TextStyle(color: Colors.grey)),
+                          //style: buttonStyle,
+                          style: TextButton.styleFrom(foregroundColor: Colors.red),
+                            child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context, true);
                           },
-                          child: const Text('Enable',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: TextButton.styleFrom(foregroundColor: Colors.blue),
+                          child: const Text(
+                            'Enable',
+                            //        style: buttonStyle,
+                          ),
                         ),
                       ],
                     );

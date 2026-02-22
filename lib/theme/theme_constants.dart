@@ -43,7 +43,7 @@ ThemeData basicLightTheme = ThemeData(
     bodyMedium: TextStyle(color: COLOR_LIGHT_PRIMARY),
     bodySmall: TextStyle(color: COLOR_LIGHT_PRIMARY),
   ),
-  dialogTheme: DialogTheme(
+  dialogTheme: DialogThemeData(
     backgroundColor: COLOR_LIGHT_PRIMARY,
     contentTextStyle: TextStyle(
       color: COLOR_LIGHT_BACKGROUND
@@ -85,7 +85,7 @@ ThemeData basicDarkTheme = ThemeData(
     bodyMedium: TextStyle(color: COLOR_DARK_PRIMARY),
     bodySmall: TextStyle(color: COLOR_DARK_PRIMARY),
   ),
-  dialogTheme: DialogTheme(
+  dialogTheme: DialogThemeData(
     backgroundColor: COLOR_DARK_PRIMARY,
     titleTextStyle: TextStyle(
       fontSize: 24,
