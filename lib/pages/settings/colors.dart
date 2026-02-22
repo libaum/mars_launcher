@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_color_picker.dart';
 import 'package:mars_launcher/pages/settings/utils.dart';
@@ -28,6 +29,21 @@ class _SettingsColorsState extends State<SettingsColors> with WidgetsBindingObse
         themeManager.toggleTheme();
       },
       child: Scaffold(
+        appBar: defaultTargetPlatform == TargetPlatform.linux
+            ? AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                iconTheme: IconThemeData(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              )
+            : null,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(

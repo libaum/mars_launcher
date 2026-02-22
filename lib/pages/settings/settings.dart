@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/app_search_manager.dart';
@@ -46,11 +47,26 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
       context,
       MaterialPageRoute<void>(
           builder: (_) => Scaffold(
-                  body: SafeArea(
-                      child: AppSearchFragment(
-                appSearchMode: AppSearchMode.chooseSpecialShortcut,
-                specialShortcutAppNotifier: specialAppNotifier,
-              )))),
+                appBar: defaultTargetPlatform == TargetPlatform.linux
+                    ? AppBar(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        leading: IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        iconTheme: IconThemeData(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                      )
+                    : null,
+                body: SafeArea(
+                    child: AppSearchFragment(
+                  appSearchMode: AppSearchMode.chooseSpecialShortcut,
+                  specialShortcutAppNotifier: specialAppNotifier,
+                )))),
     );
   }
 
@@ -68,6 +84,21 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
         themeManager.toggleTheme();
       },
       child: Scaffold(
+        appBar: defaultTargetPlatform == TargetPlatform.linux
+            ? AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                iconTheme: IconThemeData(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              )
+            : null,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
