@@ -212,3 +212,6 @@ android/vendor/
 android/vendor/bundle/
 
 pc-api.json
+
+
+android/app/.cxx/
