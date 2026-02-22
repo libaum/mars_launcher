@@ -74,23 +74,27 @@ class TemperatureManager {
     DateTime now = DateTime.now();
     try {
       final response = await weatherApi.request(
-        latitude: locationService.locationData.latitude!,
-        longitude: locationService.locationData.longitude!,
+        locations: {
+          OpenMeteoLocation(
+          latitude: locationService.locationData.latitude!,
+          longitude: locationService.locationData.longitude!,
+          startDate: now,
+          endDate: now,
+          )
+        },
         current: {WeatherCurrent.temperature_2m},
-        startDate: now,
-        endDate: now,
         daily: {WeatherDaily.sunrise, WeatherDaily.sunset},
       );
 
-      final temp = response.currentData[WeatherCurrent.temperature_2m]?.value.round() ?? "-";
-      print(response.dailyData[WeatherDaily.sunset]?.values.values.first);
+      final temp = response.segments[0].currentData[WeatherCurrent.temperature_2m]?.value.round() ?? "-";
+      print(response.segments[0].dailyData[WeatherDaily.sunset]?.values.values.first);
       setNewTemperature(temp);
 
       /// Update sunrise/sunset data if last update later than 10h (10h * 60min * 60s)
       bool isMoreThanTenHours = DateTime.now().difference(lastSunriseSunsetUpdate).inHours > 10;
       if (isMoreThanTenHours) {
-        final sunriseUnix = response.dailyData[WeatherDaily.sunrise]?.values.values.first;
-        final sunsetUnix = response.dailyData[WeatherDaily.sunset]?.values.values.first;
+        final sunriseUnix = response.segments[0].dailyData[WeatherDaily.sunrise]?.values.values.first;
+        final sunsetUnix = response.segments[0].dailyData[WeatherDaily.sunset]?.values.values.first;
 
         if (sunriseUnix != null && sunsetUnix != null) {
           DateTime sunriseDateTime = DateTime.fromMillisecondsSinceEpoch(sunriseUnix.toInt() * 1000);

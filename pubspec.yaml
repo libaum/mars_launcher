@@ -23,20 +23,20 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fluttertoast: ^8.2.4
-  get_it: ^8.0.2
+  fluttertoast: ^9.0.0
+  get_it: ^9.2.1
   shared_preferences: ^2.3.4
-  android_intent_plus: ^5.2.0
-  location: ^7.0.1
+  android_intent_plus: ^6.0.0
+  location: ^8.0.1
   device_calendar: ^4.0.1
-  permission_handler: ^11.1.0
+  permission_handler: ^12.0.1
   sizer: ^3.0.4
   flutter_alarm_clock: ^0.1.2
   url_launcher: ^6.2.1
   flutter_colorpicker: ^1.0.3
-  battery_plus: ^6.2.0
-  intl: ^0.19.0
-  open_meteo: ^2.0.2
+  battery_plus: ^7.0.0
+  intl: ^0.20.2
+  open_meteo: ^3.0.0
 
 dev_dependencies:
   flutter_test:
