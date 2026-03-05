@@ -15,6 +15,10 @@ class Strings {
   static const settingsAppNumber = "app number";
   static const String settingsKeyboardAutofocus = "Keyboard";
 
+  static const settingsGroupAppShortcuts = " App Shortcuts";
+  static const settingsGroupAppearance = " Appearance";
+  static const settingsGroupOther = " Other";
+
   static const creditsTitle = "Credits";
   static const settingsColorsTitle = "Colors";
   static const settingsColorsSearchColor = "search color";

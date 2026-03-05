@@ -130,37 +130,11 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                 },
                                 name: Strings.settingsChangeDefaultLauncher),
 
-                            /// APPS NUMBER
+                            /// ---- App Shortcuts ----
+                            _sectionHeader(context, Strings.settingsGroupAppShortcuts),
+
                             buildAppsNumberRow(),
 
-                            /// CLOCK APP
-                            buildTopRowAppRow(
-                                specialShortcutAppNotifier:
-                                    appShortcutsManager.clockAppNotifier,
-                                widgetEnabledNotifier:
-                                    settingsManager.clockWidgetEnabledNotifier,
-                                name: Strings.settingsClockApp),
-
-                            /// WEATHER APP
-                            buildWeatherAppRow(context),
-
-                            /// CALENDAR APP
-                            buildTopRowAppRow(
-                                specialShortcutAppNotifier:
-                                    appShortcutsManager.calendarAppNotifier,
-                                widgetEnabledNotifier: settingsManager
-                                    .calendarWidgetEnabledNotifier,
-                                name: Strings.settingsCalendarApp),
-
-                            /// BATTERY
-                            buildTopRowAppRow(
-                                specialShortcutAppNotifier:
-                                    appShortcutsManager.batteryAppNotifier,
-                                widgetEnabledNotifier: settingsManager
-                                    .batteryWidgetEnabledNotifier,
-                                name: Strings.settingsBattery),
-
-                            /// SWIPE LEFT
                             GenericSettingsButton(
                                 onPressed: () {
                                   pushAppSearch(
@@ -168,7 +142,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                 },
                                 name: Strings.settingsSwipeLeft),
 
-                            /// SWIPE RIGHT
                             GenericSettingsButton(
                                 onPressed: () {
                                   pushAppSearch(appShortcutsManager
@@ -176,14 +149,41 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                 },
                                 name: Strings.settingsSwipeRight),
 
-                            /// COLORS
+                            buildTopRowAppRow(
+                                specialShortcutAppNotifier:
+                                    appShortcutsManager.clockAppNotifier,
+                                widgetEnabledNotifier:
+                                    settingsManager.clockWidgetEnabledNotifier,
+                                name: Strings.settingsClockApp),
+
+                            buildWeatherAppRow(context),
+
+                            buildTopRowAppRow(
+                                specialShortcutAppNotifier:
+                                    appShortcutsManager.calendarAppNotifier,
+                                widgetEnabledNotifier: settingsManager
+                                    .calendarWidgetEnabledNotifier,
+                                name: Strings.settingsCalendarApp),
+
+                            buildTopRowAppRow(
+                                specialShortcutAppNotifier:
+                                    appShortcutsManager.batteryAppNotifier,
+                                widgetEnabledNotifier: settingsManager
+                                    .batteryWidgetEnabledNotifier,
+                                name: Strings.settingsBattery),
+
+                            /// ---- Appearance ----
+                            _sectionHeader(context, Strings.settingsGroupAppearance),
+
                             GenericSettingsButton(
                                 onPressed: () {
                                   pushOtherPage(SettingsColors());
                                 },
                                 name: Strings.settingsColors),
 
-                            /// HIDDEN APPS
+                            /// ---- Other ----
+                            _sectionHeader(context, Strings.settingsGroupOther),
+
                             GenericSettingsButton(
                                 onPressed: () {
                                   pushOtherPage(HiddenApps());
@@ -193,7 +193,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             /// KEYBOARD AUTOFOCUS
                             ///buildKeyboardAutofocusRow(),
 
-                            /// CREDITS
                             GenericSettingsButton(
                                 onPressed: () {
                                   pushOtherPage(Credits());
@@ -206,6 +205,19 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _sectionHeader(BuildContext context, String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 24, 0, 4),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 14,
+          color: Theme.of(context).primaryColor.withValues(alpha: 0.4),
         ),
       ),
     );
