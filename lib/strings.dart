@@ -53,7 +53,7 @@ class Strings {
 [ CORE ]
 tap app     :: open
 hold app    :: reassign
-hold void  :: settings
+hold void   :: settings
 double tap  :: toggle theme
 
 [ NAVIGATION ]

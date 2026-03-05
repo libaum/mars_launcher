@@ -19,8 +19,8 @@ class FirstLaunchOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = Theme.of(context).primaryColor;
-    final dimColor = textColor.withValues(alpha: 0.4);
+    const textColor = Colors.white;
+    final dimColor = Colors.white.withValues(alpha: 0.4);
 
     final overlayTexts = [
       (Strings.overlayLine1, TextStyle(fontFamily: 'monospace', fontSize: 16, color: textColor)),
@@ -52,12 +52,29 @@ class FirstLaunchOverlay extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Title above slots — balanced by invisible copy at bottom
-                      Center(child: titleWidget),
+                      // Title above slots — same horizontal alignment as slot texts
+                      Row(
+                        children: [
+                          Opacity(
+                            opacity: 0,
+                            child: AppCard(
+                              appInfo: _dummyApp,
+                              isShortcutItem: true,
+                              callbackHandleOnPress: _noOp,
+                              callbackHandleOnLongPress: _noOp,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4),
+                            child: titleWidget,
+                          ),
+                        ],
+                      ),
                       // 4 slots: invisible AppCard + overlay text
                       for (int i = 0; i < NUMBER_OF_SHORTCUT_ITEMS_ON_STARTUP; i++)
-                        Stack(
+                        Row(
                           children: [
+                            // Invisible AppCard as left spacer (same width as real [ + ])
                             Opacity(
                               opacity: 0,
                               child: AppCard(
@@ -67,11 +84,12 @@ class FirstLaunchOverlay extends StatelessWidget {
                                 callbackHandleOnLongPress: _noOp,
                               ),
                             ),
-                            Positioned.fill(
-                              child: Center(
+                            // Overlay text right next to the + slot
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 4),
                                 child: Text(
                                   overlayTexts[i].$1,
-                                  textAlign: TextAlign.center,
                                   style: overlayTexts[i].$2,
                                 ),
                               ),
@@ -79,7 +97,23 @@ class FirstLaunchOverlay extends StatelessWidget {
                           ],
                         ),
                       // Invisible counterweight so title doesn't shift centering
-                      Opacity(opacity: 0, child: titleWidget),
+                      Opacity(
+                        opacity: 0,
+                        child: Row(
+                          children: [
+                            AppCard(
+                              appInfo: _dummyApp,
+                              isShortcutItem: true,
+                              callbackHandleOnPress: _noOp,
+                              callbackHandleOnLongPress: _noOp,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 4),
+                              child: titleWidget,
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
