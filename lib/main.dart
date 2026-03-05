@@ -5,12 +5,23 @@ import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mars_launcher/constants/method_channels.dart';
+import 'package:mars_launcher/constants/global.dart';
+import 'package:mars_launcher/services/shared_prefs_manager.dart';
 
 
 void main() async {
   print("# ---- STARTING APP MARS LAUNCHER ---- #");
   WidgetsFlutterBinding.ensureInitialized();
   await setupGetIt();
+
+  assert(() {
+    if (CLEAR_SHARED_PREFS_ON_DEBUG_START) {
+      SharedPrefsManager.getInstance().then((manager) {
+        manager.clearAll();
+      });
+    }
+    return true;
+  }());
 
   runApp(MarsLauncher());
   registerAppChangeReceiver();

@@ -61,6 +61,8 @@ class SharedPrefsManager {
     return _prefs.remove(key);
   }
 
+  Future<bool> clearAll() async {
+    printSharedPrefAccess("[SharedPrefsManager] CLEAR ALL");
+    return _prefs.clear();
+  }
 }
-
-

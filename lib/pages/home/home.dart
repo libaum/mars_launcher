@@ -9,6 +9,9 @@ import 'package:mars_launcher/pages/home/top_row/top_row.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/pages/settings/settings.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/services/shared_prefs_manager.dart';
+import 'package:mars_launcher/strings.dart';
+import 'package:mars_launcher/pages/home/first_launch_overlay.dart';
 
 const double HEIGHT_SIZED_BOX = 50;
 const double BOTTOM_GESTURE_DEAD_ZONE = 16;
@@ -34,10 +37,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final temperatureManager = getIt<TemperatureManager>();
   final appsManager = getIt<AppsManager>();
+  final sharedPrefsManager = getIt<SharedPrefsManager>();
   final sensitivity = 8;
 
   final ValueNotifier<bool> searchAppsNotifier = ValueNotifier(false);
   bool _allowVerticalDrag = true;
+  late bool _showFirstLaunchOverlay;
 
   @override
   void initState() {
@@ -46,6 +51,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       appsManager.loadAndSyncApps();
     });
+    _showFirstLaunchOverlay =
+        sharedPrefsManager.readData(Keys.isFirstLaunch) ?? true;
   }
 
   @override
@@ -90,33 +97,52 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                widget.topRowOverride ?? TopRow(),
-                SizedBox(
-                  height: HEIGHT_SIZED_BOX,
-                  child: ValueListenableBuilder<String>(
-                    valueListenable: temperatureManager.sunriseSunsetNotifier,
-                    builder: (context, sunriseSunset, child) {
-                      return Center(child: Text(sunriseSunset));
-                })),
-                Expanded(
-                  child: ValueListenableBuilder<bool>(
-                      valueListenable: searchAppsNotifier,
-                      builder: (context, searchApps, child) {
-                      return !searchApps
-                          ? (widget.appShortcutsBuilder?.call() ?? Align(
-                          alignment:
-                          Alignment.centerLeft, // Center only vertically
-                          child: AppShortcutsFragment()))
-                          : (widget.appSearchBuilder?.call() ?? AppSearchFragment(appSearchMode: AppSearchMode.openApp));
-                    },
+          body: Stack(
+            children: [
+              SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    widget.topRowOverride ?? TopRow(),
+                    SizedBox(
+                      height: HEIGHT_SIZED_BOX,
+                      child: ValueListenableBuilder<String>(
+                        valueListenable: temperatureManager.sunriseSunsetNotifier,
+                        builder: (context, sunriseSunset, child) {
+                          return Center(child: Text(sunriseSunset));
+                    })),
+                    Expanded(
+                      child: ValueListenableBuilder<bool>(
+                          valueListenable: searchAppsNotifier,
+                          builder: (context, searchApps, child) {
+                          return !searchApps
+                              ? (widget.appShortcutsBuilder?.call() ?? Align(
+                              alignment:
+                              Alignment.centerLeft, // Center only vertically
+                              child: AppShortcutsFragment()))
+                              : (widget.appSearchBuilder?.call() ?? AppSearchFragment(appSearchMode: AppSearchMode.openApp));
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              if (_showFirstLaunchOverlay)
+                FirstLaunchOverlay(
+                  onDismiss: () {
+                    setState(() {
+                      _showFirstLaunchOverlay = false;
+                    });
+                    sharedPrefsManager.saveData(Keys.isFirstLaunch, false);
+                  },
+                  topSpacer: Column(
+                    children: [
+                      widget.topRowOverride ?? TopRow(),
+                      SizedBox(height: HEIGHT_SIZED_BOX),
+                    ],
                   ),
-                )
-              ],
-            ),
+                ),
+            ],
           ),
         ),
       ),

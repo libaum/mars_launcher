@@ -23,7 +23,7 @@ class Strings {
 
   /// Standard names
   static const defaultTemperatureString = "-°C";
-  static const appNameUninitialized = "hold to set";
+  static const appNameUninitialized = slotDefault;
   static const packageNameClockUninitialized = "uninitialized clock app";
   static const packageNameBatteryUninitialized = "uninitialized battery app";
   static const packageNameCalendarUninitialized = "uninitialized calendar app";
@@ -31,6 +31,39 @@ class Strings {
   static const packageNameSwipeLeftUninitialized = "uninitialized swipe left app";
   static const packageNameSwipeRightUninitialized = "uninitialized swipe right app";
   static const textCalendarEmpty = "no events";
+
+  /// Default slots
+  static const slotDefault = ' + ';
+
+  /// First launch overlay
+  static const overlayTitle = '/// quick start ///';
+  static const overlayLine1 = 'hold + to set app';
+  static const overlayLine2 = 'swipe up to search';
+  static const overlayLine3 = 'hold void for settings';
+  static const overlayTip = 'tip: find all commands in\nsettings > flight manual';
+
+  /// Flight manual
+  static const settingsFlightManual = "flight manual";
+  static const flightManualContent = '''/// FLIGHT MANUAL ///
+
+[ CORE ]
+tap app     :: open
+hold app    :: reassign
+hold void  :: settings
+double tap  :: toggle theme
+
+[ NAVIGATION ]
+swipe up    :: search
+swipe left  :: quick app 1
+swipe right :: quick app 2
+
+[ WIDGETS ]
+tap widget  :: open linked app
+hold clock  :: ???
+hold date   :: ???
+hold temp   :: ???
+
+/// END OF LOG ///''';
 }
 
 /// Shared preferences keys
@@ -58,6 +91,7 @@ class Keys {
   static const darkBackground = "dark_background";
   static const weatherActivatedAtLeastOnce = "weatherActivatedAtLeastOnce";
   static const keyboardAutofocusEnabled = "keyboard_autofocus_enabled";
+  static const isFirstLaunch = "isFirstLaunch";
 }
 
 class JsonKeys {

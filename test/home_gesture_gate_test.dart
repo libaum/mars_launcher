@@ -6,12 +6,14 @@ import 'package:mars_launcher/logic/apps_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/logic/temperature_manager.dart';
 import 'package:mars_launcher/pages/home/home.dart';
+import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 
 class MockThemeManager extends Mock implements ThemeManager {}
 class MockAppShortcutsManager extends Mock implements AppShortcutsManager {}
 class MockTemperatureManager extends Mock implements TemperatureManager {}
 class MockAppsManager extends Mock implements AppsManager {}
+class MockSharedPrefsManager extends Mock implements SharedPrefsManager {}
 
 void main() {
   final getIt = GetIt.instance;
@@ -23,6 +25,7 @@ void main() {
     final mockAppShortcutsManager = MockAppShortcutsManager();
     final mockTemperatureManager = MockTemperatureManager();
     final mockAppsManager = MockAppsManager();
+    final mockSharedPrefsManager = MockSharedPrefsManager();
 
     when(() => mockTemperatureManager.sunriseSunsetNotifier)
         .thenReturn(ValueNotifier<String>(""));
@@ -34,10 +37,16 @@ void main() {
     when(() => mockAppsManager.loadAndSyncApps())
         .thenAnswer((_) async {});
 
+    when(() => mockSharedPrefsManager.readData(any()))
+        .thenReturn(null);
+    when(() => mockSharedPrefsManager.readData('isFirstLaunch'))
+        .thenReturn(false);
+
     getIt.registerSingleton<ThemeManager>(mockThemeManager);
     getIt.registerSingleton<AppShortcutsManager>(mockAppShortcutsManager);
     getIt.registerSingleton<TemperatureManager>(mockTemperatureManager);
     getIt.registerSingleton<AppsManager>(mockAppsManager);
+    getIt.registerSingleton<SharedPrefsManager>(mockSharedPrefsManager);
   });
 
   testWidgets("Swipe from bottom edge does not open search", (tester) async {

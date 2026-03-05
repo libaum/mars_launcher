@@ -6,6 +6,7 @@ import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/pages/settings/colors.dart';
 import 'package:mars_launcher/pages/settings/credits.dart';
+import 'package:mars_launcher/pages/settings/flight_manual.dart';
 import 'package:mars_launcher/services/location_service.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
@@ -115,6 +116,13 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            /// FLIGHT MANUAL
+                            GenericSettingsButton(
+                                onPressed: () {
+                                  pushOtherPage(FlightManual());
+                                },
+                                name: Strings.settingsFlightManual),
+
                             /// SET DEFAULT LAUNCHER
                             GenericSettingsButton(
                                 onPressed: () {
