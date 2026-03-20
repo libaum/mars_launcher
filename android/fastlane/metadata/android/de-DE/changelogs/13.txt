@@ -1,0 +1,4 @@
+- Neu: Quick Start Guide beim ersten Start
+- Neu: Flight Manual in den Einstellungen — alle Gesten und Befehle auf einen Blick
+- Leere Slots zeigen jetzt +
+- Einstellungen in übersichtliche Bereiche unterteilt
