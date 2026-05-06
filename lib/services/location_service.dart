@@ -6,14 +6,11 @@ class LocationService {
   var locationData = LocationData.fromMap(Map());
 
   Future<bool> isServiceEnabled() async {
-    for (int i = 0; i < 10; i++) {
-      try {
-        return await location.serviceEnabled();
-      } on PlatformException {
-        await Future.delayed(Duration(milliseconds: 100));
-      }
+    try {
+      return await location.serviceEnabled();
+    } on PlatformException {
+      return false;
     }
-    return false;
   }
 
   Future<bool> checkPermission() async {
