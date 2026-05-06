@@ -115,19 +115,22 @@ class CalenderManager {
       events.addAll(calendarEventsResult.data as List<Event>);
     }
     String newNextEvent = Strings.textCalendarEmpty;
+    events.removeWhere((e) => e.start == null);
     if (events.isNotEmpty) {
       events.sort((a, b) => a.start!.compareTo(b.start!));
-      if (events.length > 1 && events.any((element) => !element.allDay!)) {
-        events.removeWhere((element) => element.allDay!);
+      if (events.length > 1 && events.any((element) => element.allDay != true)) {
+        events.removeWhere((element) => element.allDay == true);
       }
 
       var nextEvent = events.first;
-      if (nextEvent.allDay!) {
-        newNextEvent = nextEvent.title!;
+      final title = nextEvent.title ?? "";
+      if (nextEvent.allDay == true) {
+        newNextEvent = title;
       } else {
+        final start = nextEvent.start!;
         String startTime =
-            "${nextEvent.start!.hour.toString().padLeft(2, '0')}:${nextEvent.start!.minute.toString().padLeft(2, '0')}";
-        newNextEvent = "${nextEvent.title!} ($startTime)";
+            "${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')}";
+        newNextEvent = "$title ($startTime)";
       }
     }
     return newNextEvent;

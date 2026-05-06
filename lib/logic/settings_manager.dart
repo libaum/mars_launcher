@@ -30,14 +30,13 @@ class SettingsManager {
     shortcutMode = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.shortcutMode) ?? true, Keys.shortcutMode);
     keyboardAutofocusEnabledNotifier = ValueNotifierWithKey<bool>(sharedPrefsManager.readData(Keys.keyboardAutofocusEnabled) ?? true, Keys.keyboardAutofocusEnabled);
 
-    if (ASK_TO_BE_DEFAULT_LAUNCHER) {
+    isFirstStartup = sharedPrefsManager.readData(Keys.isFirstStartup) ?? true;
+
+    if (ASK_TO_BE_DEFAULT_LAUNCHER && isFirstStartup) {
       /// Ask on first startup to be default launcher
-      bool isFirstStartup = sharedPrefsManager.readData(Keys.isFirstStartup) ?? true;
-      if (isFirstStartup) {
-        isFirstStartup = false;
-        sharedPrefsManager.saveData(Keys.isFirstStartup, false);
-        openDefaultLauncherSettings();
-      }
+      isFirstStartup = false;
+      sharedPrefsManager.saveData(Keys.isFirstStartup, false);
+      openDefaultLauncherSettings();
     }
   }
 

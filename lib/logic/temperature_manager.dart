@@ -123,7 +123,7 @@ class TemperatureManager {
 
   void couldNotRetrieveNewTemperature(String cause) {
     print("[$runtimeType] $cause");
-    bool isMoreThanThreeHours = lastTemperatureUpdate.difference(DateTime.now()).inHours > 3;
+    bool isMoreThanThreeHours = DateTime.now().difference(lastTemperatureUpdate).inHours > 3;
     if (isMoreThanThreeHours) {
       /// If lastUpdated more than 3h ago delete value
       temperatureNotifier.value = Strings.defaultTemperatureString;

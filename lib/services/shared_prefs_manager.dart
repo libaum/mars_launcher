@@ -23,16 +23,16 @@ class SharedPrefsManager {
   }
 
 
-  void saveData(String key, dynamic value) async {
+  Future<void> saveData(String key, dynamic value) async {
     printSharedPrefAccess("[SharedPrefsManager] WRITE $key: $value");
     if (value is int) {
-      _prefs.setInt(key, value);
+      await _prefs.setInt(key, value);
     } else if (value is String) {
-      _prefs.setString(key, value);
+      await _prefs.setString(key, value);
     } else if (value is bool) {
-      _prefs.setBool(key, value);
+      await _prefs.setBool(key, value);
     } else if (value is List<String>) {
-      _prefs.setStringList(key, value);
+      await _prefs.setStringList(key, value);
     } else {
       printSharedPrefAccess("[SharedPrefsManager] Invalid Type");
     }
