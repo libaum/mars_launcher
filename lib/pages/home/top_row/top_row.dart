@@ -33,54 +33,27 @@ class TopRow extends StatelessWidget {
           ValueListenableBuilder<bool>(
               valueListenable: settingsManager.clockWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
-                return isEnabled
-                    ? TextButton(
-                        onPressed: () =>
-                            appShortcutsManager.clockAppNotifier.value.open(),
-                        onLongPress: () {
-                          openCreateAlarmDialog(
-                              context, isDarkMode);
-                        },
-                        child: Clock(is24HourFormat: is24HourFormat,))
-                    : TextButton(onPressed: () {}, child: const SizedBox.shrink());
-              }),
-
-          ValueListenableBuilder<bool>(
-              valueListenable: settingsManager.batteryWidgetEnabledNotifier,
-              builder: (context, isEnabled, child) {
-                return Expanded(
-                  child: Container(),
-                  flex: isEnabled ? 1 : 0,
-                );
+                if (!isEnabled) return const SizedBox.shrink();
+                return TextButton(
+                    onPressed: () => appShortcutsManager.clockAppNotifier.value.open(),
+                    onLongPress: () => openCreateAlarmDialog(context, isDarkMode),
+                    child: Clock(is24HourFormat: is24HourFormat));
               }),
 
           /// BATTERY WIDGET
           ValueListenableBuilder<bool>(
               valueListenable: settingsManager.batteryWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
-                return isEnabled
-                    ? TextButton(
+                if (!isEnabled) return const SizedBox.shrink();
+                return TextButton(
                   onPressed: () => appShortcutsManager.batteryAppNotifier.value.open(),
                   child: ValueListenableBuilder<int>(
-                      valueListenable:
-                      batteryManager.batteryLevelNotifier,
+                      valueListenable: batteryManager.batteryLevelNotifier,
                       builder: (context, batteryLevel, child) {
-                        print("BUILDING BATTERYICON AGAIN: $batteryLevel");
                         return BatteryIcon(
                             batteryLevel: batteryLevel,
                             paintColor: Theme.of(context).primaryColor);
                       }),
-                )
-                    : const SizedBox.shrink();
-              }),
-
-          //
-          ValueListenableBuilder<bool>(
-              valueListenable: settingsManager.weatherWidgetEnabledNotifier,
-              builder: (context, isEnabled, child) {
-                return Expanded(
-                  child: Container(),
-                  flex: isEnabled ? 1 : 0,
                 );
               }),
 
@@ -88,33 +61,21 @@ class TopRow extends StatelessWidget {
           ValueListenableBuilder<bool>(
               valueListenable: settingsManager.weatherWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
-                return isEnabled
-                    ? TextButton(
-                        onPressed: () =>
-                            appShortcutsManager.weatherAppNotifier.value.open(),
-                        onLongPress: () {
-                          temperatureManager.showSunriseSunsetForAFewSeconds();
-                        },
-                        child: Temperature(),
-                      )
-                    : const SizedBox.shrink();
+                if (!isEnabled) return const SizedBox.shrink();
+                return TextButton(
+                    onPressed: () => appShortcutsManager.weatherAppNotifier.value.open(),
+                    onLongPress: () => temperatureManager.showSunriseSunsetForAFewSeconds(),
+                    child: Temperature());
               }),
 
-
-          Expanded(
-            child: Container(),
-          ),
+          const Spacer(),
 
           /// CALENDAR WIDGET
           ValueListenableBuilder<bool>(
               valueListenable: settingsManager.calendarWidgetEnabledNotifier,
               builder: (context, isEnabled, child) {
-                return isEnabled
-                    ? EventView()
-                    : TextButton(
-                        onPressed: () {},
-                        child: const SizedBox.shrink(),
-                      ); // SizedBox.shrink();
+                if (!isEnabled) return const SizedBox.shrink();
+                return EventView();
               }),
         ],
       ),
