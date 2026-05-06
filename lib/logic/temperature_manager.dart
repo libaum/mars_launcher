@@ -24,6 +24,7 @@ class TemperatureManager {
   final settingsManager = getIt<SettingsManager>();
   final themeManager = getIt<ThemeManager>();
 
+  final weatherApi = WeatherApi(temperatureUnit: TemperatureUnit.celsius);
   Timer? timer;
   DateTime lastTemperatureUpdate = DateTime(0);
   DateTime lastSunriseSunsetUpdate = DateTime(0);
@@ -68,8 +69,6 @@ class TemperatureManager {
 
     /// Request the current weather for location data
     print("[$runtimeType] Fetching new weather data");
-
-    final weatherApi = WeatherApi(temperatureUnit: TemperatureUnit.celsius);
 
     DateTime now = DateTime.now();
     try {
