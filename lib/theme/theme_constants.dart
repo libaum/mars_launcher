@@ -27,13 +27,15 @@ const TEXT_STYLE_SETTINGS_ITEM = TextStyle(fontSize: 22, height: 1, fontWeight: 
 const TEXT_STYLE_APP_SMALL = TextStyle(fontSize: 19, fontWeight: FontWeight.w200);
 const TEXT_STYLE_APP_LARGE = TextStyle(fontSize: 30, fontWeight: FontWeight.w200);
 const TEXT_STYLE_TOP_ROW = TextStyle(fontSize: FONT_SIZE_TOP_ROW, fontWeight: FontWeight.w300, fontFeatures: [FontFeature.tabularFigures()]);
-// const TEXT_STYLE_TOP_ROW_LIGHT = TextStyle(fontSize: FONT_SIZE_EVENTS, fontWeight: FontWeight.w300);
-// const TEXT_STYLE_CLOCK = TextStyle(fontSize: FONT_SIZE_CLOCK, fontWeight: FontWeight.w300, fontFeatures: [FontFeature.tabularFigures()]);
 
 const TEXT_STYLE_CHEAT_SHEET = TextStyle(fontSize: 18, fontWeight: FontWeight.w200);
-// const TEXT_STYLE_CHEAT_SHEET = TextStyle(fontFamily: 'monospace', fontSize: 14, height: 1.8);
 const TEXT_STYLE_INPUT_HINT = TextStyle(fontSize: 18, fontWeight: FontWeight.w300);
 const TEXT_STYLE_CREDITS_BODY = TextStyle(fontSize: 15, fontWeight: FontWeight.w200);
+
+const TEXT_STYLE_DIALOG_TITLE = TextStyle(fontSize: 22, fontWeight: FontWeight.w200);
+const TEXT_STYLE_DIALOG_BUTTON = TextStyle(fontSize: 14, fontWeight: FontWeight.w300);
+
+
 
 
 ButtonStyle getDialogButtonStyle(isDarkMode) {
@@ -42,10 +44,7 @@ ButtonStyle getDialogButtonStyle(isDarkMode) {
       backgroundColor: WidgetStateProperty.all<Color>(COLOR_ACCENT.withOpacity(isDarkMode ? 0.1 : 0.25)),
       overlayColor: WidgetStateProperty.all<Color>(COLOR_ACCENT.withOpacity(0.05)),
       foregroundColor: WidgetStateProperty.all<Color>(COLOR_ACCENT),
-      textStyle: WidgetStateProperty.all(TextStyle(
-        fontFamily: FONT,
-        fontWeight: FontWeight.bold,
-      )),
+      textStyle: WidgetStateProperty.all(TEXT_STYLE_DIALOG_BUTTON),
       shape: WidgetStateProperty.all(RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(3.0)),
       )));

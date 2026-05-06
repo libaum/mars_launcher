@@ -12,7 +12,7 @@ const TEXT_RENAME = "Rename";
 const TEXT_INFO = "Info";
 const TEXT_UNINSTALL = "Uninstall";
 
-const WIDTH_SIZED_BOX = 60.0;
+const WIDTH_SIZED_BOX = 70.0;
 
 class AppInfoDialog extends StatelessWidget {
   AppInfoDialog({
@@ -29,7 +29,11 @@ class AppInfoDialog extends StatelessWidget {
     final buttonStyle = getDialogButtonStyle(isDarkMode);
 
     return AlertDialog(
-        title: Center(child: Text(appInfo.appName)),
+        title: Center(
+            child: Text(appInfo.appName,
+                    style: TEXT_STYLE_DIALOG_TITLE,
+            )
+        ),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[

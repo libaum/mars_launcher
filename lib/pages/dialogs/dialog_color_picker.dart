@@ -12,12 +12,12 @@ const BUTTON_TEXT_COLOR_DIALOG = Colors.white;
 class ColorPickerDialog extends StatelessWidget {
   final ColorType colorType;
   final themeManager = getIt<ThemeManager>();
+  final String? title;
 
-  ColorPickerDialog({Key? key, required this.colorType}): super(key: key);
+  ColorPickerDialog({Key? key, required this.colorType, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const title = 'Pick a background color';
     const textButton = 'APPLY';
 
     final buttonStyle = getDialogButtonStyle(themeManager.isDarkMode);
@@ -32,12 +32,9 @@ class ColorPickerDialog extends StatelessWidget {
     }
 
     return AlertDialog(
-      title: const Text(
-        title,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20
-        ),
+      title: Text(
+        title ?? 'Background color',
+        style: TEXT_STYLE_DIALOG_TITLE,
       ),
       content: SingleChildScrollView(
         child: Column(

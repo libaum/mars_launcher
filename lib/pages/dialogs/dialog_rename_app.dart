@@ -15,20 +15,16 @@ class RenameAppDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = TextStyle(color: Theme.of(context).scaffoldBackgroundColor, fontSize: 18);
-
     return AlertDialog(
       title: Text(
         "Rename \"${appInfo.appName}\"",
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        style: TEXT_STYLE_DIALOG_TITLE,
       ),
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("Current name: \"${appInfo.displayName}\"", style: textStyle),
-          insertVerticalSpacing(20),
           AppNameTextFieldWithValidation(appInfo.displayName, appInfo.appName),
         ],
       ),
@@ -47,8 +43,21 @@ class AppNameTextFieldWithValidation extends StatefulWidget {
 }
 
 class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidation> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   String? _errorText;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.text = widget.currentDisplayName;
+    _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +122,7 @@ class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidati
     );
   }
 
-  void setErrorText(errorText) {
+  void setErrorText(String? errorText) {
     setState(() {
       _errorText = errorText;
     });
