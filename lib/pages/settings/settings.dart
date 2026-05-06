@@ -13,6 +13,7 @@ import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/home/app_search_fragment.dart';
 import 'package:mars_launcher/pages/settings/utils.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 import 'package:mars_launcher/pages/settings/hidden_apps.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
@@ -108,7 +109,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(Strings.settingsTitle, style: TEXT_STYLE_TITLE),
+                Text(Strings.settingsTitle, style: TEXT_STYLE_SETTINGS_TITLE),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
@@ -180,6 +181,8 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   pushOtherPage(SettingsColors());
                                 },
                                 name: Strings.settingsColors),
+
+                            buildFontRow(),
 
                             /// ---- Other ----
                             _sectionHeader(context, Strings.settingsGroupOther),
@@ -335,6 +338,28 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
     );
   }
 
+  Row buildFontRow() {
+    return Row(
+      children: [
+        GenericSettingsButton(
+            onPressed: () => themeManager.cycleFont(),
+            name: "Font"),
+        Expanded(child: Container()),
+        ValueListenableBuilder<String>(
+            valueListenable: themeManager.fontNotifier,
+            builder: (context, font, child) {
+              return SizedBox(
+                width: 86,
+                child: TextButton(
+                  onPressed: () => themeManager.cycleFont(),
+                  child: Center(child: Text(font, style: TEXT_STYLE_SETTINGS_ITEM)),
+                ),
+              );
+            }),
+      ],
+    );
+  }
+
   Row buildAppsNumberRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -358,7 +383,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                     },
                     child: Center(
                         child: Text(numOfShortcutItems.toString(),
-                            style: TEXT_STYLE_ITEMS)),
+                            style: TEXT_STYLE_SETTINGS_ITEM)),
                   ));
             }),
       ],
@@ -409,7 +434,7 @@ class ShowHideButton extends StatelessWidget {
               child: Center(
                 child: Text(
                   enabled ? "hide" : "show",
-                  style: TEXT_STYLE_ITEMS,
+                  style: TEXT_STYLE_SETTINGS_ITEM,
                 ),
               ),
             );

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/pages/settings/utils.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/strings.dart';
@@ -53,7 +54,7 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(Strings.creditsTitle, style: TEXT_STYLE_TITLE),
+                Text(Strings.creditsTitle, style: TEXT_STYLE_SETTINGS_TITLE),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),

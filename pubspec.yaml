@@ -60,9 +60,12 @@ flutter:
     - assets/
 
   fonts:
-    - family: NotoSansLight
+    - family: NotoSans
       fonts:
-        - asset: assets/fonts/notosans_light.ttf
-    - family: NotoSansRegular
+        - asset: "assets/fonts/NotoSans-VariableFont_wdth,wght.ttf"
+    - family: DMSans
       fonts:
-        - asset: assets/fonts/notosans_regular.ttf
+        - asset: "assets/fonts/DMSans-VariableFont_opsz,wght.ttf"
+    - family: Outfit
+      fonts:
+        - asset: assets/fonts/Outfit-VariableFont_wght.ttf

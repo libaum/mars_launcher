@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mars_launcher/constants/global.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 
 
@@ -31,13 +30,7 @@ class _ClockState extends State<Clock> {
     return ValueListenableBuilder<String>(
         valueListenable: clockLogic.timeNotifier,
         builder: (context, currentTime, child) {
-          return Text(
-            currentTime,
-            style: const TextStyle(
-              fontSize: FONT_SIZE_CLOCK,
-              fontFamily: FONT_REGULAR,
-            ),
-          );
+          return Text(currentTime, style: TEXT_STYLE_CLOCK);
         });
   }
 

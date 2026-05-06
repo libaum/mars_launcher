@@ -141,7 +141,6 @@ class _NewTodoTextFieldState extends State<NewTodoTextField> {
   Widget build(BuildContext context) {
     final decorationColor = Theme.of(context).primaryColor;
     final underlineColor = Colors.transparent;
-    final fontSize = 18.0;
 
     return TextField(
       // maxLength: 2,
@@ -170,12 +169,10 @@ class _NewTodoTextFieldState extends State<NewTodoTextField> {
             },
           ),
           hintText: "Enter todo",
-          hintStyle: TextStyle(
+          hintStyle: TEXT_STYLE_INPUT_HINT.copyWith(
               color: Theme.of(context).brightness == Brightness.light
                   ? decorationColor.withOpacity(0.4)
-                  : decorationColor.withOpacity(0.3), //Colors.black45,
-              fontFamily: FONT_LIGHT,
-              fontSize: fontSize)),
+                  : decorationColor.withOpacity(0.3))),
     );
   }
 

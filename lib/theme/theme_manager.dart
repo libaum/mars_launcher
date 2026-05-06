@@ -21,14 +21,16 @@ class ThemeManager {
   late Color lightBackground;
   late Color darkBackground;
   late Color searchTextColor;
+  late ValueNotifier<String> fontNotifier;
 
   ThemeManager() {
     themeModeNotifier = ThemeModeNotifier<ThemeMode>(
         sharedPrefsManager.readDataWithDefault(Keys.themeMode, true) ? ThemeMode.dark : ThemeMode.light
     );
-  lightBackground = Color(sharedPrefsManager.readData(Keys.lightBackground) ?? Colors.white.value);
-  darkBackground = Color(sharedPrefsManager.readData(Keys.darkBackground) ?? Colors.black.value);
-  searchTextColor = Color(sharedPrefsManager.readData(Keys.searchColor) ?? COLOR_ACCENT.value);
+    lightBackground = Color(sharedPrefsManager.readData(Keys.lightBackground) ?? Colors.white.value);
+    darkBackground = Color(sharedPrefsManager.readData(Keys.darkBackground) ?? Colors.black.value);
+    searchTextColor = Color(sharedPrefsManager.readData(Keys.searchColor) ?? COLOR_ACCENT.value);
+    fontNotifier = ValueNotifier(sharedPrefsManager.readData(Keys.font) ?? FONT);
   }
 
   bool get isDarkMode {
@@ -36,7 +38,7 @@ class ThemeManager {
   }
 
   ThemeData get lightTheme {
-    return basicLightTheme.copyWith(
+    return buildLightTheme(fontNotifier.value).copyWith(
       scaffoldBackgroundColor: lightBackground,
       colorScheme: ColorScheme.light(
         surface: lightBackground,
@@ -48,7 +50,7 @@ class ThemeManager {
   }
 
   ThemeData get darkTheme {
-    return basicDarkTheme.copyWith(
+    return buildDarkTheme(fontNotifier.value).copyWith(
       scaffoldBackgroundColor: darkBackground,
       colorScheme: ColorScheme.light(
         surface: darkBackground,
@@ -57,6 +59,13 @@ class ThemeManager {
         brightness: Brightness.dark,
       ),
     );
+  }
+
+  void cycleFont() {
+    final idx = AVAILABLE_FONTS.indexOf(fontNotifier.value);
+    fontNotifier.value = AVAILABLE_FONTS[(idx + 1) % AVAILABLE_FONTS.length];
+    sharedPrefsManager.saveData(Keys.font, fontNotifier.value);
+    themeModeNotifier.notify();
   }
 
   get systemUiOverlayStyle {

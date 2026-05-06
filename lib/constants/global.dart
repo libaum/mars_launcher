@@ -1,7 +1,7 @@
 const PACKAGE_NAME = "com.cloudcatcher.mars_launcher";
 
 const PRINT_SHARED_PREF_ACCESS = false;
-const CLEAR_SHARED_PREFS_ON_DEBUG_START = true; // only used in debug builds
+const CLEAR_SHARED_PREFS_ON_DEBUG_START = false; // only used in debug builds
 const ASK_TO_BE_DEFAULT_LAUNCHER = false; /// Ask on first startup to be default launcher
 const DURATION_SHOW_SUNRISE_SUNSET = 5; /// in seconds
 

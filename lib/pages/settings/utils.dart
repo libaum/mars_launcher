@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-const TEXT_STYLE_ITEMS = TextStyle(fontSize: 22, height: 1);
-const TEXT_STYLE_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.normal);
+import 'package:mars_launcher/theme/theme_constants.dart';
 
 /// Generic button for the settings page
 class GenericSettingsButton extends StatelessWidget {
@@ -13,7 +11,7 @@ class GenericSettingsButton extends StatelessWidget {
     Key? key,
     required Function this.onPressed,
     required String this.name,
-    this.style=TEXT_STYLE_ITEMS
+    this.style=TEXT_STYLE_SETTINGS_ITEM
   }) : super(key: key);
 
   @override

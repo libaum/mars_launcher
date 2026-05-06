@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_color_picker.dart';
 import 'package:mars_launcher/pages/settings/utils.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/strings.dart';
@@ -52,7 +53,7 @@ class _SettingsColorsState extends State<SettingsColors> with WidgetsBindingObse
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(Strings.settingsColorsTitle, style: TEXT_STYLE_TITLE),
+                Text(Strings.settingsColorsTitle, style: TEXT_STYLE_SETTINGS_TITLE),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
@@ -98,7 +99,7 @@ class _SettingsColorsState extends State<SettingsColors> with WidgetsBindingObse
                                     );
                                   },
                                   name: Strings.settingsColorsSearchColor,
-                              style: TEXT_STYLE_ITEMS.copyWith(color: themeManager.searchTextColor),
+                              style: TEXT_STYLE_SETTINGS_ITEM.copyWith(color: themeManager.searchTextColor),
                               );
                             }
                           ),

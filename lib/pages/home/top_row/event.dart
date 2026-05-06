@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mars_launcher/constants/global.dart';
 import 'package:mars_launcher/logic/calendar_manager.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
@@ -49,10 +48,7 @@ class _EventViewState extends State<EventView> {
                           ? ".." + event.substring(event.length - letterLength)
                           : event,
                       softWrap: false,
-                      style: const TextStyle(
-                        fontSize: FONT_SIZE_EVENTS,
-                        fontFamily: FONT_LIGHT,
-                      ),
+                      style: TEXT_STYLE_TOP_ROW_LIGHT,
                     );
                   }),
               style: TextButton.styleFrom(

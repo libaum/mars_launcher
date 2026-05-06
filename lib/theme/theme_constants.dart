@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mars_launcher/constants/global.dart';
 
 /// Colors
 const COLOR_LIGHT_BACKGROUND = Colors.white;
@@ -12,9 +13,23 @@ const COLOR_ACCENT = Color(0xffc9184a);
 const COLOR_ACCENT_HIGHLIGHT = Color(0xffEA4876);
 const COLOR_DIALOG_BUTTONS = Color(0xffFF6F5C);
 
-/// Fonts
-const FONT_LIGHT = "NotoSansLight";
-const FONT_REGULAR = "NotoSansRegular";
+/// Default font (used as fallback and initial value)
+const FONT = "DMSans";
+
+/// All selectable fonts — order determines cycle direction in settings
+const List<String> AVAILABLE_FONTS = ["DMSans", "NotoSans", "Outfit"];
+
+/// Settings page text styles
+const TEXT_STYLE_SETTINGS_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.w300);
+const TEXT_STYLE_SETTINGS_ITEM = TextStyle(fontSize: 22, height: 1, fontWeight: FontWeight.w200);
+
+/// Named text styles — fontFamily intentionally omitted so they inherit from ThemeData
+const TEXT_STYLE_APP_LARGE = TextStyle(fontSize: 30, fontWeight: FontWeight.w200);
+const TEXT_STYLE_APP_SMALL = TextStyle(fontSize: 19, fontWeight: FontWeight.w200);
+const TEXT_STYLE_CLOCK = TextStyle(fontSize: FONT_SIZE_CLOCK, fontWeight: FontWeight.w300, fontFeatures: [FontFeature.tabularFigures()]);
+const TEXT_STYLE_TOP_ROW = TextStyle(fontSize: FONT_SIZE_TEMPERATURE, fontWeight: FontWeight.w300);
+const TEXT_STYLE_TOP_ROW_LIGHT = TextStyle(fontSize: FONT_SIZE_EVENTS, fontWeight: FontWeight.w300);
+const TEXT_STYLE_INPUT_HINT = TextStyle(fontSize: 18, fontWeight: FontWeight.w300);
 
 ButtonStyle getDialogButtonStyle(isDarkMode) {
   return ButtonStyle(
@@ -23,7 +38,7 @@ ButtonStyle getDialogButtonStyle(isDarkMode) {
       overlayColor: WidgetStateProperty.all<Color>(COLOR_ACCENT.withOpacity(0.05)),
       foregroundColor: WidgetStateProperty.all<Color>(COLOR_ACCENT),
       textStyle: WidgetStateProperty.all(TextStyle(
-        fontFamily: FONT_LIGHT,
+        fontFamily: FONT,
         fontWeight: FontWeight.bold,
       )),
       shape: WidgetStateProperty.all(RoundedRectangleBorder(
@@ -31,7 +46,7 @@ ButtonStyle getDialogButtonStyle(isDarkMode) {
       )));
 }
 
-ThemeData basicLightTheme = ThemeData(
+ThemeData buildLightTheme(String font) => ThemeData(
   colorScheme: ColorScheme.light(
     surface: COLOR_LIGHT_BACKGROUND,
     primary: COLOR_LIGHT_PRIMARY,
@@ -45,12 +60,10 @@ ThemeData basicLightTheme = ThemeData(
   ),
   dialogTheme: DialogThemeData(
     backgroundColor: COLOR_LIGHT_PRIMARY,
-    contentTextStyle: TextStyle(
-      color: COLOR_LIGHT_BACKGROUND
-    ),
+    contentTextStyle: TextStyle(color: COLOR_LIGHT_BACKGROUND),
     titleTextStyle: TextStyle(
       fontSize: 24,
-      fontFamily: FONT_REGULAR,
+      fontFamily: font,
       fontWeight: FontWeight.bold,
       color: COLOR_LIGHT_BACKGROUND,
     ),
@@ -60,20 +73,17 @@ ThemeData basicLightTheme = ThemeData(
   dialogBackgroundColor: COLOR_LIGHT_PRIMARY,
   primaryColor: Colors.black,
   disabledColor: COLOR_ACCENT,
-  fontFamily: FONT_LIGHT,
+  fontFamily: font,
   scaffoldBackgroundColor: COLOR_LIGHT_BACKGROUND,
   brightness: Brightness.light,
-  iconTheme: IconThemeData(
-    color: COLOR_LIGHT_PRIMARY,
-  ),
+  iconTheme: IconThemeData(color: COLOR_LIGHT_PRIMARY),
   textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
           foregroundColor: WidgetStateProperty.all<Color>(COLOR_LIGHT_PRIMARY),
           overlayColor: WidgetStateProperty.all<Color>(Colors.transparent))),
 );
 
-ThemeData basicDarkTheme = ThemeData(
-
+ThemeData buildDarkTheme(String font) => ThemeData(
   colorScheme: ColorScheme.dark(
     surface: COLOR_DARK_BACKGROUND,
     primary: COLOR_DARK_PRIMARY,
@@ -89,23 +99,19 @@ ThemeData basicDarkTheme = ThemeData(
     backgroundColor: COLOR_DARK_PRIMARY,
     titleTextStyle: TextStyle(
       fontSize: 24,
-      fontFamily: FONT_REGULAR,
+      fontFamily: font,
       fontWeight: FontWeight.bold,
       color: COLOR_DARK_BACKGROUND,
     ),
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(4.0))),
   ),
-  // dialogBackgroundColor: COLOR_DARK_PRIMARY,
   primaryColor: COLOR_DARK_PRIMARY,
   disabledColor: COLOR_ACCENT,
-  fontFamily: FONT_LIGHT,
+  fontFamily: font,
   scaffoldBackgroundColor: COLOR_DARK_BACKGROUND,
   brightness: Brightness.dark,
-  iconTheme: IconThemeData(
-    color: COLOR_DARK_PRIMARY,
-  ),
-
+  iconTheme: IconThemeData(color: COLOR_DARK_PRIMARY),
   textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
           foregroundColor: WidgetStateProperty.all<Color>(COLOR_DARK_PRIMARY),

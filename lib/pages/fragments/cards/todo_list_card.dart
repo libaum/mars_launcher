@@ -13,7 +13,6 @@ class TodoListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const fontFamily = FONT_LIGHT;
     final textColor = Theme.of(context).primaryColor;
 
     return Row(
@@ -29,11 +28,7 @@ class TodoListCard extends StatelessWidget {
               todo,
               overflow: TextOverflow.ellipsis, // Specify how to handle overflow
               maxLines: 2,
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w100,
-                fontFamily: fontFamily,
-              ),
+              style: TEXT_STYLE_APP_SMALL,
             ),
             style: ButtonStyle(
               foregroundColor: WidgetStateProperty.all(textColor),

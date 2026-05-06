@@ -12,7 +12,7 @@ import 'package:mars_launcher/pages/home/top_row/event.dart';
 import 'package:mars_launcher/pages/home/top_row/clock.dart';
 import 'package:mars_launcher/pages/home/top_row/temperature.dart';
 import 'package:mars_launcher/services/service_locator.dart';
-import 'package:mars_launcher/theme/theme_constants.dart';
+import 'package:mars_launcher/theme/theme_manager.dart';
 
 class TopRow extends StatelessWidget {
   final appShortcutsManager = getIt<AppShortcutsManager>();
@@ -84,8 +84,7 @@ class TopRow extends StatelessWidget {
 }
 
 void openCreateAlarmDialog(context, isDarkMode) async {
-  final themeDark = basicDarkTheme;
-  final themeLight = basicLightTheme;
+  final themeManager = getIt<ThemeManager>();
 
   var time = await showTimePicker(
     context: context,
@@ -93,7 +92,7 @@ void openCreateAlarmDialog(context, isDarkMode) async {
     helpText: "Create a new alarm",
     builder: (context, child) {
       return Theme(
-        data: isDarkMode ? themeDark : themeLight,
+        data: isDarkMode ? themeManager.darkTheme : themeManager.lightTheme,
         child: child!,
       );
     },

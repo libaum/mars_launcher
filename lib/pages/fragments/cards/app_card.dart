@@ -17,7 +17,6 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var fontFamily = isShortcutItem ? FONT_REGULAR : FONT_LIGHT;
     var letterSpacing = isShortcutItem ? 1.0 : 0.0;
     var textColor = isShortcutItem ? Theme.of(context).primaryColor : Theme.of(context).colorScheme.secondary;
 
@@ -34,12 +33,7 @@ class AppCard extends StatelessWidget {
         },
         child: Text(
           appInfo.displayName,
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w100,
-            fontFamily: fontFamily,
-            letterSpacing: letterSpacing,
-          ),
+          style: TEXT_STYLE_APP_LARGE.copyWith(letterSpacing: letterSpacing),
           maxLines: isShortcutItem ? 1 : 2,
         ),
         style: ButtonStyle(
