@@ -29,7 +29,11 @@ void main() async {
 
 void registerAppChangeReceiver() {
   const platform = MethodChannel(MethodChannels.notifyAppChanges);
-  platform.invokeMethod('registerAppChangeReceiver');
+  try {
+    platform.invokeMethod('registerAppChangeReceiver');
+  } catch (e) {
+    print("Error registering app change receiver: $e");
+  }
 }
 
 class MarsLauncher extends StatelessWidget {

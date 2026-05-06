@@ -154,7 +154,7 @@ class ShortcutAppsNotifier extends ValueNotifier<List<AppInfo>> {
   void replaceShortcut(int index, AppInfo newShortcutApp) async {
     print("[$runtimeType] replacing index: $index");
 
-    if (List.generate(MAX_NUM_OF_SHORTCUT_ITEMS, (i) => i).contains(index)) {
+    if (index >= 0 && index < MAX_NUM_OF_SHORTCUT_ITEMS) {
       value[index] = newShortcutApp;
       print("[$runtimeType] replaced shortcut");
       notifyListeners();

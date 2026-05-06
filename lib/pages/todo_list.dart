@@ -29,6 +29,13 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
   }
 
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void callbackRemoveFromTodoList(index) {
     todoManager.removeTodo(index);
   }
@@ -171,6 +178,13 @@ class _NewTodoTextFieldState extends State<NewTodoTextField> {
               fontSize: fontSize)),
     );
   }
+
+  @override
+  dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
 
   checkInput(value) {
     if (value.isEmpty) {
