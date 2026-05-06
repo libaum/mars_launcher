@@ -50,28 +50,28 @@ class _ClockState extends State<Clock> {
 
 class ClockLogic {
   final timeNotifier = ValueNotifier("");
-  late Timer timer;
-  bool is24HourFormat;
+  Timer? _timer;
+  final DateFormat _fmt;
 
-  ClockLogic(is24HourFormat) : this.is24HourFormat = is24HourFormat {
+  ClockLogic(bool is24HourFormat) : _fmt = DateFormat(is24HourFormat ? 'Hm' : 'jm') {
     _updateClock();
-    timer = Timer.periodic(Duration(seconds: 1), (timer) => _updateClock());
+    _scheduleNextTick();
+  }
+
+  void _scheduleNextTick() {
+    final now = DateTime.now();
+    final msUntilNextMinute = (60 - now.second) * 1000 - now.millisecond;
+    _timer = Timer(Duration(milliseconds: msUntilNextMinute), () {
+      _updateClock();
+      _scheduleNextTick();
+    });
   }
 
   void _updateClock() {
-    var now = DateTime.now();
-    String formattedTime = _formatTime(now);
-    if (formattedTime != timeNotifier.value) {
-      timeNotifier.value = formattedTime;
-    }
-  }
-
-  String _formatTime(DateTime time) {
-    String pattern = is24HourFormat ? 'Hm' : 'jm';
-    return DateFormat(pattern).format(time);
+    timeNotifier.value = _fmt.format(DateTime.now());
   }
 
   void stopTimer() {
-    timer.cancel();
+    _timer?.cancel();
   }
 }
