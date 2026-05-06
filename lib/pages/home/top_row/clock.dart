@@ -30,7 +30,7 @@ class _ClockState extends State<Clock> {
     return ValueListenableBuilder<String>(
         valueListenable: clockLogic.timeNotifier,
         builder: (context, currentTime, child) {
-          return Text(currentTime, style: TEXT_STYLE_CLOCK);
+          return Text(currentTime, style: TEXT_STYLE_TOP_ROW);
         });
   }
 

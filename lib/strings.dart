@@ -8,7 +8,7 @@ class Strings {
   static const settingsSwipeLeft = "swipe left";
   static const settingsSwipeRight = "swipe right";
   static const settingsHiddenApps = "hidden apps";
-  static const settingsCredits = "credits";
+  static const settingsCredits = "about";
   static const settingsColors = "colors";
   static const settingsMore = "more";
   static const settingsChangeDefaultLauncher = "set default launcher";
@@ -19,7 +19,8 @@ class Strings {
   static const settingsGroupAppearance = " Appearance";
   static const settingsGroupOther = " Other";
 
-  static const creditsTitle = "Credits";
+  static const creditsTitle = "About";
+  static const cheatSheetTitle = "Cheat Sheet";
   static const settingsColorsTitle = "Colors";
   static const settingsColorsSearchColor = "search color";
   static const settingsColorsLightBackground = "light background";
@@ -47,9 +48,8 @@ class Strings {
   static const overlayTip = 'tip: find all commands in\nsettings > flight manual';
 
   /// Flight manual
-  static const settingsFlightManual = "flight manual";
-  static const flightManualContent = '''/// FLIGHT MANUAL ///
-
+  static const settingsFlightManual = "cheat sheet";
+  static const flightManualContent = '''
 [ CORE ]
 tap app     :: open
 hold app    :: reassign
@@ -66,8 +66,7 @@ tap widget  :: open linked app
 hold clock  :: ???
 hold date   :: ???
 hold temp   :: ???
-
-/// END OF LOG ///''';
+''';
 }
 
 /// Shared preferences keys

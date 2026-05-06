@@ -11,6 +11,4 @@ const int NUMBER_OF_SHORTCUT_ITEMS_ON_STARTUP = 4;
 const UPDATE_TEMPERATURE_EVERY = 5; /// in minutes
 const LOAD_APPS_FROM_JSON = false; /// has to be false on release
 
-const double FONT_SIZE_TEMPERATURE = 15;
-const double FONT_SIZE_CLOCK = 15;
-const double FONT_SIZE_EVENTS = 15;
+const double FONT_SIZE_TOP_ROW = 15;

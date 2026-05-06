@@ -104,15 +104,18 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(50, 20, ROW_PADDING_RIGHT, 0),
+            padding: const EdgeInsets.fromLTRB(40, 20, ROW_PADDING_RIGHT, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(Strings.settingsTitle, style: TEXT_STYLE_SETTINGS_TITLE),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Text(Strings.settingsTitle, style: TEXT_STYLE_SETTINGS_TITLE),
+                ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                    padding: const EdgeInsets.fromLTRB(0,10, 0, 40),
                     child: SingleChildScrollView(
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,13 +346,13 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
       children: [
         GenericSettingsButton(
             onPressed: () => themeManager.cycleFont(),
-            name: "Font"),
+            name: "font"),
         Expanded(child: Container()),
         ValueListenableBuilder<String>(
             valueListenable: themeManager.fontNotifier,
             builder: (context, font, child) {
               return SizedBox(
-                width: 86,
+                width: 120,
                 child: TextButton(
                   onPressed: () => themeManager.cycleFont(),
                   child: Center(child: Text(font, style: TEXT_STYLE_SETTINGS_ITEM)),

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:mars_launcher/pages/settings/utils.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/services/service_locator.dart';
@@ -18,10 +17,18 @@ class Credits extends StatefulWidget {
 class _CreditsState extends State<Credits> with WidgetsBindingObserver {
   final themeManager = getIt<ThemeManager>();
 
+  static const String supportEmail = 'contact@catchingclouds.de';
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -49,60 +56,101 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(50, 20, 0, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(Strings.creditsTitle, style: TEXT_STYLE_SETTINGS_TITLE),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                    child: Text.rich(TextSpan(
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                      children: [
-                        TextSpan(text: "Weather data by "),
-                        TextSpan(
-                          text: "Open-Meteo.com",
-                          style: const TextStyle(
-                            color: Colors.blue,
-
-                            /// Set the color of the link
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              /// Define the URL to open when the link is tapped
-                              final uri = Uri.parse("https://open-meteo.com/");
-
-                              /// Use the url_launcher package to open the URL
-                              launchUrl(uri);
-                            },
-                        ),
-                        TextSpan(text: " (Licence can be found "),
-                        TextSpan(
-                          text: "here",
-                          style: const TextStyle(
-                            color: Colors.blue,
-
-                            /// Set the color of the link
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              /// Define the URL to open when the link is tapped
-                              final uri = Uri.parse("https://github.com/open-meteo/open-meteo/blob/main/LICENSE");
-
-                              /// Use the url_launcher package to open the URL
-                              launchUrl(uri);
-                            },
-                        ),
-                        const TextSpan(text: ")."),
-                      ],
-                    )),
+            padding: const EdgeInsets.fromLTRB(28, 20, 28, 20),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(Strings.creditsTitle, style: TEXT_STYLE_SETTINGS_TITLE),
+                  const SizedBox(height: 10),
+                  // Text(
+                  //   'About',
+                  //   style: TEXT_STYLE_CREDITS_BODY.copyWith(
+                  //     fontSize: 13,
+                  //     fontWeight: FontWeight.w600,
+                  //     color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6),
+                  //   ),
+                  // ),
+                  const SizedBox(height: 8),
+                  Text(
+                      'Mars Launcher is a small indie project that I initially built for myself because I was overwhelmed by the constant clutter on modern home screens. I believe in the value of digital minimalism, but I need to remind myself about it constantly. Mars Launcher helps me with that every day.',
+                    style: TEXT_STYLE_CREDITS_BODY.copyWith(height: 1.35),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 12),
+                  Text(
+                      'Over time, I have included more and more useful functions, but I am still trying not to change the overall feel. As part of the project\'s philosophy, Mars Launcher will forever be ad-free, open-source and free to use, and will never track users.',
+                    style: TEXT_STYLE_CREDITS_BODY.copyWith(height: 1.35),
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    'Contact',
+                    style: TEXT_STYLE_CREDITS_BODY.copyWith(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  RichText(
+                    text: TextSpan(
+                      style: TEXT_STYLE_CREDITS_BODY.copyWith(height: 1.35),
+                      children: [
+                        const TextSpan(
+                            text: 'If you have any suggestions for new features, want to report a bug, or just want to say hello, email me at ',
+                        ),
+                        TextSpan(
+                          text: supportEmail,
+                          style: const TextStyle(color: Colors.blue),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              final uri = Uri.parse('mailto:$supportEmail?subject=Mars%20Launcher%20feedback');
+                              launchUrl(uri);
+                            },
+                        ),
+                        const TextSpan(text: '.'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  // Divider(color: Theme.of(context).dividerColor),
+                  // const SizedBox(height: 12),
+                  Text(
+                    'Credits',
+                    style: TEXT_STYLE_CREDITS_BODY.copyWith(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text.rich(TextSpan(
+                    style: TEXT_STYLE_CREDITS_BODY.copyWith(height: 1.35),
+                    children: [
+                      const TextSpan(text: 'Weather data by '),
+                      TextSpan(
+                        text: 'open-meteo.com',
+                        style: const TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            final uri = Uri.parse('https://open-meteo.com/');
+                            launchUrl(uri);
+                          },
+                      ),
+                      const TextSpan(text: ' (license can be found '),
+                      TextSpan(
+                        text: 'here',
+                        style: const TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            final uri = Uri.parse('https://github.com/open-meteo/open-meteo/blob/main/LICENSE');
+                            launchUrl(uri);
+                          },
+                      ),
+                      const TextSpan(text: ').'),
+                    ],
+                  )),
+                ],
+              ),
             ),
           ),
         ),

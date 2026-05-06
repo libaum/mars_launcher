@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/pages/settings/utils.dart';
+import 'package:mars_launcher/theme/theme_constants.dart';
 import 'package:mars_launcher/strings.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/services/service_locator.dart';
@@ -34,23 +35,19 @@ class FlightManual extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(50, 20, 50, 0),
+            padding: const EdgeInsets.fromLTRB(40, 20, 50, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(Strings.cheatSheetTitle, style: TEXT_STYLE_SETTINGS_TITLE),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 30, 0, 20),
                     child: SingleChildScrollView(
                       child: Text(
                         Strings.flightManualContent,
-                        style: TextStyle(
-                          fontFamily: 'monospace',
-                          fontSize: 14,
-                          height: 1.8,
-                          color: textColor,
-                        ),
+                        style: TEXT_STYLE_CHEAT_SHEET,
                       ),
                     ),
                   ),
