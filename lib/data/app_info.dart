@@ -14,8 +14,15 @@ class AppInfo {
   bool isHidden;
 
   String? _displayName;
-  get displayName => _displayName ?? appName; /// If _displayName not set return appName
-  set displayName(newName) => _displayName = newName;
+  String? _displayNameLower;
+
+  String get displayName => _displayName ?? appName;
+  String get displayNameLower => _displayNameLower ??= displayName.toLowerCase();
+
+  set displayName(String? newName) {
+    _displayName = newName;
+    _displayNameLower = null;
+  }
 
   AppInfo({
     required this.packageName,

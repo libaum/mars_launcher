@@ -109,8 +109,9 @@ class AppSearchManager {
   }
 
   updateFilteredApps(BuildContext context, String searchValue) async {
+    final query = searchValue.toLowerCase();
     List<AppInfo> filteredApps = appsManager.appsNotifier.value
-        .where((app) => app.displayName.toLowerCase().contains(searchValue.toLowerCase()) && !app.isHidden)
+        .where((app) => app.displayNameLower.contains(query) && !app.isHidden)
         .toList();
     if (filteredApps.length == 1) {
       handleOnPress(context, filteredApps.first);
