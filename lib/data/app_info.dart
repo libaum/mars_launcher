@@ -11,7 +11,7 @@ class AppInfo {
   final String packageName;
   final String appName;
   final bool systemApp;
-  var isHidden;
+  bool isHidden;
 
   String? _displayName;
   get displayName => _displayName ?? appName; /// If _displayName not set return appName
@@ -25,20 +25,18 @@ class AppInfo {
     String? displayName
   }) : _displayName = displayName;
 
+  /// Equality / hashCode are based on packageName only — it uniquely identifies
+  /// an installed app. Including mutable fields (isHidden, displayName) would
+  /// break Map/Set lookups when those fields change after insertion.
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is AppInfo &&
           runtimeType == other.runtimeType &&
-          packageName == other.packageName &&
-          appName == other.appName &&
-          systemApp == other.systemApp &&
-          _displayName == other._displayName &&
-          isHidden == other.isHidden;
+          packageName == other.packageName;
 
   @override
-  int get hashCode =>
-      packageName.hashCode ^ appName.hashCode ^ systemApp.hashCode ^ _displayName.hashCode ^ isHidden.hashCode;
+  int get hashCode => packageName.hashCode;
 
   void open() {
     if (this.packageName.isNotEmpty && this.appName != Strings.appNameUninitialized) {
