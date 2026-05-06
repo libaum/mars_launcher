@@ -1,0 +1,5 @@
+- Fix: Weather widget no longer shows stale temperature indefinitely after failed updates
+- Fix: Calendar widget no longer crashes on certain calendar providers
+- Fix: App search is now faster
+- Fix: Clock widget now uses less battery
+- Various stability improvements
