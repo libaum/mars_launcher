@@ -25,6 +25,8 @@ class AppSearchManager {
     filteredAppsNotifier = ValueNotifier(getFilteredApps());
 
     appsManager.appsNotifier.addListener(() {
+      final currentPackageNames = appsManager.appsNotifier.value.map((a) => a.packageName).toSet();
+      memorizedAppCards.removeWhere((appInfo, _) => !currentPackageNames.contains(appInfo.packageName));
       filteredAppsNotifier.value = getFilteredApps();
     });
   }
