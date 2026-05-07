@@ -55,6 +55,7 @@ class AppInfo {
   }
 
   void uninstall() async {
+      getIt<AppsManager>().suppressLifecycleReset = true;
       final AndroidIntent intent = AndroidIntent(
         action: "android.intent.action.DELETE",
         data: "package:${this.packageName}",

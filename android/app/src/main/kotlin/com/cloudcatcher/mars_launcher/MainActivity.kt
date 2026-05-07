@@ -29,8 +29,10 @@ class MainActivity : FlutterActivity() {
             // MethodChannel for retrieving installed apps
             MethodChannel(messenger, CHANNEL_INSTALLED_APPS).setMethodCallHandler { call, result ->
                 if (call.method == "getInstalledApps") {
-                    val apps = getInstalledApps()
-                    result.success(apps)
+                    Thread {
+                        val apps = getInstalledApps()
+                        runOnUiThread { result.success(apps) }
+                    }.start()
                 } else {
                     result.notImplemented()
                 }

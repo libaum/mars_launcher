@@ -67,7 +67,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    if (state == AppLifecycleState.inactive && mounted) {
+    if (state == AppLifecycleState.resumed) {
+      appsManager.suppressLifecycleReset = false;
+    }
+    if ((state == AppLifecycleState.inactive || state == AppLifecycleState.paused) && mounted) {
+      if (appsManager.suppressLifecycleReset) return;
       searchAppsNotifier.value = false;
       Navigator.popUntil(context, (route) => route.isFirst);
     }

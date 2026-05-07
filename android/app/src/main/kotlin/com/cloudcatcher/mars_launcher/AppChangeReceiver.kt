@@ -8,10 +8,13 @@ import io.flutter.plugin.common.MethodChannel
 
 class AppChangeReceiver(private val channel: MethodChannel) : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val action = intent.action
-        if (Intent.ACTION_PACKAGE_ADDED == action || Intent.ACTION_PACKAGE_REMOVED == action) {
-            val packageName = intent.data?.schemeSpecificPart
-            channel.invokeMethod("onAppChanged", packageName)
+        val packageName = intent.data?.schemeSpecificPart ?: return
+        val isReplacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)
+        when {
+            intent.action == Intent.ACTION_PACKAGE_REMOVED && !isReplacing ->
+                channel.invokeMethod("onAppRemoved", packageName)
+            intent.action == Intent.ACTION_PACKAGE_ADDED ->
+                channel.invokeMethod("onAppInstalled", packageName)
         }
     }
 

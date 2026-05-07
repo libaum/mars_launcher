@@ -32,6 +32,7 @@ class AppsManager {
 
   var currentlySyncing = false;
   bool _hasLoadedApps = false;
+  bool suppressLifecycleReset = false;
 
   AppsManager() {
     print("[$runtimeType] INITIALISING");
@@ -43,9 +44,21 @@ class AppsManager {
   }
 
   Future<void> _handleAppChange(MethodCall call) async {
-    if (call.method == 'onAppChanged') {
-      String packageName = call.arguments;
-      print("[$runtimeType] received app event for packageName: ${packageName}");
+    if (call.method != 'onAppRemoved' && call.method != 'onAppInstalled') return;
+    final packageName = call.arguments as String;
+    print("[$runtimeType] received ${call.method} for packageName: $packageName");
+
+    if (call.method == 'onAppRemoved') {
+      appsNotifier.value = appsNotifier.value
+          .where((app) => app.packageName != packageName)
+          .toList();
+      renamedApps.remove(packageName);
+      final updated = Set<String>.from(hiddenAppsNotifier.value)..remove(packageName);
+      if (updated.length != hiddenAppsNotifier.value.length) {
+        hiddenAppsNotifier.value = updated;
+        sharedPrefsManager.saveData(Keys.hiddenApps, updated.toList());
+      }
+    } else if (call.method == 'onAppInstalled') {
       if (!currentlySyncing) {
         currentlySyncing = true;
         await syncInstalledApps();
