@@ -23,17 +23,17 @@ class FirstLaunchOverlay extends StatelessWidget {
     final dimColor = Colors.white.withValues(alpha: 0.4);
 
     final overlayTexts = [
-      (Strings.overlayLine1, TextStyle(fontFamily: 'monospace', fontSize: 16, color: textColor)),
-      (Strings.overlayLine2, TextStyle(fontFamily: 'monospace', fontSize: 16, color: textColor)),
-      (Strings.overlayLine3, TextStyle(fontFamily: 'monospace', fontSize: 16, color: textColor)),
-      (Strings.overlayTip, TextStyle(fontFamily: 'monospace', fontSize: 12, color: dimColor)),
+      (Strings.overlayLine1, TextStyle(fontSize: 19, fontWeight: FontWeight.w300, color: textColor)),
+      (Strings.overlayLine2, TextStyle(fontSize: 19, fontWeight: FontWeight.w300, color: textColor)),
+      (Strings.overlayLine3, TextStyle(fontSize: 19, fontWeight: FontWeight.w300, color: textColor)),
+      (Strings.overlayTip, TextStyle(fontSize: 13, fontWeight: FontWeight.w300, height: 1.4, color: dimColor)),
     ];
 
     final titleWidget = Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         Strings.overlayTitle,
-        style: TextStyle(fontFamily: 'monospace', fontSize: 14, color: dimColor),
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: dimColor),
       ),
     );
 

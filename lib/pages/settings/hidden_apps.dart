@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/apps_manager.dart';
-import 'package:mars_launcher/pages/settings/utils.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/pages/fragments/cards/hidden_app_card.dart';

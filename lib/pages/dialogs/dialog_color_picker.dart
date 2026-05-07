@@ -47,6 +47,7 @@ class ColorPickerDialog extends StatelessWidget {
                 selectedColor = color;
               },
               labelTypes: [],
+              enableAlpha: false,
               pickerAreaHeightPercent: 0.8,
             ),
             Align(

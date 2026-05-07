@@ -4,11 +4,10 @@ import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/logic/app_search_manager.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
-import 'package:mars_launcher/pages/settings/colors.dart';
-import 'package:mars_launcher/pages/settings/credits.dart';
+import 'package:mars_launcher/pages/settings/about.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_color_picker.dart';
 
-import 'package:mars_launcher/pages/settings/flight_manual.dart';
+import 'package:mars_launcher/pages/settings/cheat_sheet.dart';
 import 'package:mars_launcher/services/location_service.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
@@ -186,7 +185,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return ColorPickerDialog(colorType: ColorType.lightBackground, title: 'Light background color');
+                                      return ColorPickerDialog(colorType: ColorType.lightBackground, title: 'light background');
                                     },
                                   );
                                 },
@@ -198,7 +197,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return ColorPickerDialog(colorType: ColorType.darkBackground, title: 'Dark background color');
+                                      return ColorPickerDialog(colorType: ColorType.darkBackground, title: 'dark background');
                                     },
                                   );
                                 },
@@ -213,7 +212,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return ColorPickerDialog(colorType: ColorType.searchTextColor, title: 'Search color',);
+                                          return ColorPickerDialog(colorType: ColorType.searchTextColor, title: 'search color',);
                                         },
                                       );
                                     },
@@ -316,7 +315,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                   context: context,
                   builder: (BuildContext context) {
                     final Color onSurface = Theme.of(context).colorScheme.onSurface;
-                    final Color primary = Theme.of(context).colorScheme.primary;
                     return AlertDialog(
                       actionsAlignment: MainAxisAlignment.spaceBetween,
                       title: Text("Enable Weather?",

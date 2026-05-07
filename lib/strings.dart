@@ -15,9 +15,9 @@ class Strings {
   static const settingsAppNumber = "app number";
   static const String settingsKeyboardAutofocus = "Keyboard";
 
-  static const settingsGroupAppShortcuts = " App Shortcuts";
-  static const settingsGroupAppearance = " Appearance";
-  static const settingsGroupOther = " Other";
+  static const settingsGroupAppShortcuts = " app shortcuts";
+  static const settingsGroupAppearance = " appearance";
+  static const settingsGroupOther = " other";
 
   static const creditsTitle = "About";
   static const cheatSheetTitle = "Cheat Sheet";
@@ -41,32 +41,14 @@ class Strings {
   static const slotDefault = ' + ';
 
   /// First launch overlay
-  static const overlayTitle = '/// quick start ///';
+  static const overlayTitle = 'welcome';
   static const overlayLine1 = 'hold + to set app';
   static const overlayLine2 = 'swipe up to search';
   static const overlayLine3 = 'hold void for settings';
-  static const overlayTip = 'tip: find all commands in\nsettings > flight manual';
+  static const overlayTip = 'tip: find all commands in\nsettings > cheat sheet';
 
   /// Flight manual
   static const settingsFlightManual = "cheat sheet";
-  static const flightManualContent = '''
-[ CORE ]
-tap app     :: open
-hold app    :: reassign
-hold void   :: settings
-double tap  :: toggle theme
-
-[ NAVIGATION ]
-swipe up    :: search
-swipe left  :: quick app 1
-swipe right :: quick app 2
-
-[ WIDGETS ]
-tap widget  :: open linked app
-hold clock  :: ???
-hold date   :: ???
-hold temp   :: ???
-''';
 }
 
 /// Shared preferences keys

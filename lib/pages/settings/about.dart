@@ -83,43 +83,39 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
                   ),
                   const SizedBox(height: 18),
                   Text(
-                    'Contact',
-                    style: TEXT_STYLE_CREDITS_BODY.copyWith(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                    'contact',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).primaryColor.withValues(alpha: 0.4),
                     ),
                   ),
                   const SizedBox(height: 8),
-                  RichText(
-                    text: TextSpan(
-                      style: TEXT_STYLE_CREDITS_BODY.copyWith(height: 1.35),
-                      children: [
-                        const TextSpan(
-                            text: 'If you have any suggestions for new features, want to report a bug, or just want to say hello, email me at ',
-                        ),
-                        TextSpan(
-                          text: supportEmail,
-                          style: const TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              final uri = Uri.parse('mailto:$supportEmail?subject=Mars%20Launcher%20feedback');
-                              launchUrl(uri);
-                            },
-                        ),
-                        const TextSpan(text: '.'),
-                      ],
-                    ),
-                  ),
+                  Text.rich(TextSpan(
+                    style: TEXT_STYLE_CREDITS_BODY.copyWith(height: 1.35),
+                    children: [
+                      const TextSpan(
+                          text: 'If you have any suggestions for new features, want to report a bug, or just want to say hello, email me at ',
+                      ),
+                      TextSpan(
+                        text: supportEmail,
+                        style: const TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            final uri = Uri.parse('mailto:$supportEmail?subject=Mars%20Launcher%20feedback');
+                            launchUrl(uri);
+                          },
+                      ),
+                      const TextSpan(text: '.'),
+                    ],
+                  )),
                   const SizedBox(height: 18),
                   // Divider(color: Theme.of(context).dividerColor),
                   // const SizedBox(height: 12),
                   Text(
-                    'Credits',
-                    style: TEXT_STYLE_CREDITS_BODY.copyWith(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                    'credits',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).primaryColor.withValues(alpha: 0.4),
                     ),
                   ),
                   const SizedBox(height: 8),
