@@ -40,12 +40,20 @@ class Strings {
   /// Default slots
   static const slotDefault = ' + ';
 
-  /// First launch overlay
-  static const overlayTitle = 'welcome';
-  static const overlayLine1 = 'hold + to set app';
-  static const overlayLine2 = 'swipe up to search';
-  static const overlayLine3 = 'hold void for settings';
-  static const overlayTip = 'tip: find all commands in\nsettings > cheat sheet';
+  /// Shortcut placeholders — shown for uninitialized slots until reassigned.
+  /// Indices 0..3 carry first-launch tutorial hints; later slots fall back
+  /// to [shortcutPlaceholderDefault].
+  static const shortcutPlaceholders = [
+    'hold here to set an app',
+    'swipe up to search',
+    'hold void for settings',
+    'double tap to flip theme',
+  ];
+  static const shortcutPlaceholderDefault = 'hold to set an app';
+
+  /// First-launch tip shown as a SnackBar.
+  static const firstLaunchTip = 'tip: find all commands in cheat sheet';
+  static const firstLaunchTipAction = 'open';
 
   /// Flight manual
   static const settingsFlightManual = "cheat sheet";

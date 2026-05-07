@@ -11,7 +11,7 @@ import 'package:mars_launcher/pages/settings/settings.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
 import 'package:mars_launcher/strings.dart';
-import 'package:mars_launcher/pages/home/first_launch_overlay.dart';
+import 'package:mars_launcher/pages/settings/cheat_sheet.dart';
 
 const double HEIGHT_SIZED_BOX = 50;
 const double BOTTOM_GESTURE_DEAD_ZONE = 16;
@@ -42,7 +42,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   final ValueNotifier<bool> searchAppsNotifier = ValueNotifier(false);
   bool _allowVerticalDrag = true;
-  late bool _showFirstLaunchOverlay;
+  bool _tipMounted = false;
+  bool _tipVisible = true;
 
   @override
   void initState() {
@@ -51,8 +52,15 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       appsManager.loadAndSyncApps();
     });
-    _showFirstLaunchOverlay =
+    final isFirstLaunch =
         sharedPrefsManager.readData(Keys.isFirstLaunch) ?? true;
+    if (isFirstLaunch) {
+      _tipMounted = true;
+      sharedPrefsManager.saveData(Keys.isFirstLaunch, false);
+      Future.delayed(const Duration(seconds: 5), () {
+        if (mounted) setState(() => _tipVisible = false);
+      });
+    }
   }
 
   @override
@@ -127,22 +135,62 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                   ],
                 ),
               ),
-              if (_showFirstLaunchOverlay)
-                FirstLaunchOverlay(
-                  onDismiss: () {
-                    setState(() {
-                      _showFirstLaunchOverlay = false;
-                    });
-                    sharedPrefsManager.saveData(Keys.isFirstLaunch, false);
-                  },
-                  topSpacer: Column(
-                    children: [
-                      widget.topRowOverride ?? TopRow(),
-                      SizedBox(height: HEIGHT_SIZED_BOX),
-                    ],
+              if (_tipMounted)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 24,
+                  child: SafeArea(
+                    child: AnimatedOpacity(
+                      opacity: _tipVisible ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 2000),
+                      onEnd: () {
+                        if (!_tipVisible && mounted) {
+                          setState(() => _tipMounted = false);
+                        }
+                      },
+                      child: _buildFirstLaunchTip(context),
+                    ),
                   ),
                 ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFirstLaunchTip(BuildContext context) {
+    final primary = Theme.of(context).primaryColor;
+    final accent = Theme.of(context).colorScheme.secondary;
+    return Center(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          setState(() => _tipVisible = false);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => FlightManual()),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+          child: Text.rich(
+            TextSpan(
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w300,
+                color: primary.withValues(alpha: 0.45),
+              ),
+              children: [
+                TextSpan(text: '${Strings.firstLaunchTip}   '),
+                TextSpan(
+                  text: Strings.firstLaunchTipAction,
+                  style: TextStyle(color: accent),
+                ),
+              ],
+            ),
+            textAlign: TextAlign.center,
           ),
         ),
       ),

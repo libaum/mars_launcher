@@ -5,6 +5,7 @@ import 'package:mars_launcher/theme/theme_constants.dart';
 class AppCard extends StatelessWidget {
   final AppInfo appInfo;
   final bool isShortcutItem;
+  final String? placeholderText;
   final Function(BuildContext, AppInfo) callbackHandleOnPress;
   final Function(BuildContext, AppInfo) callbackHandleOnLongPress;
 
@@ -13,13 +14,20 @@ class AppCard extends StatelessWidget {
     required this.callbackHandleOnPress,
     required this.callbackHandleOnLongPress,
     this.isShortcutItem = false,
+    this.placeholderText,
   });
 
   @override
   Widget build(BuildContext context) {
-    var letterSpacing = isShortcutItem ? 1.0 : 0.0;
-    var textColor = isShortcutItem ? Theme.of(context).primaryColor : Theme.of(context).colorScheme.secondary;
-
+    final isPlaceholder = placeholderText != null;
+    final letterSpacing = isShortcutItem && !isPlaceholder ? 1.0 : 0.0;
+    final baseColor = isShortcutItem
+        ? Theme.of(context).primaryColor
+        : Theme.of(context).colorScheme.secondary;
+    final textColor = isPlaceholder ? baseColor.withValues(alpha: 0.45) : baseColor;
+    final textStyle = isPlaceholder
+        ? const TextStyle(fontSize: 22, fontWeight: FontWeight.w300)
+        : TEXT_STYLE_APP_LARGE;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -32,8 +40,8 @@ class AppCard extends StatelessWidget {
           callbackHandleOnLongPress(context, appInfo);
         },
         child: Text(
-          appInfo.displayName,
-          style: TEXT_STYLE_APP_LARGE.copyWith(letterSpacing: letterSpacing),
+          placeholderText ?? appInfo.displayName,
+          style: textStyle.copyWith(letterSpacing: letterSpacing),
           maxLines: isShortcutItem ? 1 : 2,
         ),
         style: ButtonStyle(

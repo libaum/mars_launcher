@@ -8,6 +8,7 @@ import 'package:mars_launcher/pages/home/app_search_fragment.dart';
 import 'package:mars_launcher/pages/fragments/cards/app_card.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/services/service_locator.dart';
+import 'package:mars_launcher/strings.dart';
 
 class AppShortcutsFragment extends StatelessWidget {
   final appShortcutsManager = getIt<AppShortcutsManager>();
@@ -15,6 +16,14 @@ class AppShortcutsFragment extends StatelessWidget {
 
   callbackOpenApp(BuildContext context, AppInfo appInfo) {
     appInfo.open();
+  }
+
+  String? _placeholderFor(AppInfo app, int index) {
+    if (app.appName != Strings.appNameUninitialized) return null;
+    if (index < Strings.shortcutPlaceholders.length) {
+      return Strings.shortcutPlaceholders[index];
+    }
+    return Strings.shortcutPlaceholderDefault;
   }
 
   callbackHandleOnLongPress(BuildContext context, AppInfo appInfo) {
@@ -40,18 +49,20 @@ class AppShortcutsFragment extends StatelessWidget {
             child: ValueListenableBuilder<List<AppInfo>>(
                 valueListenable: appShortcutsManager.shortcutAppsNotifier,
                 builder: (context, shortcutApps, child) {
+                  final visibleApps = shortcutApps.getRange(0, numOfShortcutItems).toList();
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: shortcutApps
-                        .getRange(0, numOfShortcutItems)
-                        .map((app) => AppCard(
-                              appInfo: app,
-                              isShortcutItem: true,
-                              callbackHandleOnPress: callbackOpenApp,
-                              callbackHandleOnLongPress: callbackHandleOnLongPress,
-                            ))
-                        .toList(),
+                    children: [
+                      for (int i = 0; i < visibleApps.length; i++)
+                        AppCard(
+                          appInfo: visibleApps[i],
+                          isShortcutItem: true,
+                          placeholderText: _placeholderFor(visibleApps[i], i),
+                          callbackHandleOnPress: callbackOpenApp,
+                          callbackHandleOnLongPress: callbackHandleOnLongPress,
+                        ),
+                    ],
                   );
                 }),
           );
