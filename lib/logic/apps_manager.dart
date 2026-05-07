@@ -30,9 +30,9 @@ class AppsManager {
   final Map<String, String> renamedApps = {}; /// {"packageName": "displayName"}
   final ValueNotifier<bool> renamedAppsUpdatedNotifier = ValueNotifier(false);
 
-  var currentlySyncing = false;
   bool _hasLoadedApps = false;
   bool suppressLifecycleReset = false;
+  Future<void>? _syncFuture;
 
   AppsManager() {
     print("[$runtimeType] INITIALISING");
@@ -48,10 +48,19 @@ class AppsManager {
     final packageName = call.arguments as String;
     print("[$runtimeType] received ${call.method} for packageName: $packageName");
 
+    // Wait for any in-flight initial sync so its stale snapshot can't clobber us.
+    // Swallow sync errors here — they'll surface to the original caller separately.
+    final pendingSync = _syncFuture;
+    if (pendingSync != null) {
+      try { await pendingSync; } catch (_) {}
+    }
+
     if (call.method == 'onAppRemoved') {
-      appsNotifier.value = appsNotifier.value
+      final filtered = appsNotifier.value
           .where((app) => app.packageName != packageName)
           .toList();
+      if (filtered.length == appsNotifier.value.length) return;
+      appsNotifier.value = filtered;
       renamedApps.remove(packageName);
       final updated = Set<String>.from(hiddenAppsNotifier.value)..remove(packageName);
       if (updated.length != hiddenAppsNotifier.value.length) {
@@ -59,11 +68,35 @@ class AppsManager {
         sharedPrefsManager.saveData(Keys.hiddenApps, updated.toList());
       }
     } else if (call.method == 'onAppInstalled') {
-      if (!currentlySyncing) {
-        currentlySyncing = true;
-        await syncInstalledApps();
-        currentlySyncing = false;
-      }
+      final appInfo = await _fetchAppInfo(packageName);
+      if (appInfo == null) return;
+      final updated = appsNotifier.value
+          .where((app) => app.packageName != packageName)
+          .toList()
+        ..add(appInfo);
+      updated.sort((a, b) => a.displayNameLower.compareTo(b.displayNameLower));
+      appsNotifier.value = updated;
+    }
+  }
+
+  Future<AppInfo?> _fetchAppInfo(String packageName) async {
+    try {
+      final result = await _installedAppsChannel.invokeMethod(
+        'getAppInfo',
+        {'packageName': packageName},
+      );
+      if (result == null) return null;
+      final map = Map<String, dynamic>.from(result);
+      return AppInfo(
+        packageName: map['packageName'],
+        appName: map['appName'],
+        systemApp: bool.parse(map['isSystemApp']),
+        isHidden: hiddenAppsNotifier.value.contains(map['packageName']),
+        displayName: renamedApps[map['packageName']],
+      );
+    } on PlatformException catch (e) {
+      print("[$runtimeType] getAppInfo failed: ${e.message}");
+      return null;
     }
   }
 
@@ -90,11 +123,13 @@ class AppsManager {
   }
 
   Future<void> loadAndSyncApps({bool force = false}) async {
-    if (_hasLoadedApps && !force) {
-      return;
+    if (_hasLoadedApps && !force) return;
+    final pending = _syncFuture ??= syncInstalledApps();
+    try {
+      await pending;
+    } finally {
+      if (identical(_syncFuture, pending)) _syncFuture = null;
     }
-
-    await syncInstalledApps();
   }
 
   void addOrUpdateRenamedApp(AppInfo appInfo, String newName) {

@@ -1,7 +1,9 @@
 package com.cloudcatcher.mars_launcher
 
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.os.Bundle
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.plugin.common.MethodChannel
@@ -28,13 +30,25 @@ class MainActivity : FlutterActivity() {
         flutterEngine?.dartExecutor?.binaryMessenger?.let { messenger ->
             // MethodChannel for retrieving installed apps
             MethodChannel(messenger, CHANNEL_INSTALLED_APPS).setMethodCallHandler { call, result ->
-                if (call.method == "getInstalledApps") {
-                    Thread {
-                        val apps = getInstalledApps()
-                        runOnUiThread { result.success(apps) }
-                    }.start()
-                } else {
-                    result.notImplemented()
+                when (call.method) {
+                    "getInstalledApps" -> {
+                        Thread {
+                            val apps = getInstalledApps()
+                            runOnUiThread { result.success(apps) }
+                        }.start()
+                    }
+                    "getAppInfo" -> {
+                        val packageName = call.argument<String>("packageName")
+                        if (packageName == null) {
+                            result.error("INVALID_ARGUMENT", "Package name is required", null)
+                        } else {
+                            Thread {
+                                val info = getAppInfo(packageName)
+                                runOnUiThread { result.success(info) }
+                            }.start()
+                        }
+                    }
+                    else -> result.notImplemented()
                 }
             }
 
@@ -100,32 +114,58 @@ class MainActivity : FlutterActivity() {
     }
 
     /**
-     * Retrieves a list of installed apps, including system apps, but excluding apps without launch functionality.
-     * @return A list of maps, each containing the package name, app name, and whether it is a system app.
+     * Retrieves a list of installed apps that have a launcher entry. Uses
+     * queryIntentActivities with ACTION_MAIN/CATEGORY_LAUNCHER, which is far
+     * cheaper than iterating every installed package.
      */
     private fun getInstalledApps(): List<Map<String, String>> {
         val pm: PackageManager = packageManager
-        val packages = pm.getInstalledPackages(PackageManager.GET_META_DATA)
+        val mainIntent = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_LAUNCHER)
+        }
+        val resolveInfos = pm.queryIntentActivities(mainIntent, 0)
         val appList = mutableListOf<Map<String, String>>()
+        val seen = HashSet<String>()
 
-        for (packageInfo in packages) {
-            if (packageInfo.packageName == "com.cloudcatcher.mars_launcher")
-                continue
-            // Check if the app has launch functionality
-            val launchIntent = pm.getLaunchIntentForPackage(packageInfo.packageName)
-            val appInfo = packageInfo.applicationInfo
-            if (launchIntent != null && appInfo != null) {
-                val appName = appInfo.loadLabel(pm)?.toString() ?: "unknown"
-                val isSystemApp = (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
-                appList.add(mapOf(
-                    "packageName" to packageInfo.packageName,
-                    "appName" to appName,
-                    "isSystemApp" to isSystemApp.toString())
-                )
-            }
+        for (resolveInfo in resolveInfos) {
+            val packageName = resolveInfo.activityInfo?.packageName ?: continue
+            if (packageName == "com.cloudcatcher.mars_launcher") continue
+            if (!seen.add(packageName)) continue
+            appList.add(resolveInfoToMap(resolveInfo, packageName, pm))
         }
 
         return appList
+    }
+
+    /**
+     * Retrieves info for a single app by package name. Returns null if the
+     * package has no launcher entry (e.g. uninstalled or not launchable).
+     */
+    private fun getAppInfo(packageName: String): Map<String, String>? {
+        if (packageName == "com.cloudcatcher.mars_launcher") return null
+        val pm: PackageManager = packageManager
+        val mainIntent = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_LAUNCHER)
+            setPackage(packageName)
+        }
+        val resolveInfo = pm.queryIntentActivities(mainIntent, 0).firstOrNull() ?: return null
+        return resolveInfoToMap(resolveInfo, packageName, pm)
+    }
+
+    private fun resolveInfoToMap(
+        resolveInfo: ResolveInfo,
+        packageName: String,
+        pm: PackageManager
+    ): Map<String, String> {
+        val appInfo = resolveInfo.activityInfo?.applicationInfo
+        val appName = appInfo?.loadLabel(pm)?.toString()
+            ?: resolveInfo.loadLabel(pm).toString()
+        val isSystemApp = ((appInfo?.flags ?: 0) and ApplicationInfo.FLAG_SYSTEM) != 0
+        return mapOf(
+            "packageName" to packageName,
+            "appName" to appName,
+            "isSystemApp" to isSystemApp.toString()
+        )
     }
 
     /**
