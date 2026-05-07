@@ -45,6 +45,12 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
   }
 
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   void pushAppSearch(ValueNotifierWithKey<AppInfo> specialAppNotifier) {
     Navigator.push(
       context,
@@ -185,7 +191,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return ColorPickerDialog(colorType: ColorType.lightBackground, title: 'light background');
+                                      return ColorPickerDialog(colorType: ColorType.lightBackground, title: 'Light background');
                                     },
                                   );
                                 },
@@ -197,7 +203,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return ColorPickerDialog(colorType: ColorType.darkBackground, title: 'dark background');
+                                      return ColorPickerDialog(colorType: ColorType.darkBackground, title: 'Dark background');
                                     },
                                   );
                                 },
@@ -212,7 +218,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return ColorPickerDialog(colorType: ColorType.searchTextColor, title: 'search color',);
+                                          return ColorPickerDialog(colorType: ColorType.searchTextColor, title: 'Search color',);
                                         },
                                       );
                                     },
@@ -314,17 +320,22 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
               final bool? accepted = await showDialog<bool>(
                   context: context,
                   builder: (BuildContext context) {
-                    final Color onSurface = Theme.of(context).colorScheme.onSurface;
+                    final Color dialogTextColor = Theme.of(context)
+                            .dialogTheme
+                            .contentTextStyle
+                            ?.color ??
+                        Theme.of(context).colorScheme.onSurface;
                     return AlertDialog(
                       actionsAlignment: MainAxisAlignment.spaceBetween,
-                      title: Text("Enable Weather?",
-                          style: TextStyle(
-                              color: onSurface,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18)),
+                      title: Text(
+                        "Enable Weather?",
+                        style: TEXT_STYLE_DIALOG_TITLE,
+                      ),
                       content: Text(
                         "To show the current temperature, your location is sent anonymously to Open-Meteo.\n\nThis data is used only for weather updates and is never tracked or sold.",
-                        style: TextStyle(color: onSurface, fontSize: 16),
+                        style: TEXT_STYLE_DIALOG_BODY.copyWith(
+                          color: dialogTextColor,
+                        ),
                       ),
                       actions: [
                         TextButton(

@@ -53,7 +53,7 @@ class FlightManual extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(40, 20, 50, 0),
+            padding: const EdgeInsets.fromLTRB(40, 20, 30, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -116,7 +116,7 @@ class _CheatRow extends StatelessWidget {
         textBaseline: TextBaseline.alphabetic,
         children: [
           SizedBox(
-            width: 150,
+            width: 130,
             child: Text(
               action,
               style: TEXT_STYLE_SETTINGS_ITEM.copyWith(

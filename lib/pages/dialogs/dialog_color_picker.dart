@@ -35,6 +35,7 @@ class ColorPickerDialog extends StatelessWidget {
       title: Text(
         title ?? 'Background color',
         style: TEXT_STYLE_DIALOG_TITLE,
+        // textAlign: TextAlign.center,
       ),
       content: SingleChildScrollView(
         child: Column(

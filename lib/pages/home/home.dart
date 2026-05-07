@@ -57,7 +57,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     if (isFirstLaunch) {
       _tipMounted = true;
       sharedPrefsManager.saveData(Keys.isFirstLaunch, false);
-      Future.delayed(const Duration(seconds: 5), () {
+      Future.delayed(const Duration(seconds: 20), () {
         if (mounted) setState(() => _tipVisible = false);
       });
     }
@@ -147,7 +147,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                   child: SafeArea(
                     child: AnimatedOpacity(
                       opacity: _tipVisible ? 1.0 : 0.0,
-                      duration: const Duration(milliseconds: 2000),
+                      duration: const Duration(milliseconds: 400),
                       onEnd: () {
                         if (!_tipVisible && mounted) {
                           setState(() => _tipMounted = false);

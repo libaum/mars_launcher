@@ -14,10 +14,10 @@ const COLOR_ACCENT_HIGHLIGHT = Color(0xffEA4876);
 const COLOR_DIALOG_BUTTONS = Color(0xffFF6F5C);
 
 /// Default font (used as fallback and initial value)
-const FONT = "DMSans";
+const FONT = "NotoSans";
 
 /// All selectable fonts — order determines cycle direction in settings
-const List<String> AVAILABLE_FONTS = ["DMSans", "NotoSans", "Outfit"];
+const List<String> AVAILABLE_FONTS = ["NotoSans", "Outfit", "DMSans"];
 
 /// Settings page text styles
 const TEXT_STYLE_SETTINGS_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.w300);
@@ -32,7 +32,8 @@ const TEXT_STYLE_CHEAT_SHEET = TextStyle(fontSize: 18, fontWeight: FontWeight.w2
 const TEXT_STYLE_INPUT_HINT = TextStyle(fontSize: 18, fontWeight: FontWeight.w300);
 const TEXT_STYLE_CREDITS_BODY = TextStyle(fontSize: 15, fontWeight: FontWeight.w200);
 
-const TEXT_STYLE_DIALOG_TITLE = TextStyle(fontSize: 22, fontWeight: FontWeight.w200);
+const TEXT_STYLE_DIALOG_TITLE = TextStyle(fontSize: 20, fontWeight: FontWeight.w200);
+const TEXT_STYLE_DIALOG_BODY = TextStyle(fontSize: 16, fontWeight: FontWeight.w200);
 const TEXT_STYLE_DIALOG_BUTTON = TextStyle(fontSize: 14, fontWeight: FontWeight.w300);
 
 
