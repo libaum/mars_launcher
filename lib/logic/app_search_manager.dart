@@ -29,6 +29,14 @@ class AppSearchManager {
       memorizedAppCards.removeWhere((appInfo, _) => !currentPackageNames.contains(appInfo.packageName));
       filteredAppsNotifier.value = getFilteredApps();
     });
+
+    /// AppCard captures appInfo, but AppInfo equality is by packageName only —
+    /// so a mutated displayName returns the same cached widget and Flutter skips
+    /// the rebuild. Drop the cache so renamed apps get a fresh AppCard.
+    appsManager.renamedAppsUpdatedNotifier.addListener(() {
+      memorizedAppCards.clear();
+      filteredAppsNotifier.value = getFilteredApps();
+    });
   }
 
   List<AppInfo> getFilteredApps() {
