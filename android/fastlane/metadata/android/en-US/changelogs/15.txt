@@ -1,0 +1,2 @@
+- Feat: Font is now adjustable (3 different fonts)
+- Add about page
