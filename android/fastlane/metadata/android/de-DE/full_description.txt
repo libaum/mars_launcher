@@ -1,36 +1,28 @@
-<b>Die Erde ist laut. Dein Handy sollte es nicht sein.</b>
-<p>Mars Launcher ist ein minimalistischer, textbasierter Rückzugsort für digitale Minimalisten und Fokus-Suchende. Er reduziert dein Smartphone auf seinen Kernzweck: ein Werkzeug, keine Falle. Durch das Entfernen bunter Icons und Dopamin-gesteuertem Chaos gibt Mars dir deine Zeit zurück.</p>
-<b>🚀 KERN-NAVIGATION</b>
-<b>Sofort-Start</b>
-<p>Wische nach oben und fange an zu tippen. Sobald das Suchergebnis eindeutig ist, öffnet sich die App automatisch. Keine extra Klicks. Keine Reibung. Erlebe den schnellsten Weg, auf deine Apps zuzugreifen.</p>
-<b>Bis zu 7 Text-Shortcuts</b>
-<p>Tippen zum Starten, lange drücken, um deine wichtigsten Apps zuzuweisen.</p>
-<b>Wischen Links/Rechts</b>
-<p>Sofortiger Zugriff auf benutzerdefinierte Kurzbefehle, die in den Einstellungen festgelegt wurden.</p>
-<b>Einstellungen</b>
-<p>Drücke lange auf die Leere (leerer Raum), um deine Kommandozentrale anzupassen.</p>
-<b>🛠️ STEALTH TOOLS (VERSTECKTE MODULE)</b>
-<p>Mars verbirgt leistungsstarke Produktivitäts-Tools direkt hinter den Widgets, die du bereits nutzt. Keine zusätzlichen Icons nötig:</p>
-<b>⏰ Uhr</b>
-<p>Lange drücken für einen schnellen Wecker.</p>
-<b>📅 Datum</b>
-<p>Lange drücken für eine minimalistische, integrierte To-Do-Liste.</p>
-<b>🌞 Wetter</b>
-<p>Lange drücken, um lokale Sonnenuntergangs- und Sonnenaufgangszeiten anzuzeigen.</p>
-<b>🌓 DESIGNED FÜR DEINEN VIBE</b>
-<b>Design wechseln</b>
-<p>Doppeltippe auf den leeren Bereich, um sofort zwischen Dark und Light Mode zu wechseln.</p>
-<b>AMOLED-optimiert</b>
-<p>Tiefschwarzer Hintergrund, um Akku zu sparen und die Augen zu schonen.</p>
-<b>Personalisierung</b>
-<p>Ändere Farben und UI-Einstellungen, um sie deinem persönlichen Stil anzupassen.</p>
-<b>🔐 WARUM MARS?</b>
-<p>Wir glauben an <b>Humane Tech</b>. Mars hat:</p>
-<ul>
-<li>Keine Werbung</li>
-<li>Kein Daten-Tracking</li>
-<li>Keine Abonnements</li>
-<li>Keine versteckten Kosten</li>
-</ul>
-<p>Es ist eine saubere und ruhige Umgebung für alle, die der „Erde entfliehen" und ihren Fokus zurückgewinnen wollen.</p>
-<b>Willkommen beim Mars Launcher.<br/>Willkommen zu Hause.</b>
+Ich hab Mars ursprünglich für mich selbst gebaut, weil mich mein Handy irgendwann nur noch genervt hat.<br><br>
+
+Überall Icons, überall Farbe, überall irgendwas das nach Aufmerksamkeit schreit. Mars ist der Versuch dagegen — ein schlichter, textbasierter Homescreen der dein Handy wieder zu dem macht, was es eigentlich sein sollte: ein Werkzeug.<br><br>
+
+Angefangen hat's als kleines Projekt für mich. Vielleicht passt's ja auch zu dir.<br><br>
+
+<b>🚀 NAVIGATION</b><br><br>
+- <b>Instant Launch</b> — Nach oben wischen, tippen, fertig. Sobald das Ergebnis eindeutig ist, öffnet die App von selbst.<br>
+- <b>7 Text-Shortcuts</b> — Antippen zum Öffnen, lang drücken zum Belegen.<br>
+- <b>Links/Rechts wischen</b> — Direkt zu eigenen Shortcuts.<br>
+- <b>Einstellungen</b> — Leeren Bereich lang drücken.<br><br>
+
+<b>VERSTECKTE FUNKTIONEN</b><br><br>
+- Uhr → lang drücken für einen Wecker<br>
+- Datum → lang drücken für eine To-Do-Liste<br>
+- Wetter → lang drücken für Sonnenauf- und -untergang<br><br>
+
+<b>AUSSEHEN</b><br><br>
+- Doppeltipp auf leeren Bereich für Dark/Light Mode<br>
+- Reines AMOLED-Schwarz<br>
+- Farben und UI anpassbar<br><br>
+
+<b>WAS MARS NIE HABEN WIRD</b><br><br>
+Keine Werbung. Kein Tracking. Kein Abo.<br><br>
+
+Mars ist ein kleines Indie-Projekt — open-source, kostenlos und mit der Überzeugung gebaut, dass die eigene Aufmerksamkeit es wert ist, geschützt zu werden.<br><br>
+
+<i>Willkommen auf dem Mars. Hier ist es ruhiger.</i>

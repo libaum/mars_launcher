@@ -1,25 +1,28 @@
-<b>Earth is loud. Your phone shouldn’t be.</b><br>
-<br>
-Mars Launcher is a minimalistic, text-based escape for digital minimalists and focus-seekers. It reduces your smartphone to its core purpose: a tool, not a trap. By removing colorful icons and dopamine-driven clutter, Mars gives you your time back.<br>
-<br>
-<b>🚀 CORE NAVIGATION</b><br>
-• <b>Instant Launch:</b> Swipe up and start typing. As soon as the search result is unique, the app opens automatically. No extra clicks. No friction. Experience the fastest way to access your apps.<br>
-• <b>Up to 7 Text Shortcuts:</b> Tap to launch, long-press to assign your daily drivers.<br>
-• <b>Swipe Left/Right:</b> Instant access to custom shortcuts assigned in settings.<br>
-• <b>Settings:</b> Long-press the void (empty space) to customize your mission control.<br>
-<br>
-<b>🛠️ STEALTH TOOLS (HIDDEN MODULES)</b><br>
-Mars hides powerful productivity tools directly behind the widgets you already use. No extra icons needed:<br>
-• <b>Clock:</b> Long-press for a quick alarm maker.<br>
-• <b>Date:</b> Long-press for a minimalist, built-in To-Do list.<br>
-• <b>Weather:</b> Long-press to reveal local Sunset and Sunrise times.<br>
-<br>
-<b>🌓 DESIGNED FOR YOUR VIBE</b><br>
-• <b>Toggle Theme:</b> Double-tap the empty space to switch between Dark and Light mode instantly.<br>
-• <b>AMOLED Friendly:</b> Pure black background to save battery and reduce eye strain.<br>
-• <b>Customization:</b> Change colors and UI settings to match your personal aesthetic.<br>
-<br>
-<b>WHY MARS?</b><br>
-We believe in <b>Humane Tech</b>. Mars has no ads, no data tracking, and no subscriptions. It’s a clean and quiet environment for those who want to "Escape Earth" and reclaim their focus.<br>
-<br>
-<b>Welcome to Mars Launcher. Welcome home.</b>
+I built Mars because I couldn't stand my own phone anymore.<br><br>
+
+Too many icons. Too much color. Too many things designed to pull me back in. Mars Launcher is my attempt to fix that — a minimal, text-based home screen that turns your phone into a tool instead of a trap.<br><br>
+
+It started as a personal project. Now maybe it's yours too.<br><br>
+
+<b>🚀 CORE NAVIGATION</b><br><br>
+- <b>Instant Launch</b> — Swipe up, start typing. The moment your search is unique, the app opens. No tap needed.<br>
+- <b>7 Text Shortcuts</b> — Tap to launch, long-press to assign.<br>
+- <b>Swipe Left/Right</b> — Jump to custom shortcuts instantly.<br>
+- <b>Settings</b> — Long-press the empty space.<br><br>
+
+<b>HIDDEN TOOLS</b><br><br>
+- Clock → long-press for a quick alarm<br>
+- Date → long-press for a minimal to-do list<br>
+- Weather → long-press for local sunrise &amp; sunset<br><br>
+
+<b>LOOKS &amp; FEEL</b><br><br>
+- Double-tap empty space to toggle Dark/Light mode<br>
+- Pure black AMOLED background<br>
+- Adjustable colors and UI<br><br>
+
+<b>WHAT MARS WILL NEVER HAVE</b><br><br>
+No ads. No tracking. No subscription. No bullshit.<br><br>
+
+Mars is a small indie project — open-source, free forever, and built with the belief that your attention is worth protecting.<br><br>
+
+<i>Welcome to Mars. It's quieter here.</i>
