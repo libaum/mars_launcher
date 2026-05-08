@@ -12,37 +12,45 @@ class EventView extends StatefulWidget {
   State<EventView> createState() => _EventViewState();
 }
 
+// Horizontal padding on the calendar TextButton — must match the styleFrom below
+// so _fitFromEnd receives the actual text display width, not the button width.
+const _kCalendarHPad = 8.0;
+
 class _EventViewState extends State<EventView> {
   final appShortcutsManager = getIt<AppShortcutsManager>();
   final calenderLogic = CalenderManager();
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        appShortcutsManager.calendarAppNotifier.value.open();
-      },
-      onLongPress: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const TodoList()),
+    // LayoutBuilder is OUTSIDE TextButton so it sees the real available width
+    // from Align/Expanded. We subtract the button's horizontal padding so the
+    // text is fitted to the actual display area, not the full button width.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final style = DefaultTextStyle.of(context).style.merge(TEXT_STYLE_TOP_ROW);
+        return ValueListenableBuilder<String>(
+          valueListenable: calenderLogic.eventNotifier,
+          builder: (context, event, child) {
+            final displayText = _fitFromEnd(
+                event, constraints.maxWidth - _kCalendarHPad * 2, style);
+            return TextButton(
+              onPressed: () => appShortcutsManager.calendarAppNotifier.value.open(),
+              onLongPress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const TodoList()),
+                );
+              },
+              style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(),
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.symmetric(horizontal: _kCalendarHPad),
+              ),
+              child: Text(displayText, softWrap: false, style: TEXT_STYLE_TOP_ROW),
+            );
+          },
         );
       },
-      style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(),
-        alignment: Alignment.center,
-      ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final style = DefaultTextStyle.of(context).style.merge(TEXT_STYLE_TOP_ROW);
-          return ValueListenableBuilder<String>(
-              valueListenable: calenderLogic.eventNotifier,
-              builder: (context, event, child) {
-                final displayText = _fitFromEnd(event, constraints.maxWidth, style);
-                return Text(displayText, softWrap: false, style: TEXT_STYLE_TOP_ROW);
-              });
-        },
-      ),
     );
   }
 

@@ -5,45 +5,50 @@ import 'package:flutter/material.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 
+const _kBatteryRefreshInterval = Duration(minutes: 5);
+
 class BatteryManager {
   final settingsManager = getIt<SettingsManager>();
   final Battery _battery = Battery();
   final batteryLevelNotifier = ValueNotifier(0);
 
-  StreamSubscription<BatteryState>? subscriptionBatteryEnabled;
+  StreamSubscription<BatteryState>? _stateSubscription;
+  Timer? _refreshTimer;
 
   BatteryManager() {
-    settingsManager.batteryWidgetEnabledNotifier.addListener(handleBatteryWidgetEnabledChanged);
+    settingsManager.batteryWidgetEnabledNotifier.addListener(_handleEnabledChanged);
 
-    /// Activate listener if batteryWidget is enabled
     if (settingsManager.batteryWidgetEnabledNotifier.value) {
-      activateOnBatteryChangedListener();
+      _activate();
     }
   }
 
-  void handleBatteryWidgetEnabledChanged() {
+  void _handleEnabledChanged() {
     if (settingsManager.batteryWidgetEnabledNotifier.value) {
-      activateOnBatteryChangedListener();
+      _activate();
     } else {
-      deactivateOnBatteryChangedListener();
+      _deactivate();
     }
   }
 
-  /// Listen to changes of battery
-  Future<void> activateOnBatteryChangedListener() async {
-    if (subscriptionBatteryEnabled == null) {
-      /// Add subscription if not already subscribed
-      subscriptionBatteryEnabled = _battery.onBatteryStateChanged.listen((BatteryState state) {
+  Future<void> _activate() async {
+    await updateBatteryLevel();
+
+    if (_stateSubscription == null) {
+      _stateSubscription = _battery.onBatteryStateChanged.listen((BatteryState state) {
         print("Battery state changed: $state");
         updateBatteryLevel();
       });
     }
+
+    _refreshTimer ??= Timer.periodic(_kBatteryRefreshInterval, (_) => updateBatteryLevel());
   }
 
-  /// Cancel subscription to battery changed
-  void deactivateOnBatteryChangedListener() {
-    subscriptionBatteryEnabled?.cancel();
-    subscriptionBatteryEnabled = null;
+  void _deactivate() {
+    _stateSubscription?.cancel();
+    _stateSubscription = null;
+    _refreshTimer?.cancel();
+    _refreshTimer = null;
   }
 
   Future<void> updateBatteryLevel() async {

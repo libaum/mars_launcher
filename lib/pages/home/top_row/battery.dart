@@ -29,11 +29,11 @@ class BatteryPainter extends CustomPainter {
 
     Paint outlinePaint = Paint()
       ..color = paintColor
-      ..strokeWidth = 1
+      ..strokeWidth = 0.7
       ..style = PaintingStyle.stroke;
     RRect backgroundRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(0, 0, size.width, size.height),
-      Radius.circular(2),
+      Radius.circular(3),
     );
     canvas.drawRRect(backgroundRect, outlinePaint);
 
@@ -43,7 +43,7 @@ class BatteryPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
     RRect protrusionRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(size.width, size.height / 4, 3, size.height / 2),
-      Radius.circular(0.5),
+      Radius.circular(1),
     );
     canvas.drawRRect(protrusionRect, protrusionPaint);
 

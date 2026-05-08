@@ -26,59 +26,59 @@ class TopRow extends StatelessWidget {
     final is24HourFormat = MediaQuery.of(context).alwaysUse24HourFormat;
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              /// CLOCK
-              _ToggleableSlot(
-                notifier: settingsManager.clockWidgetEnabledNotifier,
-                child: TextButton(
-                    onPressed: () => appShortcutsManager.clockAppNotifier.value.open(),
-                    onLongPress: () => openCreateAlarmDialog(context, isDarkMode),
-                    child: Clock(is24HourFormat: is24HourFormat)),
-              ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// CLOCK
+          _ToggleableSlot(
+            notifier: settingsManager.clockWidgetEnabledNotifier,
+            child: TextButton(
+                onPressed: () => appShortcutsManager.clockAppNotifier.value.open(),
+                onLongPress: () => openCreateAlarmDialog(context, isDarkMode),
+                child: Clock(is24HourFormat: is24HourFormat)),
+          ),
 
-              /// BATTERY + WEATHER (centered as a unit between Clock and Calendar)
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _ToggleableSlot(
-                    notifier: settingsManager.batteryWidgetEnabledNotifier,
-                    child: TextButton(
-                      onPressed: () => appShortcutsManager.batteryAppNotifier.value.open(),
-                      child: ValueListenableBuilder<int>(
-                          valueListenable: batteryManager.batteryLevelNotifier,
-                          builder: (context, batteryLevel, child) {
-                            return BatteryIcon(
-                                batteryLevel: batteryLevel,
-                                paintColor: Theme.of(context).primaryColor);
-                          }),
-                    ),
-                  ),
-                  _ToggleableSlot(
-                    notifier: settingsManager.weatherWidgetEnabledNotifier,
-                    child: TextButton(
-                        onPressed: () => appShortcutsManager.weatherAppNotifier.value.open(),
-                        onLongPress: () => temperatureManager.showSunriseSunsetForAFewSeconds(),
-                        child: Temperature()),
-                  ),
-                ],
-              ),
+          const Spacer(),
 
-              /// CALENDAR
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
-                child: _ToggleableSlot(
-                  notifier: settingsManager.calendarWidgetEnabledNotifier,
-                  child: const EventView(),
-                ),
+          /// BATTERY
+          _ToggleableSlot(
+            notifier: settingsManager.batteryWidgetEnabledNotifier,
+            child: TextButton(
+              onPressed: () => appShortcutsManager.batteryAppNotifier.value.open(),
+              child: ValueListenableBuilder<int>(
+                  valueListenable: batteryManager.batteryLevelNotifier,
+                  builder: (context, batteryLevel, child) {
+                    return BatteryIcon(
+                        batteryLevel: batteryLevel,
+                        paintColor: Theme.of(context).primaryColor);
+                  }),
+            ),
+          ),
+
+          /// WEATHER
+          _ToggleableSlot(
+            notifier: settingsManager.weatherWidgetEnabledNotifier,
+            child: TextButton(
+                onPressed: () => appShortcutsManager.weatherAppNotifier.value.open(),
+                onLongPress: () => temperatureManager.showSunriseSunsetForAFewSeconds(),
+                child: Temperature()),
+          ),
+
+          const Spacer(),
+
+          /// CALENDAR — Expanded so it claims its flex share (no overflow);
+          /// Align so the button right-aligns within that space.
+          Expanded(
+            flex: 6,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: _ToggleableSlot(
+                notifier: settingsManager.calendarWidgetEnabledNotifier,
+                child: const EventView(),
               ),
-            ],
-          );
-        },
+            ),
+          ),
+        ],
       ),
     );
   }

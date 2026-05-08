@@ -108,12 +108,11 @@ class CalenderManager {
     var now = DateTime.now();
     var midnight = DateTime(now.year, now.month, now.day + 1);
 
-    List<Event> events = [];
-    for (Calendar calendar in _calendars) {
-      var calendarEventsResult = await _deviceCalendarPlugin.retrieveEvents(
-          calendar.id, RetrieveEventsParams(startDate: now, endDate: midnight));
-      events.addAll(calendarEventsResult.data as List<Event>);
-    }
+    final results = await Future.wait(
+      _calendars.map((calendar) => _deviceCalendarPlugin.retrieveEvents(
+          calendar.id, RetrieveEventsParams(startDate: now, endDate: midnight))),
+    );
+    final List<Event> events = results.expand((r) => r.data as List<Event>).toList();
     String newNextEvent = Strings.textCalendarEmpty;
     events.removeWhere((e) => e.start == null);
     if (events.isNotEmpty) {
