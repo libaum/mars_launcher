@@ -325,6 +325,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                             .contentTextStyle
                             ?.color ??
                         Theme.of(context).colorScheme.onSurface;
+                    final buttonStyle = getDialogButtonStyle(isThemeDark(context));
                     return AlertDialog(
                       actionsAlignment: MainAxisAlignment.spaceBetween,
                       title: Text(
@@ -342,19 +343,15 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                           onPressed: () {
                             Navigator.pop(context, false);
                           },
-                          //style: buttonStyle,
-                          style: TextButton.styleFrom(foregroundColor: Colors.red),
-                            child: const Text('Cancel'),
+                          style: buttonStyle,
+                          child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context, true);
                           },
-                          style: TextButton.styleFrom(foregroundColor: Colors.blue),
-                          child: const Text(
-                            'Enable',
-                            //        style: buttonStyle,
-                          ),
+                          style: buttonStyle,
+                          child: const Text('Enable'),
                         ),
                       ],
                     );

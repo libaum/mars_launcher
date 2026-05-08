@@ -76,7 +76,7 @@ class _AppNameTextFieldWithValidation extends State<AppNameTextFieldWithValidati
           decoration: InputDecoration(
               errorText: _errorText,
               filled: true,
-              fillColor: isDarkMode ? Colors.black12 : Colors.white,
+              fillColor: isDarkMode ? Colors.white.withOpacity(0.07) : Colors.white,
               focusColor: Colors.redAccent,
               hintText: "Enter new name",
               hintStyle: TextStyle(

@@ -41,9 +41,7 @@ const TEXT_STYLE_DIALOG_BUTTON = TextStyle(fontSize: 14, fontWeight: FontWeight.
 
 ButtonStyle getDialogButtonStyle(isDarkMode) {
   return ButtonStyle(
-      // backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
-      backgroundColor: WidgetStateProperty.all<Color>(COLOR_ACCENT.withOpacity(isDarkMode ? 0.1 : 0.25)),
-      overlayColor: WidgetStateProperty.all<Color>(COLOR_ACCENT.withOpacity(0.05)),
+      overlayColor: WidgetStateProperty.all<Color>(COLOR_ACCENT.withOpacity(0.08)),
       foregroundColor: WidgetStateProperty.all<Color>(COLOR_ACCENT),
       textStyle: WidgetStateProperty.all(TEXT_STYLE_DIALOG_BUTTON),
       shape: WidgetStateProperty.all(RoundedRectangleBorder(
@@ -67,9 +65,9 @@ ThemeData buildLightTheme(String font) => ThemeData(
     backgroundColor: COLOR_LIGHT_PRIMARY,
     contentTextStyle: TextStyle(color: COLOR_LIGHT_BACKGROUND),
     titleTextStyle: TextStyle(
-      fontSize: 24,
+      fontSize: 20,
       fontFamily: font,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w300,
       color: COLOR_LIGHT_BACKGROUND,
     ),
     shape: RoundedRectangleBorder(
@@ -101,15 +99,18 @@ ThemeData buildDarkTheme(String font) => ThemeData(
     bodySmall: TextStyle(color: COLOR_DARK_PRIMARY),
   ),
   dialogTheme: DialogThemeData(
-    backgroundColor: COLOR_DARK_PRIMARY,
+    backgroundColor: COLOR_DARK_BACKGROUND,
+    contentTextStyle: TextStyle(color: COLOR_DARK_PRIMARY),
     titleTextStyle: TextStyle(
-      fontSize: 24,
+      fontSize: 20,
       fontFamily: font,
-      fontWeight: FontWeight.bold,
-      color: COLOR_DARK_BACKGROUND,
+      fontWeight: FontWeight.w300,
+      color: COLOR_DARK_PRIMARY,
     ),
     shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(4.0))),
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      side: BorderSide(color: Color(0x5FFFFFFF), width: 0.7),
+    ),
   ),
   primaryColor: COLOR_DARK_PRIMARY,
   disabledColor: COLOR_ACCENT,
