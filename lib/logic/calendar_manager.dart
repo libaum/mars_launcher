@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/strings.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 const INDEX_TO_WEEKDAY = {
   1: 'Monday',
@@ -56,18 +57,26 @@ class CalenderManager {
   CalenderManager() {
     updateEvents();
     timer = Timer.periodic(Duration(minutes: 1), (timer) => updateEvents());
-    permissionService.permissionCalendarGranted.addListener(initializeEvents);
+    /// Fast-path refresh when permission flips to granted (initial install or
+    /// re-grant after revoke). Without this the user would wait up to 1min for
+    /// the next timer tick.
+    permissionService.permissionCalendarGranted.addListener(_onPermissionChanged);
   }
 
-  void initializeEvents() {
+  void _onPermissionChanged() {
     if (permissionService.permissionCalendarGranted.value) {
-      print("[$runtimeType] initializing events");
-      permissionService.permissionCalendarGranted.removeListener(initializeEvents);
       updateEvents();
     }
   }
 
   Future updateEvents() async {
+    /// Re-check OS-level permission state on every tick so revocation in
+    /// system settings is reflected without app restart.
+    if (!await Permission.calendarFullAccess.isGranted) {
+      eventNotifier.value = Strings.textCalendarEmpty;
+      return;
+    }
+
     DateTime now = DateTime.now();
     if (now.compareTo(_lastUpdatedCalendars) >= 0) {
       await _retrieveCalendars();
@@ -96,7 +105,7 @@ class CalenderManager {
       }
 
       final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
-      _calendars = calendarsResult.data as List<Calendar>;
+      _calendars = calendarsResult.data?.toList() ?? <Calendar>[];
     } on PlatformException catch (e) {
       print("[$runtimeType] $e");
     }
