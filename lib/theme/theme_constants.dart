@@ -24,15 +24,15 @@ const TEXT_STYLE_SETTINGS_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight
 const TEXT_STYLE_SETTINGS_ITEM = TextStyle(fontSize: 22, height: 1, fontWeight: FontWeight.w200);
 
 /// Named text styles — fontFamily intentionally omitted so they inherit from ThemeData
-const TEXT_STYLE_APP_SMALL = TextStyle(fontSize: 19, fontWeight: FontWeight.w200);
-const TEXT_STYLE_APP_LARGE = TextStyle(fontSize: 30, fontWeight: FontWeight.w200);
-const TEXT_STYLE_TOP_ROW = TextStyle(fontSize: FONT_SIZE_TOP_ROW, fontWeight: FontWeight.w300, fontFeatures: [FontFeature.tabularFigures()]);
+const TEXT_STYLE_APP_SMALL = TextStyle(fontSize: 20, fontWeight: FontWeight.w200);
+const TEXT_STYLE_APP_LARGE = TextStyle(fontSize: 30, fontWeight: FontWeight.w300);
+const TEXT_STYLE_TOP_ROW = TextStyle(fontSize: FONT_SIZE_TOP_ROW, fontWeight: FontWeight.w400, fontFeatures: [FontFeature.tabularFigures()]);
 
 const TEXT_STYLE_CHEAT_SHEET = TextStyle(fontSize: 18, fontWeight: FontWeight.w200);
 const TEXT_STYLE_INPUT_HINT = TextStyle(fontSize: 18, fontWeight: FontWeight.w300);
-const TEXT_STYLE_CREDITS_BODY = TextStyle(fontSize: 15, fontWeight: FontWeight.w200);
+const TEXT_STYLE_ABOUT_BODY = TextStyle(fontSize: 15, fontWeight: FontWeight.w200);
 
-const TEXT_STYLE_DIALOG_TITLE = TextStyle(fontSize: 20, fontWeight: FontWeight.w200);
+const TEXT_STYLE_DIALOG_TITLE = TextStyle(fontSize: 20, fontWeight: FontWeight.w300);
 const TEXT_STYLE_DIALOG_BODY = TextStyle(fontSize: 16, fontWeight: FontWeight.w200);
 const TEXT_STYLE_DIALOG_BUTTON = TextStyle(fontSize: 14, fontWeight: FontWeight.w300);
 

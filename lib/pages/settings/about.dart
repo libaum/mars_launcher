@@ -74,12 +74,12 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
                   const SizedBox(height: 8),
                   Text(
                       'Mars Launcher is a small indie project that I initially built for myself because I was overwhelmed by the constant clutter on modern home screens. I believe in the value of digital minimalism, but I need to remind myself about it constantly. Mars Launcher helps me with that every day.',
-                    style: TEXT_STYLE_CREDITS_BODY.copyWith(height: 1.35),
+                    style: TEXT_STYLE_ABOUT_BODY.copyWith(height: 1.35),
                   ),
                   const SizedBox(height: 12),
                   Text(
                       'Over time, I have included more and more useful functions, but I am still trying not to change the overall feel. As part of the project\'s philosophy, Mars Launcher will forever be ad-free, open-source and free to use, and will never track users.',
-                    style: TEXT_STYLE_CREDITS_BODY.copyWith(height: 1.35),
+                    style: TEXT_STYLE_ABOUT_BODY.copyWith(height: 1.35),
                   ),
                   const SizedBox(height: 18),
                   Text(
@@ -91,7 +91,7 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
                   ),
                   const SizedBox(height: 8),
                   Text.rich(TextSpan(
-                    style: TEXT_STYLE_CREDITS_BODY.copyWith(height: 1.35),
+                    style: TEXT_STYLE_ABOUT_BODY.copyWith(height: 1.35),
                     children: [
                       const TextSpan(
                           text: 'If you have any suggestions for new features, want to report a bug, or just want to say hello, email me at ',
@@ -120,7 +120,7 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
                   ),
                   const SizedBox(height: 8),
                   Text.rich(TextSpan(
-                    style: TEXT_STYLE_CREDITS_BODY.copyWith(height: 1.35),
+                    style: TEXT_STYLE_ABOUT_BODY.copyWith(height: 1.35),
                     children: [
                       const TextSpan(text: 'Weather data by '),
                       TextSpan(
