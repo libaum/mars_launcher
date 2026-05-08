@@ -112,7 +112,7 @@ class CalenderManager {
       _calendars.map((calendar) => _deviceCalendarPlugin.retrieveEvents(
           calendar.id, RetrieveEventsParams(startDate: now, endDate: midnight))),
     );
-    final List<Event> events = results.expand((r) => r.data as List<Event>).toList();
+    final List<Event> events = results.expand((r) => r.data ?? <Event>[]).toList();
     String newNextEvent = Strings.textCalendarEmpty;
     events.removeWhere((e) => e.start == null);
     if (events.isNotEmpty) {

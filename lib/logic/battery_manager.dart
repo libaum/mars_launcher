@@ -52,11 +52,10 @@ class BatteryManager {
   }
 
   Future<void> updateBatteryLevel() async {
-    _battery.batteryLevel.then((level) {
-      if (level != batteryLevelNotifier.value) {
-        print("BATTERY LEVEL: $level");
-        batteryLevelNotifier.value = level;
-      }
-    });
+    final level = await _battery.batteryLevel;
+    if (level != batteryLevelNotifier.value) {
+      print("BATTERY LEVEL: $level");
+      batteryLevelNotifier.value = level;
+    }
   }
 }
