@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mars_launcher/logic/apps_manager.dart';
+
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/logic/todo_manager.dart';
 import 'package:mars_launcher/pages/fragments/cards/todo_list_card.dart';
@@ -16,43 +16,16 @@ class TodoList extends StatefulWidget {
   State<TodoList> createState() => _TodoListState();
 }
 
-class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
+class _TodoListState extends State<TodoList> {
   final themeManager = getIt<ThemeManager>();
-  final appsManager = getIt<AppsManager>();
   final todoManager = getIt<TodoManager>();
-  final currentlyInTextFieldNotifier = ValueNotifier(false);
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void callbackRemoveFromTodoList(index) {
-    todoManager.removeTodo(index);
-  }
-
-  void callbackAddTodo(todo) {
-    todoManager.addTodo(todo);
-  }
+  late final NewTodoTextField _newTodoTextField =
+      NewTodoTextField(callbackAddTodo: todoManager.addTodo);
 
   @override
   Widget build(BuildContext context) {
     const title = "To-Dos";
-    const text_delete_all = "clear all";
-
-    final newTodoTextFieldWithPadding = Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
-      child: NewTodoTextField(callbackAddTodo: callbackAddTodo),
-    );
+    const textDeleteAll = "clear all";
 
     return GestureDetector(
       onDoubleTap: () {
@@ -80,40 +53,35 @@ class _TodoListState extends State<TodoList> with WidgetsBindingObserver {
                       onPressed: () {
                         todoManager.clearTodoList();
                       },
-                      child: const Text(text_delete_all,
+                      child: const Text(textDeleteAll,
                         style: TextStyle(
-                          fontSize: 12
+                          fontSize: 14
                         ),
                       )
                   )
                 ]),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(40, 0, 40, 30),
-                          child: ValueListenableBuilder<List<String>>(
-                              valueListenable: todoManager.todoListNotifier,
-                              builder: (context, todoList, child) {
-                                var items = todoList.asMap().entries
-                                    .map<Widget>((todo) => TodoListCard(
-                                          index: todo.key,
-                                          todo: todo.value,
-                                          callbackRemoveFromTodos: callbackRemoveFromTodoList,
-                                        ))
-                                    .toList();
-                                items.add(newTodoTextFieldWithPadding);
-
-                                return Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: items);
-                              })
-                      ),
-                    ],
-                  ),
+                child: ValueListenableBuilder<List<String>>(
+                  valueListenable: todoManager.todoListNotifier,
+                  builder: (context, todoList, child) {
+                    return ListView.builder(
+                      padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                      itemCount: todoList.length,
+                      itemBuilder: (context, index) {
+                        return TodoListCard(
+                          index: index,
+                          todo: todoList[index],
+                          callbackRemoveFromTodos: todoManager.removeTodo,
+                        );
+                      },
+                    );
+                  },
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(40, 0, 40, 30),
+                child: _newTodoTextField,
               ),
             ],
           ),
@@ -134,66 +102,69 @@ class NewTodoTextField extends StatefulWidget {
 }
 
 class _NewTodoTextFieldState extends State<NewTodoTextField> {
-  TextEditingController _controller = TextEditingController();
-  String? _errorText;
+  final _controller = TextEditingController();
+  final _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     final decorationColor = Theme.of(context).primaryColor;
-    final underlineColor = Colors.transparent;
+    final hintColor = Theme.of(context).brightness == Brightness.light
+        ? decorationColor.withOpacity(0.4)
+        : decorationColor.withOpacity(0.3);
 
-    return TextField(
-      // maxLength: 2,
-      controller: _controller,
-      cursorColor: decorationColor,
-      onSubmitted: (value) {
-        checkInput(value);
-      },
-      decoration: InputDecoration(
-          // counterText: "",
-          errorText: _errorText,
-          enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: underlineColor)),
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: underlineColor)),
-          border: UnderlineInputBorder(
-              borderSide: BorderSide(color: underlineColor)),
-          focusColor: Colors.redAccent,
-          suffixIcon: IconButton(
-            icon: Icon(
-              Icons.add,
-              color: decorationColor,
-            ),
-            onPressed: () {
-              checkInput(_controller.text.trim());
-            },
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.6,
           ),
-          hintText: "Enter todo",
-          hintStyle: TEXT_STYLE_INPUT_HINT.copyWith(
-              color: Theme.of(context).brightness == Brightness.light
-                  ? decorationColor.withOpacity(0.4)
-                  : decorationColor.withOpacity(0.3))),
+          child: TextField(
+            controller: _controller,
+            focusNode: _focusNode,
+            cursorColor: decorationColor,
+            style: TEXT_STYLE_APP_SMALL.copyWith(color: decorationColor),
+            onEditingComplete: () {},
+            onSubmitted: checkInput,
+            decoration: InputDecoration(
+              isDense: true,
+              border: InputBorder.none,
+              hintText: "Enter todo",
+              hintStyle: TEXT_STYLE_APP_SMALL.copyWith(color: hintColor),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            ),
+          ),
+        ),
+        // GestureDetector instead of IconButton — IconButton participates in
+        // Flutter's focus system and steals focus from the TextField on tap.
+        GestureDetector(
+          onTap: () => checkInput(_controller.text),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Icon(Icons.add, color: decorationColor, size: 20),
+          ),
+        ),
+      ],
     );
   }
 
   @override
-  dispose() {
+  void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
-
-  checkInput(value) {
-    if (value.isEmpty) {
-    } else {
-      widget.callbackAddTodo(value);
+  void checkInput(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isNotEmpty) {
+      widget.callbackAddTodo(trimmed);
       _controller.clear();
     }
-  }
-
-  void setErrorText(errorText) {
-    setState(() {
-      _errorText = errorText;
+    // postFrameCallback lets Flutter re-acquire the IME after the OS closes it
+    // on keyboard "done" action, without needing it for the plus-button path.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
     });
   }
 }
