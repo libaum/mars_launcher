@@ -29,7 +29,7 @@ Modern smartphones are designed to be addictive. Bright colors and notification 
     * `Long Press`: Open Settings.
 * **Integrated Productivity:** Built-in minimal To-Do list (access via long-press on calendar date).
 * **Privacy Respecting:** Open-source and transparent. Weather data is fetched from [Open-Meteo](https://open-meteo.com/) (no API key or tracking). All data is stored locally on your device.
-* **Customization:** Hide or rename apps for a cleaner look (e.g., "Social" instead of "Instagram"). Enable/disable widgets as needed.
+* **Customization:** Hide or rename apps for a cleaner look (e.g., "Social" instead of "Instagram"). Enable/disable widgets as needed. Choose from multiple fonts and custom accent/background colors.
 
 ## 🛠 Tech Stack
 
