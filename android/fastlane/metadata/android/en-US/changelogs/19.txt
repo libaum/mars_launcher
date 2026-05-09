@@ -1,0 +1,2 @@
+- Redesigned dialogs: dark mode, cleaner app actions menu
+- New fonts: Geist, Space Grotesk
