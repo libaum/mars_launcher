@@ -109,8 +109,8 @@ class _NewTodoTextFieldState extends State<NewTodoTextField> {
   Widget build(BuildContext context) {
     final decorationColor = Theme.of(context).primaryColor;
     final hintColor = Theme.of(context).brightness == Brightness.light
-        ? decorationColor.withOpacity(0.4)
-        : decorationColor.withOpacity(0.3);
+        ? decorationColor.withValues(alpha: 0.4)
+        : decorationColor.withValues(alpha: 0.3);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

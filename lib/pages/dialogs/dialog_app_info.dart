@@ -97,7 +97,7 @@ class _ActionRow extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       overlayColor: WidgetStateProperty.all(
-        isDark ? Colors.white.withOpacity(0.08) : Colors.black.withOpacity(0.05),
+        isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
