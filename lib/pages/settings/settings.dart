@@ -405,7 +405,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                 width: 120,
                 child: TextButton(
                   onPressed: () => themeManager.cycleFont(),
-                  child: Center(child: Text(font, style: TEXT_STYLE_SETTINGS_ITEM)),
+                  child: Center(child: Text(FONT_DISPLAY_NAMES[font] ?? font, style: TEXT_STYLE_SETTINGS_ITEM)),
                 ),
               );
             }),

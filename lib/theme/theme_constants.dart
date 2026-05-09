@@ -17,7 +17,10 @@ const COLOR_DIALOG_BUTTONS = Color(0xffFF6F5C);
 const FONT = "NotoSans";
 
 /// All selectable fonts — order determines cycle direction in settings
-const List<String> AVAILABLE_FONTS = ["NotoSans", "Outfit", "DMSans"];
+const List<String> AVAILABLE_FONTS = ["NotoSans", "Outfit", "Geist", "SpaceGrotesk"];
+
+/// Display names for fonts shown in settings (fallback: font key itself)
+const Map<String, String> FONT_DISPLAY_NAMES = {"SpaceGrotesk": "Space"};
 
 /// Settings page text styles
 const TEXT_STYLE_SETTINGS_TITLE = TextStyle(fontSize: 35, fontWeight: FontWeight.w300);
