@@ -129,16 +129,16 @@ ThemeData buildDarkTheme(String font) => ThemeData(
           overlayColor: WidgetStateProperty.all<Color>(Colors.transparent))),
 );
 
-SystemUiOverlayStyle lightSystemUiOverlayStyle = SystemUiOverlayStyle(
-  systemNavigationBarColor: Colors.white,
+SystemUiOverlayStyle lightSystemUiOverlayStyle = const SystemUiOverlayStyle(
+  systemNavigationBarColor: Colors.transparent,
   systemNavigationBarIconBrightness: Brightness.light,
-  statusBarColor: Colors.white,
+  statusBarColor: Colors.transparent,
   statusBarIconBrightness: Brightness.dark,
 );
 
-SystemUiOverlayStyle darkSystemUiOverlayStyle = SystemUiOverlayStyle(
-  systemNavigationBarColor: Colors.black,
+SystemUiOverlayStyle darkSystemUiOverlayStyle = const SystemUiOverlayStyle(
+  systemNavigationBarColor: Colors.transparent,
   systemNavigationBarIconBrightness: Brightness.dark,
-  statusBarColor: Colors.black,
+  statusBarColor: Colors.transparent,
   statusBarIconBrightness: Brightness.light,
 );
