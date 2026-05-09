@@ -41,7 +41,9 @@ const TEXT_STYLE_DIALOG_BUTTON = TextStyle(fontSize: 14, fontWeight: FontWeight.
 
 ButtonStyle getDialogButtonStyle(isDarkMode) {
   return ButtonStyle(
-      overlayColor: WidgetStateProperty.all<Color>(COLOR_ACCENT.withOpacity(0.08)),
+      overlayColor: WidgetStateProperty.all<Color>(
+        isDarkMode ? Colors.white.withOpacity(0.08) : Colors.black.withOpacity(0.05),
+      ),
       foregroundColor: WidgetStateProperty.all<Color>(COLOR_ACCENT),
       textStyle: WidgetStateProperty.all(TEXT_STYLE_DIALOG_BUTTON),
       shape: WidgetStateProperty.all(RoundedRectangleBorder(

@@ -18,7 +18,7 @@ class ColorPickerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textButton = 'APPLY';
+    const textButton = 'Apply';
 
     final buttonStyle = getDialogButtonStyle(themeManager.isDarkMode);
 
