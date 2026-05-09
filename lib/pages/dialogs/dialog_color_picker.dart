@@ -22,13 +22,17 @@ class ColorPickerDialog extends StatelessWidget {
 
     final buttonStyle = getDialogButtonStyle(themeManager.isDarkMode);
 
-    late var selectedColor;
-    if (colorType == ColorType.lightBackground){
+    late Color selectedColor;
+    late Color defaultColor;
+    if (colorType == ColorType.lightBackground) {
       selectedColor = themeManager.lightBackground;
+      defaultColor = COLOR_LIGHT_BACKGROUND;
     } else if (colorType == ColorType.darkBackground) {
       selectedColor = themeManager.darkBackground;
+      defaultColor = COLOR_DARK_BACKGROUND;
     } else {
       selectedColor = themeManager.searchTextColor;
+      defaultColor = COLOR_ACCENT;
     }
 
     return AlertDialog(
@@ -51,18 +55,26 @@ class ColorPickerDialog extends StatelessWidget {
               enableAlpha: false,
               pickerAreaHeightPercent: 0.8,
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                child: const Text(textButton),
-                onPressed: () {
-                  print(selectedColor);
-
-                  themeManager.setColor(colorType, selectedColor);
-                  Navigator.of(context).pop();
-                },
-                style: buttonStyle
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    themeManager.setColor(colorType, defaultColor);
+                    Navigator.of(context).pop();
+                  },
+                  style: buttonStyle,
+                  child: const Text('Reset'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    themeManager.setColor(colorType, selectedColor);
+                    Navigator.of(context).pop();
+                  },
+                  style: buttonStyle,
+                  child: const Text(textButton),
+                ),
+              ],
             ),
           ],
         ),
