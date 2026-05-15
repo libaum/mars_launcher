@@ -54,6 +54,33 @@ ButtonStyle getDialogButtonStyle(isDarkMode) {
       )));
 }
 
+const _kDialSurface = Color(0xFF1C1C1C);
+
+TimePickerThemeData _timePickerTheme({required bool border}) => TimePickerThemeData(
+  backgroundColor: Colors.black,
+  dialBackgroundColor: _kDialSurface,
+  hourMinuteColor: WidgetStateColor.resolveWith((states) =>
+    states.contains(WidgetState.selected) ? COLOR_ACCENT : _kDialSurface),
+  hourMinuteTextColor: Colors.white,
+  dayPeriodColor: WidgetStateColor.resolveWith((states) =>
+    states.contains(WidgetState.selected) ? COLOR_ACCENT : _kDialSurface),
+  dayPeriodTextColor: Colors.white,
+  dialHandColor: COLOR_ACCENT,
+  dialTextColor: Colors.white,
+  entryModeIconColor: Colors.white,
+  helpTextStyle: const TextStyle(color: Colors.white54, fontSize: 12),
+  cancelButtonStyle: ButtonStyle(
+    foregroundColor: WidgetStateProperty.all(COLOR_ACCENT),
+  ),
+  confirmButtonStyle: ButtonStyle(
+    foregroundColor: WidgetStateProperty.all(COLOR_ACCENT),
+  ),
+  shape: RoundedRectangleBorder(
+    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+    side: border ? const BorderSide(color: Color(0x5FFFFFFF), width: 0.7) : BorderSide.none,
+  ),
+);
+
 ThemeData buildLightTheme(String font) => ThemeData(
   colorScheme: ColorScheme.light(
     surface: COLOR_LIGHT_BACKGROUND,
@@ -89,6 +116,7 @@ ThemeData buildLightTheme(String font) => ThemeData(
       style: ButtonStyle(
           foregroundColor: WidgetStateProperty.all<Color>(COLOR_LIGHT_PRIMARY),
           overlayColor: WidgetStateProperty.all<Color>(Colors.transparent))),
+  timePickerTheme: _timePickerTheme(border: false),
 );
 
 ThemeData buildDarkTheme(String font) => ThemeData(
@@ -127,6 +155,7 @@ ThemeData buildDarkTheme(String font) => ThemeData(
       style: ButtonStyle(
           foregroundColor: WidgetStateProperty.all<Color>(COLOR_DARK_PRIMARY),
           overlayColor: WidgetStateProperty.all<Color>(Colors.transparent))),
+  timePickerTheme: _timePickerTheme(border: true),
 );
 
 SystemUiOverlayStyle lightSystemUiOverlayStyle = const SystemUiOverlayStyle(
