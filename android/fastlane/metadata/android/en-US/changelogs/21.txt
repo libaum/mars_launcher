@@ -1,0 +1,2 @@
+- Top row widgets now spread evenly: 1 active → left, 2 → left+right, 3 → spread
+- Settings widget toggles now show ● / ○ instead of hide/show
