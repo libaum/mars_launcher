@@ -16,6 +16,7 @@ class Credits extends StatefulWidget {
 
 class _CreditsState extends State<Credits> with WidgetsBindingObserver {
   final themeManager = getIt<ThemeManager>();
+  bool _marsRevealed = false;
 
   static const String supportEmail = 'contact@catchingclouds.de';
 
@@ -145,6 +146,25 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
                       const TextSpan(text: ').'),
                     ],
                   )),
+                  const SizedBox(height: 32),
+                  GestureDetector(
+                    onTap: () => setState(() => _marsRevealed = !_marsRevealed),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      child: Text(
+                        _marsRevealed
+                            ? 'Minimalistic and really simple :)'
+                            : 'What does Mars stand for?',
+                        key: ValueKey(_marsRevealed),
+                        style: TEXT_STYLE_ABOUT_BODY.copyWith(
+                          fontSize: 12,
+                          color: Theme.of(context).primaryColor.withValues(
+                            alpha: _marsRevealed ? 0.5 : 0.25,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
