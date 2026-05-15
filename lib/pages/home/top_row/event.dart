@@ -43,8 +43,8 @@ class _EventViewState extends State<EventView> {
               },
               style: TextButton.styleFrom(
                 shape: RoundedRectangleBorder(),
-                alignment: Alignment.centerRight,
                 padding: const EdgeInsets.symmetric(horizontal: _kCalendarHPad),
+                minimumSize: const Size(0, 36),
               ),
               child: Text(displayText, softWrap: false, style: TEXT_STYLE_TOP_ROW),
             );

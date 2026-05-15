@@ -171,17 +171,19 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
 
                             buildTopRowAppRow(
                                 specialShortcutAppNotifier:
+                                appShortcutsManager.batteryAppNotifier,
+                                widgetEnabledNotifier: settingsManager
+                                    .batteryWidgetEnabledNotifier,
+                                name: Strings.settingsBattery),
+
+                            buildTopRowAppRow(
+                                specialShortcutAppNotifier:
                                     appShortcutsManager.calendarAppNotifier,
                                 widgetEnabledNotifier: settingsManager
                                     .calendarWidgetEnabledNotifier,
                                 name: Strings.settingsCalendarApp),
 
-                            buildTopRowAppRow(
-                                specialShortcutAppNotifier:
-                                    appShortcutsManager.batteryAppNotifier,
-                                widgetEnabledNotifier: settingsManager
-                                    .batteryWidgetEnabledNotifier,
-                                name: Strings.settingsBattery),
+
 
                             /// ---- Appearance ----
                             _sectionHeader(context, Strings.settingsGroupAppearance),
@@ -486,7 +488,7 @@ class ShowHideButton extends StatelessWidget {
               width: 70,
               child: Center(
                 child: Text(
-                  enabled ? "hide" : "show",
+                  enabled ? "●" : "○",
                   style: TEXT_STYLE_SETTINGS_ITEM,
                 ),
               ),

@@ -26,76 +26,57 @@ class TopRow extends StatelessWidget {
     final is24HourFormat = MediaQuery.of(context).alwaysUse24HourFormat;
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// CLOCK
-          _ToggleableSlot(
-            notifier: settingsManager.clockWidgetEnabledNotifier,
-            child: TextButton(
-                onPressed: () => appShortcutsManager.clockAppNotifier.value.open(),
-                onLongPress: () => openCreateAlarmDialog(context, isDarkMode),
-                child: Clock(is24HourFormat: is24HourFormat)),
-          ),
+      child: LayoutBuilder(
+        builder: (context, constraints) => ListenableBuilder(
+          listenable: Listenable.merge([
+            settingsManager.clockWidgetEnabledNotifier,
+            settingsManager.batteryWidgetEnabledNotifier,
+            settingsManager.weatherWidgetEnabledNotifier,
+            settingsManager.calendarWidgetEnabledNotifier,
+          ]),
+          builder: (context, _) {
+            final clockOn = settingsManager.clockWidgetEnabledNotifier.value;
+            final batteryOn = settingsManager.batteryWidgetEnabledNotifier.value;
+            final weatherOn = settingsManager.weatherWidgetEnabledNotifier.value;
+            final calendarOn = settingsManager.calendarWidgetEnabledNotifier.value;
 
-          const Spacer(),
-
-          /// BATTERY
-          _ToggleableSlot(
-            notifier: settingsManager.batteryWidgetEnabledNotifier,
-            child: TextButton(
-              onPressed: () => appShortcutsManager.batteryAppNotifier.value.open(),
-              child: ValueListenableBuilder<int>(
-                  valueListenable: batteryManager.batteryLevelNotifier,
-                  builder: (context, batteryLevel, child) {
-                    return BatteryIcon(
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (clockOn)
+                  TextButton(
+                    onPressed: () => appShortcutsManager.clockAppNotifier.value.open(),
+                    onLongPress: () => openCreateAlarmDialog(context, isDarkMode),
+                    child: Clock(is24HourFormat: is24HourFormat),
+                  ),
+                if (weatherOn)
+                  TextButton(
+                    onPressed: () => appShortcutsManager.weatherAppNotifier.value.open(),
+                    onLongPress: () => temperatureManager.showSunriseSunsetForAFewSeconds(),
+                    child: Temperature(),
+                  ),
+                if (batteryOn)
+                  TextButton(
+                    onPressed: () => appShortcutsManager.batteryAppNotifier.value.open(),
+                    child: ValueListenableBuilder<int>(
+                      valueListenable: batteryManager.batteryLevelNotifier,
+                      builder: (context, batteryLevel, _) => BatteryIcon(
                         batteryLevel: batteryLevel,
-                        paintColor: Theme.of(context).primaryColor);
-                  }),
-            ),
-          ),
-
-          /// WEATHER
-          _ToggleableSlot(
-            notifier: settingsManager.weatherWidgetEnabledNotifier,
-            child: TextButton(
-                onPressed: () => appShortcutsManager.weatherAppNotifier.value.open(),
-                onLongPress: () => temperatureManager.showSunriseSunsetForAFewSeconds(),
-                child: Temperature()),
-          ),
-
-          const Spacer(),
-
-          /// CALENDAR — Expanded so it claims its flex share (no overflow);
-          /// Align so the button right-aligns within that space.
-          Expanded(
-            flex: 6,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: _ToggleableSlot(
-                notifier: settingsManager.calendarWidgetEnabledNotifier,
-                child: const EventView(),
-              ),
-            ),
-          ),
-        ],
+                        paintColor: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                if (calendarOn)
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.45),
+                    child: const EventView(),
+                  ),
+              ],
+            );
+          },
+        ),
       ),
-    );
-  }
-}
-
-class _ToggleableSlot extends StatelessWidget {
-  final ValueNotifier<bool> notifier;
-  final Widget child;
-
-  const _ToggleableSlot({required this.notifier, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: notifier,
-      builder: (context, isEnabled, _) =>
-          isEnabled ? child : const SizedBox.shrink(),
     );
   }
 }
