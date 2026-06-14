@@ -16,6 +16,7 @@ import 'package:mars_launcher/pages/home/app_search_fragment.dart';
 import 'package:mars_launcher/pages/settings/utils.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 import 'package:mars_launcher/pages/settings/hidden_apps.dart';
+import 'package:mars_launcher/pages/settings/mars_apps_settings.dart';
 import 'package:mars_launcher/services/permission_service.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/strings.dart';
@@ -246,6 +247,12 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                                   pushOtherPage(HiddenApps());
                                 },
                                 name: Strings.settingsHiddenApps),
+
+                            GenericSettingsButton(
+                                onPressed: () {
+                                  pushOtherPage(MarsAppsSettings());
+                                },
+                                name: Strings.settingsMarsApps),
 
                             /// KEYBOARD AUTOFOCUS
                             ///buildKeyboardAutofocusRow(),

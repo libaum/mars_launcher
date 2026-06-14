@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:mars_launcher/constants/global.dart';
+import 'package:mars_launcher/data/mars_apps.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/services/service_locator.dart';
 import 'package:mars_launcher/services/shared_prefs_manager.dart';
@@ -19,6 +20,9 @@ class SettingsManager {
   late final ValueNotifierWithKey<bool> shortcutMode;
   late final ValueNotifierWithKey<bool> keyboardAutofocusEnabledNotifier;
 
+  /// Package names of the Mars apps shown in the swipe-down overview.
+  late final ValueNotifierWithKey<List<String>> enabledMarsAppsNotifier;
+
   late bool isFirstStartup;
 
   SettingsManager() {
@@ -29,6 +33,9 @@ class SettingsManager {
     numberOfShortcutItemsNotifier = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.numOfShortcutItems) ?? NUMBER_OF_SHORTCUT_ITEMS_ON_STARTUP, Keys.numOfShortcutItems);
     shortcutMode = ValueNotifierWithKey(sharedPrefsManager.readData(Keys.shortcutMode) ?? true, Keys.shortcutMode);
     keyboardAutofocusEnabledNotifier = ValueNotifierWithKey<bool>(sharedPrefsManager.readData(Keys.keyboardAutofocusEnabled) ?? true, Keys.keyboardAutofocusEnabled);
+    enabledMarsAppsNotifier = ValueNotifierWithKey<List<String>>(
+        sharedPrefsManager.readStringList(Keys.enabledMarsApps) ?? marsApps.map((app) => app.packageName).toList(),
+        Keys.enabledMarsApps);
 
     isFirstStartup = sharedPrefsManager.readData(Keys.isFirstStartup) ?? true;
 
@@ -54,6 +61,18 @@ class SettingsManager {
         notifier.value = (notifier.value + 1) % (MAX_NUM_OF_SHORTCUT_ITEMS+1);
     }
     sharedPrefsManager.saveData(notifier.key, notifier.value);
+  }
+
+  /// Show/hide a Mars app in the swipe-down overview.
+  void toggleMarsApp(String packageName) {
+    final enabled = List<String>.from(enabledMarsAppsNotifier.value);
+    if (enabled.contains(packageName)) {
+      enabled.remove(packageName);
+    } else {
+      enabled.add(packageName);
+    }
+    enabledMarsAppsNotifier.value = enabled;
+    sharedPrefsManager.saveData(Keys.enabledMarsApps, enabled);
   }
 
   Future<void> openDefaultLauncherSettings() async {

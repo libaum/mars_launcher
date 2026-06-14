@@ -8,6 +8,8 @@ class Strings {
   static const settingsSwipeLeft = "swipe left";
   static const settingsSwipeRight = "swipe right";
   static const settingsHiddenApps = "hidden apps";
+  static const settingsMarsApps = "mars apps";
+  static const marsAppsTitle = "Mars apps";
   static const settingsCredits = "about";
   static const settingsColors = "colors";
   static const settingsMore = "more";
@@ -70,6 +72,7 @@ class Keys {
   static const isFirstStartup = "isFirstStartup";
   static const todoList = "todoList";
   static const hiddenApps = "hiddenApps";
+  static const enabledMarsApps = "enabledMarsApps";
   static const renamedApps = 'renamedApps';
   static const appsAreSaved = "appsAreSaved";
   static const typeAppClock = "clockApp";
