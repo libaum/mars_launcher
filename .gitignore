@@ -228,3 +228,6 @@ android/app/.cxx/
 
 # scan temporary files
 **/fastlane/test_output
+
+# Kotlin daemon session artifacts
+android/.kotlin/
