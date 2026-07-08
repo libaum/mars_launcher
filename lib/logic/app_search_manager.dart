@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mars_launcher/data/app_info.dart';
+import 'package:mars_launcher/data/mars_apps.dart';
 import 'package:mars_launcher/logic/apps_manager.dart';
+import 'package:mars_launcher/logic/settings_manager.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_app_info.dart';
@@ -12,6 +14,7 @@ enum AppSearchMode { openApp, chooseShortcut, chooseSpecialShortcut }
 class AppSearchManager {
   final appsManager = getIt<AppsManager>();
   final appShortcutsManager = getIt<AppShortcutsManager>();
+  final settingsManager = getIt<SettingsManager>();
   late final ValueNotifier<List<AppInfo>> filteredAppsNotifier;
   final Map<AppInfo, AppCard> memorizedAppCards = {};
 
@@ -119,6 +122,25 @@ class AppSearchManager {
   }
 
   updateFilteredApps(BuildContext context, String searchValue) async {
+    /// Secret unlock: the whole field must equal the code exactly, so it can't
+    /// fire while typing a normal app name. Only in normal open-app search.
+    if (appSearchMode == AppSearchMode.openApp &&
+        searchValue.trim().toLowerCase() == marsAppsUnlockCode) {
+      if (!settingsManager.marsAppsUnlockedNotifier.value) {
+        settingsManager.unlockMarsApps();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("mars apps unlocked"),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      }
+      filteredAppsNotifier.value = [];
+      return;
+    }
+
     final query = searchValue.toLowerCase();
     List<AppInfo> filteredApps = appsManager.appsNotifier.value
         .where((app) => app.displayNameLower.contains(query) && !app.isHidden)

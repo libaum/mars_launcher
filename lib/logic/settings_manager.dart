@@ -23,6 +23,9 @@ class SettingsManager {
   /// Package names of the Mars apps shown in the swipe-down overview.
   late final ValueNotifierWithKey<List<String>> enabledMarsAppsNotifier;
 
+  /// Whether the private Mars apps have been revealed via the unlock code.
+  late final ValueNotifierWithKey<bool> marsAppsUnlockedNotifier;
+
   late bool isFirstStartup;
 
   SettingsManager() {
@@ -36,6 +39,8 @@ class SettingsManager {
     enabledMarsAppsNotifier = ValueNotifierWithKey<List<String>>(
         sharedPrefsManager.readStringList(Keys.enabledMarsApps) ?? marsApps.map((app) => app.packageName).toList(),
         Keys.enabledMarsApps);
+    marsAppsUnlockedNotifier = ValueNotifierWithKey<bool>(
+        sharedPrefsManager.readData(Keys.marsAppsUnlocked) ?? false, Keys.marsAppsUnlocked);
 
     isFirstStartup = sharedPrefsManager.readData(Keys.isFirstStartup) ?? true;
 
@@ -61,6 +66,13 @@ class SettingsManager {
         notifier.value = (notifier.value + 1) % (MAX_NUM_OF_SHORTCUT_ITEMS+1);
     }
     sharedPrefsManager.saveData(notifier.key, notifier.value);
+  }
+
+  /// Reveal the private Mars apps. Called once the unlock code is entered.
+  void unlockMarsApps() {
+    if (marsAppsUnlockedNotifier.value) return;
+    marsAppsUnlockedNotifier.value = true;
+    sharedPrefsManager.saveData(Keys.marsAppsUnlocked, true);
   }
 
   /// Show/hide a Mars app in the swipe-down overview.

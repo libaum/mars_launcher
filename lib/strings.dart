@@ -73,6 +73,7 @@ class Keys {
   static const todoList = "todoList";
   static const hiddenApps = "hiddenApps";
   static const enabledMarsApps = "enabledMarsApps";
+  static const marsAppsUnlocked = "marsAppsUnlocked";
   static const renamedApps = 'renamedApps';
   static const appsAreSaved = "appsAreSaved";
   static const typeAppClock = "clockApp";

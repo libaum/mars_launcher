@@ -49,11 +49,12 @@ class MarsAppsFragment extends StatelessWidget {
             builder: (context, installedApps, child) {
               final installedPackages =
                   installedApps.map((app) => app.packageName).toSet();
+              final unlocked = settingsManager.marsAppsUnlockedNotifier.value;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (final app in marsApps)
+                  for (final app in visibleMarsApps(unlocked))
                     if (enabled.contains(app.packageName))
                       _MarsAppCard(
                         app: app,
@@ -100,7 +101,7 @@ class _MarsAppCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              app.name,
+              app.displayName,
               style: TEXT_STYLE_APP_LARGE.copyWith(letterSpacing: 1.0),
               maxLines: 1,
             ),

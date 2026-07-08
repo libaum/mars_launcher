@@ -60,12 +60,14 @@ class MarsAppsSettings extends StatelessWidget {
                     child: ValueListenableBuilder<List<String>>(
                       valueListenable: settingsManager.enabledMarsAppsNotifier,
                       builder: (context, enabled, child) {
+                        final unlocked =
+                            settingsManager.marsAppsUnlockedNotifier.value;
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            for (final app in marsApps)
+                            for (final app in visibleMarsApps(unlocked))
                               _MarsAppToggleRow(
-                                name: app.name,
+                                name: app.displayName,
                                 enabled: enabled.contains(app.packageName),
                                 onPressed: () =>
                                     settingsManager.toggleMarsApp(app.packageName),
