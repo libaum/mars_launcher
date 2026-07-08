@@ -1,0 +1,2 @@
+- Swipe down to browse the Mars app family
+- Settings: choose which Mars apps appear in the overview
