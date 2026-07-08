@@ -1,6 +1,5 @@
 plugins {
     id "com.android.application"
-    id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -24,10 +23,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
     }
 
     defaultConfig {
@@ -63,4 +58,25 @@ android {
 
 flutter {
     source = '../..'
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
+// Workaround for Flutter 3.44.x + AGP 8.9: the Flutter Gradle plugin copies the
+// AOT Dart snapshot to build/app/intermediates/flutter/<variant>/jniLibs/<abi>/libapp.so
+// but only wires it into the obsolete `merge<Variant>JniLibFolders` task. Current AGP
+// merges native libs in `merge<Variant>NativeLibs`, which never sees libapp.so, so the
+// release APK ships without a Dart VM snapshot and crashes at startup
+// ("VM snapshot invalid"). The AAB path is unaffected. Force the ordering + input here.
+android.applicationVariants.all { variant ->
+    def capName = variant.name.capitalize()
+    def flutterJniLibs = layout.buildDirectory.dir("intermediates/flutter/${variant.name}/jniLibs")
+    android.sourceSets.getByName(variant.name).jniLibs.srcDir(flutterJniLibs)
+    tasks.matching { it.name == "merge${capName}NativeLibs" }.configureEach {
+        dependsOn("copyJniLibsflutterBuild${capName}")
+    }
 }
