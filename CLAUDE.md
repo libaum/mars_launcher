@@ -112,3 +112,8 @@ Battery+Weather are a nested `Row(mainAxisSize: min)` so `spaceBetween` treats t
 
 ### Releases
 Changelogs live in `android/fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`. Version is set in `pubspec.yaml` as `name+versionCode` (e.g. `1.2.0+18`).
+
+### Hidden admin features (search-field keywords)
+The app search field, in normal open-app mode, matches a few exact-string secret codes (see `lib/data/mars_apps.dart` and `lib/logic/settings_transfer.dart`). They must equal the whole field exactly so they never trigger by accident, and are handled in `AppSearchManager.updateFilteredApps`:
+- `#unlockallmarsapps` — reveal the private Mars apps (`private: true`) in the swipe-down overview and settings; persisted in SharedPreferences.
+- `#exportsettings` / `#importsettings` — dump/restore the full SharedPreferences state as JSON at `/sdcard/Android/data/<applicationId>/files/mars_settings.json`. Only work once the Mars apps are unlocked (admin gate). Use `./settings.sh pull|push` to move the file via adb; restart the launcher after an import so managers reload. Change the codes to your own secrets before a public release.

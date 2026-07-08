@@ -65,4 +65,27 @@ class SharedPrefsManager {
     printSharedPrefAccess("[SharedPrefsManager] CLEAR ALL");
     return _prefs.clear();
   }
+
+  /// Snapshot of every stored preference (admin settings transfer).
+  Map<String, dynamic> exportAll() {
+    final Map<String, dynamic> data = {};
+    for (final key in _prefs.getKeys()) {
+      data[key] = _prefs.get(key);
+    }
+    return data;
+  }
+
+  /// Overwrite all preferences with [data] (admin settings transfer).
+  /// Existing prefs are cleared first so the result is an exact copy.
+  Future<void> importAll(Map<String, dynamic> data) async {
+    await _prefs.clear();
+    for (final entry in data.entries) {
+      var value = entry.value;
+      // JSON decodes string lists as List<dynamic>; saveData needs List<String>.
+      if (value is List) {
+        value = value.map((e) => e.toString()).toList();
+      }
+      await saveData(entry.key, value);
+    }
+  }
 }

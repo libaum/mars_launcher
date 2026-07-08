@@ -3,6 +3,7 @@ import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/data/mars_apps.dart';
 import 'package:mars_launcher/logic/apps_manager.dart';
 import 'package:mars_launcher/logic/settings_manager.dart';
+import 'package:mars_launcher/logic/settings_transfer.dart';
 import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/logic/utils.dart';
 import 'package:mars_launcher/pages/dialogs/dialog_app_info.dart';
@@ -139,6 +140,34 @@ class AppSearchManager {
       }
       filteredAppsNotifier.value = [];
       return;
+    }
+
+    /// Admin-only settings transfer — same exact-match rule, and only once the
+    /// private apps are unlocked, so normal users can never reach it.
+    if (appSearchMode == AppSearchMode.openApp &&
+        settingsManager.marsAppsUnlockedNotifier.value) {
+      final code = searchValue.trim().toLowerCase();
+      if (code == exportSettingsCode || code == importSettingsCode) {
+        final path = code == exportSettingsCode
+            ? await exportSettings()
+            : await importSettings();
+        if (context.mounted) {
+          final ok = path != null;
+          final action = code == exportSettingsCode ? "exported" : "imported";
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(ok
+                  ? (code == importSettingsCode
+                      ? "settings imported — restart app"
+                      : "settings $action")
+                  : "settings $action failed"),
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
+        filteredAppsNotifier.value = [];
+        return;
+      }
     }
 
     final query = searchValue.toLowerCase();
