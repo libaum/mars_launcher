@@ -1,0 +1,2 @@
+- New default font (Outfit)
+- Fixed navigation bar color in dark mode
