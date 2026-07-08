@@ -19,9 +19,14 @@ flutter test test/home_gesture_gate_test.dart
 # Lint / static analysis
 flutter analyze
 
-# Run on a connected device via flutter run (debug and release coexist)
-./run_debug.sh                 # com.cloudcatcher.mars_launcher.debug ("Mars Launcher DEBUG"), hot reload
-./run_release.sh               # com.cloudcatcher.mars_launcher (release-signed)
+# Debug: run on a connected device via flutter run (hot reload)
+./run_debug.sh                 # com.cloudcatcher.mars_launcher.debug ("Mars Launcher DEBUG")
+
+# Release: build + archive an APK, then install (coexists with debug)
+./install_release.sh           # build release APK, archive under apk_archive/, install
+./install_release.sh list      # list archived APKs (newest first)
+./install_release.sh restore    # reinstall most recent archived APK (no rebuild)
+./install_release.sh restore 21 # reinstall archived APK for versionCode 21
 
 # Deploy to Google Play via Fastlane
 cd android && fastlane android deploy      # build + upload to Play Store

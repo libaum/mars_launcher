@@ -231,3 +231,9 @@ android/app/.cxx/
 
 # Kotlin daemon session artifacts
 android/.kotlin/
+
+# tokensave code-graph cache
+.tokensave/
+
+# Archived release APKs (install_release.sh)
+apk_archive/
