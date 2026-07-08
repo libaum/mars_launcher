@@ -158,9 +158,14 @@ ThemeData buildDarkTheme(String font) => ThemeData(
   timePickerTheme: _timePickerTheme(border: true),
 );
 
+// systemNavigationBarContrastEnforced: false — on Android 15+ (edge-to-edge is
+// forced) the system otherwise draws a contrast scrim over the nav bar that
+// ignores systemNavigationBarColor and reads light. Turning it off lets the
+// (dark/light) Scaffold background show through behind the transparent bar.
 SystemUiOverlayStyle lightSystemUiOverlayStyle = const SystemUiOverlayStyle(
   systemNavigationBarColor: Colors.transparent,
   systemNavigationBarIconBrightness: Brightness.light,
+  systemNavigationBarContrastEnforced: false,
   statusBarColor: Colors.transparent,
   statusBarIconBrightness: Brightness.dark,
 );
@@ -168,6 +173,7 @@ SystemUiOverlayStyle lightSystemUiOverlayStyle = const SystemUiOverlayStyle(
 SystemUiOverlayStyle darkSystemUiOverlayStyle = const SystemUiOverlayStyle(
   systemNavigationBarColor: Colors.transparent,
   systemNavigationBarIconBrightness: Brightness.dark,
+  systemNavigationBarContrastEnforced: false,
   statusBarColor: Colors.transparent,
   statusBarIconBrightness: Brightness.light,
 );
