@@ -14,7 +14,7 @@ const COLOR_ACCENT_HIGHLIGHT = Color(0xffEA4876);
 const COLOR_DIALOG_BUTTONS = Color(0xffFF6F5C);
 
 /// Default font (used as fallback and initial value)
-const FONT = "NotoSans";
+const FONT = "Outfit";
 
 /// All selectable fonts — order determines cycle direction in settings
 const List<String> AVAILABLE_FONTS = ["NotoSans", "Outfit", "Geist", "SpaceGrotesk"];
