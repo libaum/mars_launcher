@@ -14,6 +14,7 @@ const _sections = <(String, List<(String, String)>)>[
   ]),
   ('navigation', [
     ('swipe up', 'search'),
+    ('swipe down', 'mars apps'),
     ('swipe left', 'quick app 1'),
     ('swipe right', 'quick app 2'),
   ]),

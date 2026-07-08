@@ -116,4 +116,48 @@ void main() {
     expect(find.byKey(const Key("search")), findsOneWidget);
     expect(find.byKey(const Key("shortcuts")), findsNothing);
   });
+
+  testWidgets("Swipe down reveals the Mars apps", (tester) async {
+    tester.binding.window.physicalSizeTestValue = const Size(400, 800);
+    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    addTearDown(() {
+      tester.binding.window.clearPhysicalSizeTestValue();
+      tester.binding.window.clearDevicePixelRatioTestValue();
+    });
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: MediaQuery(
+          data: const MediaQueryData(
+            size: Size(400, 800),
+            viewPadding: EdgeInsets.only(bottom: 24),
+          ),
+          child: Home(
+            topRowOverride: const SizedBox.shrink(),
+            appShortcutsBuilder: () => const SizedBox(key: Key("shortcuts")),
+            appSearchBuilder: () => const SizedBox(key: Key("search")),
+            marsAppsBuilder: () => const SizedBox(key: Key("marsApps")),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byKey(const Key("shortcuts")), findsOneWidget);
+    expect(find.byKey(const Key("marsApps")), findsNothing);
+
+    // A single down-swipe steps shortcuts -> marsApps (and no further).
+    await tester.dragFrom(const Offset(200, 300), const Offset(0, 120));
+    await tester.pump(const Duration(milliseconds: 80));
+
+    expect(find.byKey(const Key("marsApps")), findsOneWidget);
+    expect(find.byKey(const Key("shortcuts")), findsNothing);
+    expect(find.byKey(const Key("search")), findsNothing);
+
+    // Swiping back up returns to the shortcuts view.
+    await tester.dragFrom(const Offset(200, 300), const Offset(0, -120));
+    await tester.pump(const Duration(milliseconds: 80));
+
+    expect(find.byKey(const Key("shortcuts")), findsOneWidget);
+    expect(find.byKey(const Key("marsApps")), findsNothing);
+  });
 }

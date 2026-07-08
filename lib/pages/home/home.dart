@@ -5,6 +5,7 @@ import 'package:mars_launcher/logic/shortcut_manager.dart';
 import 'package:mars_launcher/logic/temperature_manager.dart';
 import 'package:mars_launcher/pages/home/app_shortcuts_fragment.dart';
 import 'package:mars_launcher/pages/home/app_search_fragment.dart';
+import 'package:mars_launcher/pages/home/mars_apps_fragment.dart';
 import 'package:mars_launcher/pages/home/top_row/top_row.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/pages/settings/settings.dart';
@@ -16,10 +17,15 @@ import 'package:mars_launcher/pages/settings/cheat_sheet.dart';
 const double HEIGHT_SIZED_BOX = 50;
 const double BOTTOM_GESTURE_DEAD_ZONE = 16;
 
+/// The three vertically-stacked home views. Swipe up reveals search, swipe
+/// down reveals the Mars app family — shortcuts sit in between.
+enum HomeView { marsApps, shortcuts, search }
+
 class Home extends StatefulWidget {
   final Widget? topRowOverride;
   final Widget Function()? appShortcutsBuilder;
   final Widget Function()? appSearchBuilder;
+  final Widget Function()? marsAppsBuilder;
 
   @override
   _HomeState createState() => _HomeState();
@@ -29,6 +35,7 @@ class Home extends StatefulWidget {
     this.topRowOverride,
     this.appShortcutsBuilder,
     this.appSearchBuilder,
+    this.marsAppsBuilder,
   });
 }
 
@@ -40,8 +47,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   final sharedPrefsManager = getIt<SharedPrefsManager>();
   final sensitivity = 8;
 
-  final ValueNotifier<bool> searchAppsNotifier = ValueNotifier(false);
+  final ValueNotifier<HomeView> homeViewNotifier = ValueNotifier(HomeView.shortcuts);
   bool _allowVerticalDrag = true;
+  bool _verticalDragConsumed = false;
   bool _tipMounted = false;
   bool _tipVisible = true;
 
@@ -72,7 +80,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     }
     if ((state == AppLifecycleState.inactive || state == AppLifecycleState.paused) && mounted) {
       if (appsManager.suppressLifecycleReset) return;
-      searchAppsNotifier.value = false;
+      homeViewNotifier.value = HomeView.shortcuts;
       Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
@@ -124,15 +132,24 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                           return Center(child: Text(sunriseSunset));
                     })),
                     Expanded(
-                      child: ValueListenableBuilder<bool>(
-                          valueListenable: searchAppsNotifier,
-                          builder: (context, searchApps, child) {
-                          return !searchApps
-                              ? (widget.appShortcutsBuilder?.call() ?? Align(
-                              alignment:
-                              Alignment.centerLeft, // Center only vertically
-                              child: AppShortcutsFragment()))
-                              : (widget.appSearchBuilder?.call() ?? AppSearchFragment(appSearchMode: AppSearchMode.openApp));
+                      child: ValueListenableBuilder<HomeView>(
+                          valueListenable: homeViewNotifier,
+                          builder: (context, view, child) {
+                          switch (view) {
+                            case HomeView.search:
+                              return widget.appSearchBuilder?.call() ??
+                                  AppSearchFragment(appSearchMode: AppSearchMode.openApp);
+                            case HomeView.marsApps:
+                              return widget.marsAppsBuilder?.call() ??
+                                  Align(
+                                      alignment: Alignment.centerLeft, // Center only vertically
+                                      child: MarsAppsFragment());
+                            case HomeView.shortcuts:
+                              return widget.appShortcutsBuilder?.call() ??
+                                  Align(
+                                      alignment: Alignment.centerLeft, // Center only vertically
+                                      child: AppShortcutsFragment());
+                          }
                         },
                       ),
                     )
@@ -202,12 +219,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   _onWillPop(didPop) async {
-    searchAppsNotifier.value = false;
+    homeViewNotifier.value = HomeView.shortcuts;
     return;
   }
 
   _horizontalDragHandler(details) {
-    if (searchAppsNotifier.value) {
+    /// Horizontal shortcuts only react on the shortcuts view.
+    if (homeViewNotifier.value != HomeView.shortcuts) {
       return;
     }
 
@@ -221,18 +239,29 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   _verticalDragHandler(details) {
-    if (!_allowVerticalDrag) {
+    if (!_allowVerticalDrag || _verticalDragConsumed) {
       return;
     }
 
-    if (details.delta.dy > sensitivity) { /// Down Swipe
-      searchAppsNotifier.value = false; /// Close app search
-    } else if (details.delta.dy < -sensitivity) { /// Up Swipe
-      searchAppsNotifier.value = true; /// Open app search
+    if (details.delta.dy > sensitivity) { /// Down Swipe: search -> shortcuts -> marsApps
+      if (homeViewNotifier.value == HomeView.search) {
+        homeViewNotifier.value = HomeView.shortcuts;
+      } else if (homeViewNotifier.value == HomeView.shortcuts) {
+        homeViewNotifier.value = HomeView.marsApps;
+      }
+      _verticalDragConsumed = true;
+    } else if (details.delta.dy < -sensitivity) { /// Up Swipe: marsApps -> shortcuts -> search
+      if (homeViewNotifier.value == HomeView.marsApps) {
+        homeViewNotifier.value = HomeView.shortcuts;
+      } else if (homeViewNotifier.value == HomeView.shortcuts) {
+        homeViewNotifier.value = HomeView.search;
+      }
+      _verticalDragConsumed = true;
     }
   }
 
   void _verticalDragStartHandler(BuildContext context, DragStartDetails details) {
+    _verticalDragConsumed = false; /// One view transition per drag gesture
     _allowVerticalDrag = _isDragStartAboveSystemGestureArea(context, details.globalPosition.dy);
   }
 
