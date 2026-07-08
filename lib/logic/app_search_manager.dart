@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mars_launcher/data/app_info.dart';
 import 'package:mars_launcher/data/mars_apps.dart';
 import 'package:mars_launcher/logic/apps_manager.dart';
@@ -122,21 +123,26 @@ class AppSearchManager {
     }
   }
 
+  /// Admin feedback for the hidden search codes. Uses Fluttertoast (not a
+  /// SnackBar) because the search field keeps the keyboard open, over which the
+  /// launcher's ScaffoldMessenger snackbars aren't reliably visible.
+  void _adminToast(BuildContext context, String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        backgroundColor: Theme.of(context).primaryColor,
+        textColor: Theme.of(context).scaffoldBackgroundColor);
+  }
+
   updateFilteredApps(BuildContext context, String searchValue) async {
     /// Secret unlock: the whole field must equal the code exactly, so it can't
     /// fire while typing a normal app name. Only in normal open-app search.
     if (appSearchMode == AppSearchMode.openApp &&
         searchValue.trim().toLowerCase() == marsAppsUnlockCode) {
-      if (!settingsManager.marsAppsUnlockedNotifier.value) {
+      if (settingsManager.marsAppsUnlockedNotifier.value) {
+        _adminToast(context, "mars apps already unlocked");
+      } else {
         settingsManager.unlockMarsApps();
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("mars apps unlocked"),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        }
+        _adminToast(context, "mars apps unlocked");
       }
       filteredAppsNotifier.value = [];
       return;
@@ -152,18 +158,14 @@ class AppSearchManager {
             ? await exportSettings()
             : await importSettings();
         if (context.mounted) {
-          final ok = path != null;
-          final action = code == exportSettingsCode ? "exported" : "imported";
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(ok
-                  ? (code == importSettingsCode
-                      ? "settings imported — restart app"
-                      : "settings $action")
-                  : "settings $action failed"),
-              duration: const Duration(seconds: 3),
-            ),
-          );
+          if (path == null) {
+            final action = code == exportSettingsCode ? "export" : "import";
+            _adminToast(context, "settings $action failed");
+          } else if (code == importSettingsCode) {
+            _adminToast(context, "settings imported — restart app");
+          } else {
+            _adminToast(context, "settings exported:\n$path");
+          }
         }
         filteredAppsNotifier.value = [];
         return;
