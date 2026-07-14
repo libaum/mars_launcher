@@ -2,41 +2,65 @@ default_platform(:android)
 
 platform :android do
 
-  desc "Build & Deploy to Production"
-    lane :deploy do
-      # 1. Sicherstellen, dass wir im richtigen Verzeichnis starten
-      # Wir sind in android/fastlane, also müssen wir 2 Ebenen hoch zum Flutter-Root
+  # ---------------------------------------------------------------------------
+  # Helpers
+  # ---------------------------------------------------------------------------
 
-      # Cleanen (optional, aber sicher)
-      sh "cd ../.. && flutter clean"
+  # Reads the version code (the number after "+" in pubspec.yaml)
+  private_lane :current_version_code do
+    sh("grep '^version:' ../../pubspec.yaml | sed 's/.*+//'").strip.to_i
+  end
 
-      # Bauen (Das erstellt das AppBundle korrekt mit Version aus pubspec.yaml)
-      sh "cd ../.. && flutter build appbundle --release"
-
-      # 2. Upload
-      supply(
-        track: "production",
-        # Der Pfad zum Output ist immer gleich bei Flutter:
-        # Vom android-Ordner (wo Fastlane läuft) aus gesehen:
-        aab: "../build/app/outputs/bundle/release/app-release.aab",
-
-        # Metadaten überspringen, wenn du nur Code updaten willst
-        skip_upload_metadata: true,
-        skip_upload_images: true,
-        skip_upload_screenshots: true,
-
-        # IMPORTANT:
-        # 'completed' = Live immediately for everyone (once Google has reviewed).
-        # 'draft' = Upload only, you must press the button in the Console.
-        # 'inProgress' + rollout = Percentage rollout (see below).
-        release_status: "completed"
-      )
+  # Builds the Flutter release AAB
+  private_lane :build_flutter_aab do
+    Dir.chdir("../..") do
+      sh("flutter clean")
+      sh("flutter pub get")
+      sh("flutter build appbundle --release")
     end
+  end
 
-  desc "Update only texts & images"
+  # Uploads the already-built AAB (binary + changelog only, no store listing)
+  #   options[:track]  -> "alpha" | "production"
+  #   options[:status] -> "draft" | "completed"
+  private_lane :upload_aab do |options|
+    supply(
+      track: options[:track],
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      mapping: "../build/app/outputs/mapping/release/mapping.txt",
+      version_code: current_version_code,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: false,
+      release_status: options[:status]
+    )
+  end
+
+  # ---------------------------------------------------------------------------
+  # Lanes
+  # ---------------------------------------------------------------------------
+
+  # 1. Build a new version and upload it to Alpha (Closed Testing, draft).
+  desc "Build & upload a new version to Alpha (draft)"
+  lane :alpha do
+    build_flutter_aab
+    upload_aab(track: "alpha", status: "draft")
+  end
+
+  # 2. Build a new version and upload it to Production (live after review).
+  desc "Build & upload a new version to Production"
+  lane :production do
+    build_flutter_aab
+    upload_aab(track: "production", status: "completed")
+  end
+
+  # 3. Update ONLY the store listing (texts, images, screenshots).
+  desc "Update the store listing only (texts, images, screenshots)"
   lane :metadata do
     supply(
       track: "production",
+      version_code: current_version_code,
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: false,
@@ -44,6 +68,18 @@ platform :android do
       skip_upload_screenshots: false,
       skip_upload_changelogs: true
     )
+  end
+
+  # 4. Upload the existing AAB to Alpha without rebuilding.
+  desc "Upload the existing AAB to Alpha (no rebuild, draft)"
+  lane :alpha_upload do
+    upload_aab(track: "alpha", status: "draft")
+  end
+
+  # 5. Upload the existing AAB to Production without rebuilding.
+  desc "Upload the existing AAB to Production (no rebuild)"
+  lane :production_upload do
+    upload_aab(track: "production", status: "completed")
   end
 
 end

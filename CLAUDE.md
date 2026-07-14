@@ -28,9 +28,10 @@ flutter analyze
 ./install_release.sh restore    # reinstall most recent archived APK (no rebuild)
 ./install_release.sh restore 21 # reinstall archived APK for versionCode 21
 
-# Deploy to Google Play via Fastlane
-cd android && fastlane android deploy      # build + upload to Play Store
-cd android && fastlane android metadata   # update store listing text/images only
+# Deploy to Google Play via Fastlane (from android/)
+cd android && bundle exec fastlane production  # build + upload to Production
+cd android && bundle exec fastlane alpha       # build + upload to Alpha (closed testing, draft)
+cd android && bundle exec fastlane metadata    # update store listing text/images only
 ```
 
 ## Architecture

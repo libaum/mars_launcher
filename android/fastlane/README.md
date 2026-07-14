@@ -15,13 +15,21 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## Android
 
-### android deploy
+### android alpha
 
 ```sh
-[bundle exec] fastlane android deploy
+[bundle exec] fastlane android alpha
 ```
 
-Build & Deploy to Production
+Build & upload a new version to Alpha (draft)
+
+### android production
+
+```sh
+[bundle exec] fastlane android production
+```
+
+Build & upload a new version to Production
 
 ### android metadata
 
@@ -29,7 +37,23 @@ Build & Deploy to Production
 [bundle exec] fastlane android metadata
 ```
 
-Update only texts & images
+Update the store listing only (texts, images, screenshots)
+
+### android alpha_upload
+
+```sh
+[bundle exec] fastlane android alpha_upload
+```
+
+Upload the existing AAB to Alpha (no rebuild, draft)
+
+### android production_upload
+
+```sh
+[bundle exec] fastlane android production_upload
+```
+
+Upload the existing AAB to Production (no rebuild)
 
 ----
 
