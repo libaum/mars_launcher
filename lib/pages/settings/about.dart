@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:mars_launcher/theme/theme_constants.dart';
 import 'package:mars_launcher/theme/theme_manager.dart';
 import 'package:mars_launcher/services/service_locator.dart';
-import 'package:mars_launcher/strings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Credits extends StatefulWidget {
@@ -16,9 +15,12 @@ class Credits extends StatefulWidget {
 
 class _CreditsState extends State<Credits> with WidgetsBindingObserver {
   final themeManager = getIt<ThemeManager>();
-  bool _marsRevealed = false;
 
   static const String supportEmail = 'contact@catchingclouds.de';
+  static const String storeUrl =
+      'https://play.google.com/store/apps/details?id=com.cloudcatcher.mars_launcher';
+  static const String marsDevPage =
+      'https://play.google.com/store/apps/dev?id=7784376568737667246';
 
   @override
   void initState() {
@@ -32,12 +34,19 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  Future<void> _open(String url) async {
+    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).primaryColor;
+    final secondary = primary.withValues(alpha: 0.5);
+    final bodyPrimary = TEXT_STYLE_ABOUT_BODY.copyWith(height: 1.5, color: primary);
+    final bodySecondary = TEXT_STYLE_ABOUT_BODY.copyWith(height: 1.5, color: secondary);
+
     return GestureDetector(
-      onDoubleTap: () {
-        themeManager.toggleTheme();
-      },
+      onDoubleTap: () => themeManager.toggleTheme(),
       child: Scaffold(
         appBar: defaultTargetPlatform == TargetPlatform.linux
             ? AppBar(
@@ -47,11 +56,7 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () => Navigator.pop(context),
                 ),
-                iconTheme: IconThemeData(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black,
-                ),
+                iconTheme: IconThemeData(color: primary),
               )
             : null,
         resizeToAvoidBottomInset: false,
@@ -62,113 +67,102 @@ class _CreditsState extends State<Credits> with WidgetsBindingObserver {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(Strings.creditsTitle, style: TEXT_STYLE_SETTINGS_TITLE),
-                  const SizedBox(height: 10),
-                  // Text(
-                  //   'About',
-                  //   style: TEXT_STYLE_CREDITS_BODY.copyWith(
-                  //     fontSize: 13,
-                  //     fontWeight: FontWeight.w600,
-                  //     color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6),
-                  //   ),
-                  // ),
-                  const SizedBox(height: 8),
+                  Text('Mars Launcher', style: TEXT_STYLE_SETTINGS_TITLE),
+                  const SizedBox(height: 20),
+                  // This app — personal "why", in primary (white).
                   Text(
-                      'Mars Launcher is a small indie project that I initially built for myself because I was overwhelmed by the constant clutter on modern home screens. I believe in the value of digital minimalism, but I need to remind myself about it constantly. Mars Launcher helps me with that every day.',
-                    style: TEXT_STYLE_ABOUT_BODY.copyWith(height: 1.35),
+                    'A few years ago, I read Cal Newport\'s Digital Minimalism and started thinking about how a smartphone could feel calmer and more intentional. I couldn\'t switch to a dumb phone, but I wanted mine to feel that way, so I built the launcher I was missing.',
+                    style: bodyPrimary,
                   ),
                   const SizedBox(height: 12),
                   Text(
-                      'Over time, I have included more and more useful functions, but I am still trying not to change the overall feel. As part of the project\'s philosophy, Mars Launcher will forever be ad-free, open-source and free to use, and will never track users.',
-                    style: TEXT_STYLE_ABOUT_BODY.copyWith(height: 1.35),
+                    'I\'ve used it every day since then, gradually adapting it to fit my real life. Over time, it evolved into a fast and focused home screen, where small, thoughtful tools and gesture-based interactions that stay out of the way. The goal was never to add more, but to make using my phone feel simpler.',
+                    style: bodyPrimary,
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 12),
                   Text(
-                    'contact',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).primaryColor.withValues(alpha: 0.4),
-                    ),
+                    'What started as a personal tool became the phone experience I wanted to share with others. Since it will always be free, perhaps it can make your phone feel a little calmer and more intentional too. :)',
+                    style: bodyPrimary,
                   ),
-                  const SizedBox(height: 8),
+
+                  const SizedBox(height: 12),
+
+                  // API attribution — belongs to this app's weather feature.
                   Text.rich(TextSpan(
-                    style: TEXT_STYLE_ABOUT_BODY.copyWith(height: 1.35),
-                    children: [
-                      const TextSpan(
-                          text: 'If you have any suggestions for new features, want to report a bug, or just want to say hello, email me at ',
-                      ),
-                      TextSpan(
-                        text: supportEmail,
-                        style: const TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            final uri = Uri.parse('mailto:$supportEmail?subject=Mars%20Launcher%20feedback');
-                            launchUrl(uri);
-                          },
-                      ),
-                      const TextSpan(text: '.'),
-                    ],
-                  )),
-                  const SizedBox(height: 18),
-                  // Divider(color: Theme.of(context).dividerColor),
-                  // const SizedBox(height: 12),
-                  Text(
-                    'credits',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).primaryColor.withValues(alpha: 0.4),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text.rich(TextSpan(
-                    style: TEXT_STYLE_ABOUT_BODY.copyWith(height: 1.35),
+                    style: TEXT_STYLE_ABOUT_BODY.copyWith(fontSize: 13, height: 1.5, color: secondary),
                     children: [
                       const TextSpan(text: 'Weather data by '),
                       TextSpan(
-                        text: 'open-meteo.com',
-                        style: const TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            final uri = Uri.parse('https://open-meteo.com/');
-                            launchUrl(uri);
-                          },
+                        text: 'open-meteo',
+                        style: TextStyle(color: primary, decoration: TextDecoration.underline),
+                        recognizer: TapGestureRecognizer()..onTap = () => _open('https://open-meteo.com/'),
                       ),
-                      const TextSpan(text: ' (license can be found '),
+                      const TextSpan(text: ' ('),
                       TextSpan(
-                        text: 'here',
-                        style: const TextStyle(color: Colors.blue),
+                        text: 'license',
+                        style: TextStyle(color: primary, decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            final uri = Uri.parse('https://github.com/open-meteo/open-meteo/blob/main/LICENSE');
-                            launchUrl(uri);
-                          },
+                          ..onTap = () => _open('https://github.com/open-meteo/open-meteo/blob/main/LICENSE'),
                       ),
                       const TextSpan(text: ').'),
                     ],
                   )),
-                  const SizedBox(height: 32),
-                  GestureDetector(
-                    onTap: () => setState(() => _marsRevealed = !_marsRevealed),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 400),
-                      child: Text(
-                        _marsRevealed
-                            ? 'Minimalistic and really simple :)'
-                            : 'What does Mars stand for?',
-                        key: ValueKey(_marsRevealed),
-                        style: TEXT_STYLE_ABOUT_BODY.copyWith(
-                          fontSize: 12,
-                          color: Theme.of(context).primaryColor.withValues(
-                            alpha: _marsRevealed ? 0.5 : 0.25,
-                          ),
-                        ),
-                      ),
-                    ),
+
+
+
+
+                  const SizedBox(height: 16),
+                  Text('—', style: TextStyle(fontSize: 15, color: secondary)),
+                  const SizedBox(height: 16),
+
+
+                  // About Mars — shared philosophy, grayed, identical across all apps.
+                  Text(
+                    'Mars — Minimalist And Really Simple. A growing family of small, calm tools built around one idea: solve one problem well, and never fight for your attention. Created by one person out of passion and conviction. Forever open source. No ads. No tracking.',
+                    style: bodySecondary,
                   ),
+                  const SizedBox(height: 30),
+
+
+                  _LinkRow(label: 'More Mars apps', onTap: () => _open(marsDevPage)),
+                  _LinkRow(label: 'Get in touch', onTap: () => _open('mailto:$supportEmail?subject=Mars%20Launcher%20feedback')),
+                  _LinkRow(label: 'Rate Mars Launcher', onTap: () => _open(storeUrl)),
+                  const SizedBox(height: 20),
+
+
+
+
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LinkRow extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  const _LinkRow({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final primary = Theme.of(context).primaryColor;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300, color: primary)),
+            ),
+            Icon(Icons.north_east, size: 18, color: primary.withValues(alpha: 0.3)),
+          ],
         ),
       ),
     );
